@@ -8,6 +8,7 @@ const redocusaurus = [
   "redocusaurus",
   {
     debug: Boolean(process.env.DEBUG || process.env.CI),
+    editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
     specs: [
       {
         id: "platform-v1",
@@ -65,15 +66,13 @@ const config = {
         docs: {
           sidebarPath: require.resolve("./sidebarsDocs.js"),
           // Please change this to your repo.
-          editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+          editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
           remarkPlugins: [require("mdx-mermaid")],
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
-          editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+          editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -95,14 +94,16 @@ const config = {
         routeBasePath: "use-cases",
         sidebarPath: require.resolve("./sidebarsUseCases.js"),
         remarkPlugins: [require("mdx-mermaid")],
+        editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
       },
     ],
   ],
   title: "Capitalise.com Developer Portal",
-  tagline: "Developer Portal",
+  tagline:
+    "Bring credit scores, business insights and access to financial products into your product using our ready-to-go API",
   customFields: {
     meta: {
-      description: "Integrate Redoc easily into your Docusaurus Site",
+      description: this.tagline,
     },
   },
   url: process.env.DEPLOY_PRIME_URL || "http://localhost:5000", // Your website URL

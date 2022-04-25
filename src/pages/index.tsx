@@ -7,18 +7,35 @@ import HomepageFeatures from "@site/src/components/HomepageFeatures";
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header className="hero hero--primary index">
-      <div className="container">
-        <Link className="hot-news" to="/use-cases/credit-profile-widget">
-          <span className="badge badge--secondary">NEW</span>
-          <span className=""> Credit profile widget is now live!</span>
-        </Link>
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        <Link className="" to="/use-cases">
-          <button className="button button--secondary button--lg">
-            Get started - 5min ⏱️
-          </button>
-        </Link>
+    <header className="flex hero hero--primary index">
+      <div className="container flex index-content">
+        <div>
+          <Link className="hot-news" to="/use-cases/credit-profile-widget">
+            <span className="badge badge--secondary">NEW</span>
+            <span> Credit profile widget is now live!</span>
+          </Link>
+          <h1 className="hero__title">
+            The integration layer for small business financial services
+          </h1>
+          <p className="tagline">{siteConfig.tagline}</p>
+          <Link to="/use-cases">
+            <button className="button button--secondary button--lg margin-right--md margin-bottom--md ">
+              Get started in 5min ⏱️
+            </button>
+          </Link>
+          <Link to="/">
+            <button className="button button--secondary button--lg margin-right--md margin-bottom--md button--outline">
+              Download Intergration Whitepaper 📄
+            </button>
+          </Link>
+        </div>
+        <div>
+          <img
+            src={require("/img/super-woman.png").default}
+            alt="Example banner"
+            className="featured-img"
+          />
+        </div>
       </div>
     </header>
   );
@@ -27,9 +44,7 @@ function HomepageHeader() {
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Layout
-      title={siteConfig.title}
-      description="Description will go into a meta tag in <head />">
+    <Layout title={siteConfig.title} description={siteConfig.tagline}>
       <HomepageHeader />
       <main>
         <HomepageFeatures />
