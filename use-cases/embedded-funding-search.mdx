@@ -1,0 +1,670 @@
+---
+title: Embedded funding search
+tags:
+  - API
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import BrowserWindow from "@site/src/components/BrowserWindow";
+
+Embed funding funding directly into your website to instantly have access to over 100 lenders
+
+## Example
+
+<BrowserWindow>
+  <iframe
+    src="https://demo.capitalise.com/app/questionnaire/funding/search?introducer=eyJ0b2tlbiI6ImkyODhlMDg2OS0yNzllLTQ1YmUtYmI0OC1jMmQ0YzYxOGU3MzMiLCJpbnRyb2R1Y2VyTmFtZSI6IkhMIERlbW8gQ29tcGFueTEifQ=="
+    width="100%"
+    height="850px"
+    frameborder="0"
+    scrolling="no"
+    allowtransparency="true"
+    allow="encrypted-media"
+  />
+</BrowserWindow>
+
+## Getting your Introducer Key
+
+Once you've got your account set up by your Partnership Manager, navitagte to Website Integration ([Production](https://capitalise.com/app/ui/settings/widget) / [Demo](https://demo.capitalise.com/app/ui/settings/widget)) page. You will be prompted to login if you haven't already.
+
+Your `Introducer Key` is displayed in both highlighted areas - they are identical so you only need to copy once.
+
+![Introducer Key](/img/introducer-key.png)
+
+:::warning Important
+
+- DO NOT change your `Introducer Key` because it's the unique identifier of your API Partner account
+- Always double check if your `Introducer Key` is correct before a production release by checking the page in [Step 1](#step-1-getting-your-introducer-key). You might not be able to receive commission if the `Introducer Key` is incorrect.
+- `Introducer Key` would be different between Production and Demo environments
+- The same `Introducer Key` of an environment can be used for Direct Hyperlink and Embeded Journey via JavaScript Snippets.
+
+:::
+
+## Place Embedded Funding Questionnaire
+
+You have two options to embed the funding questionnaire
+
+### JavaScript - questionnaire modal
+
+Place below link at the place you want to show the button. You can change the wording and style as you see fit. But please keep `capitalise-funding` as the one of the class names.
+
+```html
+<a href="#" class="capitalise-funding">Get your business funded (in modal)</a>
+```
+
+Add below CSS to before the end of `</head>` tag to style the modal.
+
+```html
+<style>
+  #capFundQModal {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    z-index: 1000000;
+  }
+</style>
+```
+
+Place below the code before the `</body>` tag and `REPLACE_WITH_YOUR_INTRODUCER_KEY` with your introducer key. This JavaScript snippet will listen to the `onClick` of elements that have the class `capitalise-funding` and show the funding questionnaire in a modal.
+
+If you have the user's consent, you can pass over in the `answers` parameter so the those answers could be pre-filled. See full list of answers supported.
+
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
+```html
+<!-- Capitalise Funding Questionnaire -->
+<script>
+  function startCapitaliseQuestionnaire(ev) {
+    ev.preventDefault();
+    var el = document.createElement("div");
+    el.setAttribute("id", "capFundQModal");
+    document.body.insertBefore(el, document.body.firstChild);
+    capitalise
+      .init({
+        <!-- highlight-next-line -->
+        referralCode: "REPLACE_WITH_YOUR_INTRODUCER_KEY", // !!! Replace with your introducer key
+
+        // Pre-fill answers, optional
+        // "answers": {
+        //     amount: 25000,
+        //     term: 3,
+        //     useOfFunds: 1,
+        //     companyType: 3,
+        //     sector: 23,
+        //     companyName: "ABC Limited",
+        //     companyNumber: "13390812",
+        //     revenue: 125000,
+        //     contactPhone: '07974678882',
+        //     contactName: 'Joe Bloggs',
+        //     contactEmail: 'joe.bloggs@abc-limited.com',
+        //     invoices: true,
+        //     assets: false,
+        //     epos: true,
+        //     purchaseOrders: false,
+        //     permissions: true,
+        //     clientsType: 3
+        // }
+      })
+      .start.inWrapper("capFundQModal");
+    document.getElementById("capFundQModal").className = "show";
+  }
+  var capitaliseFundingButtons =
+    document.getElementsByClassName("capitalise-funding");
+  for (var i = 0; i < capitaliseFundingButtons.length; i++) {
+    capitaliseFundingButtons[i].addEventListener(
+      "click",
+      startCapitaliseQuestionnaire
+    );
+  }
+</script>
+<script src="https://demo.capitalise.com/app/qst/bootstrap/js/script.js?1549992796"></script>
+<!-- Capitalise Funding Questionnaire -->
+```
+
+</TabItem>
+  <TabItem value="production" label="Production">
+
+```html
+<!-- Capitalise Funding Questionnaire -->
+<script>
+  function startCapitaliseQuestionnaire(ev) {
+    ev.preventDefault();
+    var el = document.createElement("div");
+    el.setAttribute("id", "capFundQModal");
+    document.body.insertBefore(el, document.body.firstChild);
+    capitalise
+      .init({
+        referralCode: "REPLACE_WITH_YOUR_INTRODUCER_KEY", // !!! Replace with your introducer key
+      })
+      .start.inWrapper("capFundQModal");
+    document.getElementById("capFundQModal").className = "show";
+  }
+  var capitaliseFundingButtons =
+    document.getElementsByClassName("capitalise-funding");
+  for (var i = 0; i < capitaliseFundingButtons.length; i++) {
+    capitaliseFundingButtons[i].addEventListener(
+      "click",
+      startCapitaliseQuestionnaire
+    );
+  }
+</script>
+<script src="https://capitalise.com/app/qst/bootstrap/js/script.js?1549992796"></script>
+<!-- Capitalise Funding Questionnaire -->
+```
+
+</TabItem>
+</Tabs>
+
+### Iframe
+
+Alternatively, you can user embed the questionnaire as iframe by below code at the place you want to show the questionnaire. Iframe currently does not support pre-fill answers.
+
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
+```html
+<iframe
+  src="https://demo.capitalise.com/app/questionnaire/funding/search?introducer=REPLACE_WITH_YOUR_INTRODUCER_KEY"
+  width="100%"
+  height="100%"
+  frameborder="0"
+  scrolling="no"
+  allowtransparency="true"
+  allow="encrypted-media"></iframe>
+```
+
+  </TabItem>
+
+  <TabItem value="production" label="Production">
+
+```html
+<iframe
+  src="https://capitalise.com/app/questionnaire/funding/search?introducer=REPLACE_WITH_YOUR_INTRODUCER_KEY"
+  width="100%"
+  height="100%"
+  frameborder="0"
+  scrolling="no"
+  allowtransparency="true"
+  allow="encrypted-media"></iframe>
+```
+
+  </TabItem>
+</Tabs>
+
+## Pre-fill answer supported
+
+<table id="jsprefill">
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+      <th>Format</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>companyType</code>
+      </td>
+      <td>The tranding type of the company</td>
+      <td>
+        Integer
+        <p>
+          Default: <code>null</code>
+        </p>
+        <p>
+          Enumerations:
+          <li>
+            <code>1</code> Sole Trader
+          </li>
+          <li>
+            <code>2</code> Limited Liability Partnership
+          </li>
+          <li>
+            <code>3</code> Limited Company
+          </li>
+          <li>
+            <code>4</code> Startup
+          </li>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>amount</code>
+      </td>
+      <td>The amount of fund (business loans) required</td>
+      <td>
+        Integer
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>useOfFunds</code>
+      </td>
+      <td>The use of funds</td>
+      <td>
+        Integer
+        <p>
+          Default: <code>null</code>
+        </p>
+        <p>
+          <li>
+            <code>1</code> Day to day cashflow
+          </li>
+          <li>
+            <code>2</code> Business expansion
+          </li>
+          <li>
+            <code>3</code> Equipment/Asset finance
+          </li>
+          <li>
+            <code>4</code> Refinancing debt
+          </li>
+          <li>
+            <code>5</code> Import/Export
+          </li>
+          <li>
+            <code>6</code> Tax bill due
+          </li>
+          <li>
+            <code>7</code> Acquiring a business
+          </li>
+          <li>
+            <code>8</code> Starting a business
+          </li>
+          <li>
+            <code>9</code> Purchasing a property
+          </li>
+          <li>
+            <code>10</code> Purchasing stock
+          </li>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>term</code>
+      </td>
+      <td>
+        The term of business loan in months. The value will be rounded up to the
+        closest option below:
+        <li>
+          <code>1-6</code> 6 months or less
+        </li>
+        <li>
+          <code>7-12</code> 12 months
+        </li>
+        <li>
+          <code>13-24</code> 24 months
+        </li>
+        <li>
+          <code>25-36</code> 3 years
+        </li>
+        <li>
+          <code>37-60</code> 4-5 years
+        </li>
+        <li>
+          <code>>=61</code> More than 5 years
+        </li>
+      </td>
+      <td>
+        Integer
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>sector</code>
+      </td>
+      <td>The sector of the company</td>
+      <td>
+        Integer
+        <p>
+          Default: <code>null</code>
+        </p>
+        <p>
+          Enumerations:
+          <li>
+            <code>1</code> Agriculture
+          </li>
+          <li>
+            <code>2</code> Automotive
+          </li>
+          <li>
+            <code>3</code> Business Services
+          </li>
+          <li>
+            <code>4</code> Construction
+          </li>
+          <li>
+            <code>5</code> Courier
+          </li>
+          <li>
+            <code>6</code> Distribution
+          </li>
+          <li>
+            <code>7</code> Financial Services
+          </li>
+          <li>
+            <code>8</code> Haulage
+          </li>
+          <li>
+            <code>9</code> Healthcare/Care
+          </li>
+          <li>
+            <code>10</code> Hotels/Guest House/Public House
+          </li>
+          <li>
+            <code>11</code> Import/Export
+          </li>
+          <li>
+            <code>12</code> IT Related
+          </li>
+          <li>
+            <code>13</code> Manufacturing
+          </li>
+          <li>
+            <code>14</code> Print/Publishing
+          </li>
+          <li>
+            <code>15</code> Professional Services
+          </li>
+          <li>
+            <code>16</code> Property
+          </li>
+          <li>
+            <code>17</code> Recruitment
+          </li>
+          <li>
+            <code>18</code> Retail
+          </li>
+          <li>
+            <code>19</code> Security Services
+          </li>
+          <li>
+            <code>20</code> Trade
+          </li>
+          <li>
+            <code>21</code> Transportation
+          </li>
+          <li>
+            <code>22</code> Wholesale
+          </li>
+          <li>
+            <code>23</code> Other
+          </li>
+          <li>
+            <code>27</code> Education
+          </li>
+          <li>
+            <code>29</code> Charities
+          </li>
+          <li>
+            <code>31</code> Media &amp; Entertainment
+          </li>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>companyNumber</code>
+      </td>
+      <td>
+        The Companies House Number of the company. This number will be used for
+        company lookup.
+      </td>
+      <td>
+        String(8)
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>companyName</code>
+      </td>
+      <td>The name of the company</td>
+      <td>
+        String
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>yearsTrading</code>
+      </td>
+      <td>The period that the company has been trading in years</td>
+      <td>
+        Integer
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>revenue</code>
+      </td>
+      <td>
+        The company's revenue over the last 12 months in Brish Pounds (GBP)
+      </td>
+      <td>
+        Integer
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>invoices</code>
+      </td>
+      <td>Does the company raise invoices to businesses?</td>
+      <td>
+        Boolean
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>clientsType</code>
+      </td>
+      <td>What type of businesses does the customer serve?</td>
+      <td>
+        Integer
+        <p>
+          Default: <code>null</code>
+        </p>
+        <p>
+          Enumerations:
+          <li>
+            <code>1</code> SMEs
+          </li>
+          <li>
+            <code>2</code> Large Corporates
+          </li>
+          <li>
+            <code>3</code> Public Sector
+          </li>
+          <li>
+            <code>4</code> Consumers
+          </li>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>epos</code>
+      </td>
+      <td>Does the company have a credit or debit card terminal?</td>
+      <td>
+        Boolean
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>eposRevenue</code>
+      </td>
+      <td>The monthly revenue through the terminal in Brish Pounds (GBP)</td>
+      <td>
+        Integer
+        <p>
+          Default: <code>null</code>
+        </p>
+        <p>
+          Enumerations:
+          <li>
+            <code>1</code> Less than &pound;2K
+          </li>
+          <li>
+            <code>2</code> &pound;2-3K
+          </li>
+          <li>
+            <code>3</code> &pound;3-4K
+          </li>
+          <li>
+            <code>4</code> &pound;4-5K
+          </li>
+          <li>
+            <code>5</code> &pound;5K+
+          </li>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>asset</code>
+      </td>
+      <td>Whether or not the funding is for an asset</td>
+      <td>
+        Boolean
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>assetType</code>
+      </td>
+      <td>
+        The type of asset that funding is for - only applicable when{" "}
+        <code>asset</code> is <code>true</code>
+      </td>
+      <td>
+        Integer
+        <p>
+          Default: <code>null</code>
+        </p>
+        <p>
+          Enumerations:
+          <li>
+            <code>1</code> Transportation
+          </li>
+          <li>
+            <code>2</code> Office
+          </li>
+          <li>
+            <code>3</code> Stock
+          </li>
+          <li>
+            <code>4</code> Manufacturing
+          </li>
+          <li>
+            <code>5</code> A Business
+          </li>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>purchaseOrders</code>
+      </td>
+      <td>Whether or not the customer receives any purchase order</td>
+      <td>
+        Boolean
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>guarantee</code>
+      </td>
+      <td>The guarantee(s) that the customer is prepared to offer</td>
+      <td>
+        Integer
+        <li>
+          <code>1</code> Personal
+        </li>
+        <li>
+          <code>2</code> Business
+        </li>
+        <li>
+          <code>3</code> None
+        </li>
+        <li>
+          <code>4</code> Both
+        </li>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>contactPhone</code>
+      </td>
+      <td>
+        The mobile phone number of company contact - currently only accepting
+        the UK number without area code
+      </td>
+      <td>
+        String(11)
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>contactName</code>
+      </td>
+      <td>The full name of company contact</td>
+      <td>
+        String
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>contactEmail</code>
+      </td>
+      <td>The email address of the company contact</td>
+      <td>
+        String
+        <p>
+          Default: <code>null</code>
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>

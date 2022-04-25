@@ -7,17 +7,21 @@ import HomepageFeatures from "@site/src/components/HomepageFeatures";
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header className="hero hero--primary index">
-      <div className="container">
-        <Link className="hot-news" to="/use-cases/credit-profile-widget">
-          <span className="badge badge--secondary">NEW</span>
-          <span className=""> Credit profile widget is now live!</span>
+    <header className="flex min-h-[40vh] items-center justify-center bg-gradient-to-br from-green-700  to-green-600">
+      <div className="container text-white">
+        <Link
+          className="flex items-center no-underline hover:no-underline hover:text-white text-slate-200"
+          to="/">
+          <button className="px-2 py-1 font-mono text-xs tracking-widest text-center bg-green-600 rounded-full">
+            NEW
+          </button>
+          <span className="ml-2">Credit profile widget is now live!</span>
         </Link>
-        <Link to="/">
-          <h1 className="hero__title">{siteConfig.title}</h1>
-        </Link>
+        <h1 className="mt-2 mb-12 text-6xl font-semibold text-white">
+          {siteConfig.title}
+        </h1>
         <Link className="" to="/docs/intro">
-          <button className="button button--secondary button--lg">
+          <button className="px-4 py-2 bg-teal-300 rounded hover:bg-teal-400">
             Get started - 5min ⏱️
           </button>
         </Link>

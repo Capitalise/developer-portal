@@ -1,0 +1,318 @@
+openapi: 3.0.0
+info:
+  title: Marketplace
+  version: '2.0'
+  contact:
+    name: Capitalise
+    email: engineering@capitalise.com
+    url: 'https://capitalise.com'
+  description: ''
+servers:
+  - url: 'https://demo.capitalise.com/api/marketplace/v2'
+    description: Demo
+  - url: 'https://capitalise.com/api/marketplace/v2'
+    description: Production
+paths:
+  /tenants:
+    post:
+      summary: Create a tenant
+      operationId: post-tenants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                referenceId:
+                  type: string
+                  description: A unique reference ID that you can pass over to identify this tenan
+      description: A tenant is property or product within a company.
+      tags:
+        - Tenants
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 'The ID of the tenant, which will be used for other Marketplace products as `Capitalise-tenant-id` in the header.'
+                  referenceId:
+                    type: string
+                    description: The unqieu reference ID you passed on
+                  createdDateTime:
+                    type: string
+                    description: The date and time created
+                  UpdatedDateTime:
+                    type: string
+                    description: The date and time updated
+      security:
+        - Master Access Token: []
+    parameters: []
+    get:
+      summary: Retrieve tenants
+      operationId: get-tenants
+      responses:
+        '200':
+          description: OK
+      description: Retrieve all tenants
+      security:
+        - Master Access Token: []
+      tags:
+        - Tenants
+  /auth/authorize:
+    post:
+      summary: Generate a master access token for tenants management
+      operationId: post-auth-authorize
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: 'The access token to manage tenants, which is referred as `Marketplace master access token` in the documentation.'
+                  expires_in:
+                    type: string
+                    description: The expiry of `access_token` in seconds
+                  refresh_token:
+                    type: string
+                    description: The refresh token
+                  scope:
+                    type: string
+                    description: The scopes that the tenants should have
+                  token_type:
+                    type: string
+                    description: The token type
+      description: ''
+      tags:
+        - Auth
+      security:
+        - X-API-Key: []
+    parameters: []
+  /auth/refresh-token:
+    post:
+      summary: Refresh a master access token
+      operationId: post-auth-refresh-token
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  description: The refresh token
+      security:
+        - Master Access Token: []
+      tags:
+        - Auth
+  /auth/tenants/authorize:
+    post:
+      summary: Generate a tenant access token
+      operationId: post-auth-tenants-authorize
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      description: Generate a tenant access token to manage products and data of a specific tenant
+      security:
+        - Master Access Token: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Capitalise-tenant-id
+          description: The tenant ID
+      tags:
+        - Auth
+  /profile:
+    get:
+      summary: Retrieve the profile
+      tags:
+        - Profile
+      responses:
+        '200':
+          description: OK
+      operationId: get-profile
+      description: ''
+      security:
+        - Tenant Access Token: []
+    post:
+      summary: Set up profile details
+      operationId: post-profile
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                x-examples:
+                  example-1:
+                    companyInformation:
+                      name: PRET A MANGER (EUROPE) LIMITED
+                      type: LIMITED_COMPANY
+                      registrationNumber: '01854213'
+                      sector: RETAIL
+                      score:
+                        grade: C
+                        value: 60
+                    id: 7a47a21b-8dd1-49b3-8c03-45cf0fb2e8c5
+                    createdAt: '2022-04-25T08:49:28.560Z'
+                    updatedAt: '2022-04-25T08:49:28.560Z'
+                properties:
+                  companyInformation:
+                    type: object
+                    required:
+                      - name
+                      - type
+                      - registrationNumber
+                      - sector
+                      - score
+                    properties:
+                      name:
+                        type: string
+                        minLength: 1
+                      type:
+                        type: string
+                        minLength: 1
+                      registrationNumber:
+                        type: string
+                        minLength: 1
+                      sector:
+                        type: string
+                        minLength: 1
+                      score:
+                        type: object
+                        required:
+                          - grade
+                        properties:
+                          grade:
+                            type: string
+                            minLength: 1
+                  id:
+                    type: string
+                    minLength: 1
+                  createdAt:
+                    type: string
+                    minLength: 1
+                  updatedAt:
+                    type: string
+                    minLength: 1
+                required:
+                  - companyInformation
+                  - id
+                  - createdAt
+                  - updatedAt
+      description: ''
+      security:
+        - Tenant Access Token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                companyInformation:
+                  type: object
+                  required:
+                    - registrationNumber
+                  properties:
+                    registrationNumber:
+                      type: string
+                      description: The Companies House number
+              required:
+                - companyInformation
+        description: ''
+      tags:
+        - Profile
+    patch:
+      summary: Update profile
+      operationId: patch-profile
+      responses:
+        '200':
+          description: OK
+      description: ''
+      tags:
+        - Profile
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      description: ''
+      x-examples:
+        Alice Smith:
+          id: 142
+          firstName: Alice
+          lastName: Smith
+          email: alice.smith@gmail.com
+          dateOfBirth: '1997-10-31'
+          emailVerified: true
+          signUpDate: '2019-08-24'
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the given user.
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1997-10-31'
+        emailVerified:
+          type: boolean
+          description: Set to true if the user's email has been verified.
+        createDate:
+          type: string
+          format: date
+          description: The date that the user was created.
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - emailVerified
+  securitySchemes:
+    Master Access Token:
+      type: http
+      scheme: bearer
+      description: Your bearer token should be a master access token generated from `/marketplace/v2/auth/authorize` or `/marketplace/v2/auth/refresh-token`
+    Tenant Access Token:
+      type: http
+      scheme: bearer
+      description: Your bearer token should lbe a tenant access token generated from `/marketplace/v2/auth/tenants/authorize`
+    X-API-Key:
+      name: X-API-Key
+      type: apiKey
+      in: header
+tags:
+  - name: Auth
+  - name: Profile
+  - name: Tenants

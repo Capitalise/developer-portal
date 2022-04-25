@@ -1,70 +1,142 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.css';
+import React from "react";
+import Link from "@docusaurus/Link";
 
 type FeatureItem = {
   title: string;
-  Svg: React.ComponentType<React.ComponentProps<'svg'>>;
+  Svg: React.ComponentType<React.ComponentProps<"svg">>;
+  link: string;
   description: JSX.Element;
+  tags: string[];
+  isNew: boolean;
 };
 
-const FeatureList: FeatureItem[] = [
+const UseCases = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: "Credit profile widget",
+    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
+    svg_path: "/static/img/undraw_docusaurus_mountain.svg",
+    link: "/use-cases/credit-profile-widget",
+    tags: ["API", "Iframe", "JavaScript"],
+    isNew: true,
+    description: (
+      <>Help users track business credit score directly from your platform</>
+    ),
+  },
+  {
+    title: "Embedded funding search",
+    Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
+    link: "/use-cases/embedded-funding-search",
+    tags: ["Iframe", "JavaScript"],
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Help users funding funding for from with over 100 lenders in 5 minutes
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: "Native funding search",
+    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    tags: ["API"],
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Design your own native journey to help user fund funding from over 100
+        lenders
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: "Direct referral",
+    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    tags: ["HTML"],
+    description: (
+      <>Directly refer users to our platform and search for funding</>
+    ),
+  },
+];
+
+const ApiProducts = [
+  {
+    title: "Platform",
+    Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
+    link: "/api/platform",
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Customer benefits customer benefits a lot of customer benefits and
+        customer benefits continue and going on an on - but snappy!
+      </>
+    ),
+  },
+  {
+    title: "Marketplace",
+    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
+    link: "/api/marketplace",
+    description: (
+      <>
+        Customer benefits customer benefits a lot of customer benefits and
+        customer benefits continue and going on an on - but snappy!
       </>
     ),
   },
 ];
 
-function Feature({title, Svg, description}: FeatureItem) {
+function Feature({ link, title, Svg, description, tags, isNew }: FeatureItem) {
   return (
-    <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+    <Link to={link} className=" card padding-horiz--md">
+      <div className="card__image">
+        <Svg role="img" />
       </div>
-      <div className="text--center padding-horiz--md">
+      <div className="card__body">
         <h3>{title}</h3>
+        {!link && (
+          <p className="featured-badge">
+            <span className="badge badge--secondary">COMING SOON</span>
+          </p>
+        )}
+        {isNew && (
+          <p className="featured-badge">
+            <span className="badge badge--info">NEW</span>
+          </p>
+        )}
         <p>{description}</p>
       </div>
-    </div>
+      {tags && (
+        <div className="card__footer">
+          <div className="button-group button-group--block">
+            <ul className="pills">
+              {tags
+                ? tags.map((tag) => (
+                    <li className="pills__item pills__item--active" key={tag}>
+                      {tag}
+                    </li>
+                  ))
+                : null}
+            </ul>
+          </div>
+        </div>
+      )}
+    </Link>
   );
 }
 
 export default function HomepageFeatures(): JSX.Element {
   return (
-    <section className={styles.features}>
-      <div className="container">
-        <div className="row">
-          {FeatureList.map((props, idx) => (
+    <>
+      <section>
+        <h2>Use cases</h2>
+        <div className="container flex">
+          {UseCases.map((props, idx) => (
             <Feature key={idx} {...props} />
           ))}
         </div>
-      </div>
-    </section>
+      </section>
+      <section>
+        <h2>API products</h2>
+        <div className="container flex">
+          {ApiProducts.map((props, idx) => (
+            <Feature key={idx} {...props} />
+          ))}
+        </div>
+      </section>
+    </>
   );
 }
