@@ -13,8 +13,7 @@ type FeatureItem = {
 const UseCases = [
   {
     title: "Credit profile widget",
-    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
-    svg_path: "/static/img/undraw_docusaurus_mountain.svg",
+    Svg: require("@site/static/img/index-credit-profile-widget.svg").default,
     link: "/use-cases/credit-profile-widget",
     tags: ["API", "Iframe", "JavaScript"],
     isNew: true,
@@ -24,7 +23,7 @@ const UseCases = [
   },
   {
     title: "Embedded funding search",
-    Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
+    Svg: require("@site/static/img/index-embedded-funding-search.svg").default,
     link: "/use-cases/embedded-funding-search",
     tags: ["Iframe", "JavaScript"],
     description: (
@@ -35,7 +34,7 @@ const UseCases = [
   },
   {
     title: "Native funding search",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    Svg: require("@site/static/img/index-native-funding-search.svg").default,
     tags: ["API"],
     description: (
       <>
@@ -46,7 +45,7 @@ const UseCases = [
   },
   {
     title: "Direct referral",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    Svg: require("@site/static/img/index-direct-referral.svg").default,
     tags: ["HTML"],
     description: (
       <>Directly refer users to our platform and search for funding</>
@@ -57,7 +56,7 @@ const UseCases = [
 const ApiProducts = [
   {
     title: "Platform",
-    Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
+    Svg: require("@site/static/img/index-platform.svg").default,
     link: "/api/platform",
     description: (
       <>
@@ -68,7 +67,7 @@ const ApiProducts = [
   },
   {
     title: "Marketplace",
-    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
+    Svg: require("@site/static/img/index-marketplace.svg").default,
     link: "/api/marketplace",
     description: (
       <>
