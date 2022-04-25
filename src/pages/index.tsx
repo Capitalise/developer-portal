@@ -14,7 +14,7 @@ function HomepageHeader() {
           <span className=""> Credit profile widget is now live!</span>
         </Link>
         <h1 className="hero__title">{siteConfig.title}</h1>
-        <Link className="" to="/docs/intro">
+        <Link className="" to="/user-cases">
           <button className="button button--secondary button--lg">
             Get started - 5min ⏱️
           </button>
