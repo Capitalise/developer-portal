@@ -131,7 +131,7 @@ const config = {
         },
         {
           label: "Marketplace",
-          to: "/api/marketplace",
+          to: "/api/marketplace/v1",
           position: "left",
           items: [
             {
