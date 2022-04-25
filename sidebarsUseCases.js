@@ -26,7 +26,6 @@ const sidebars = {
         "credit-profile-widget",
         "embedded-funding-search",
         "native-funding-search",
-        "direct-referral",
       ],
     },
   ],

@@ -28,27 +28,31 @@ const UseCases = [
     tags: ["Iframe", "JavaScript"],
     description: (
       <>
-        Help users funding funding for from with over 100 lenders in 5 minutes
+        Low-code integration to help your users search funding for from with
+        over 100 lenders in 5 minutes
       </>
     ),
   },
   {
     title: "Native funding search",
     Svg: require("@site/static/img/index-native-funding-search.svg").default,
+    link: "/use-cases/native-funding-search",
     tags: ["API"],
     description: (
       <>
-        Design your own native journey to help user fund funding from over 100
+        Design your own native journey to help user search funding from over 100
         lenders
       </>
     ),
   },
   {
-    title: "Direct referral",
+    title: "Native instant offers",
     Svg: require("@site/static/img/index-direct-referral.svg").default,
-    tags: ["HTML"],
+    tags: ["API"],
     description: (
-      <>Directly refer users to our platform and search for funding</>
+      <>
+        Integrate once with access to get instant offers from multiple lenders
+      </>
     ),
   },
 ];
@@ -58,21 +62,16 @@ const ApiProducts = [
     title: "Platform",
     Svg: require("@site/static/img/index-platform.svg").default,
     link: "/api/platform",
-    description: (
-      <>
-        Customer benefits customer benefits a lot of customer benefits and
-        customer benefits continue and going on an on - but snappy!
-      </>
-    ),
+    description: <>Authentication and authorisation to Capitalise APIs</>,
   },
   {
     title: "Marketplace",
     Svg: require("@site/static/img/index-marketplace.svg").default,
-    link: "/api/marketplace",
+    link: "/api/marketplace/v1",
     description: (
       <>
-        Customer benefits customer benefits a lot of customer benefits and
-        customer benefits continue and going on an on - but snappy!
+        Funding matching services and intelligent scoring & insight services all
+        in one place
       </>
     ),
   },
@@ -93,7 +92,7 @@ function Feature({ link, title, Svg, description, tags, isNew }: FeatureItem) {
         )}
         {isNew && (
           <p className="featured-badge">
-            <span className="badge badge--info">NEW</span>
+            <span className="badge badge--success">NEW</span>
           </p>
         )}
         <p>{description}</p>

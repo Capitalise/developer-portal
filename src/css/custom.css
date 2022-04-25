@@ -6,7 +6,7 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
+  --ifm-color-primary: #00a045;
   --ifm-color-primary-dark: #29784c;
   --ifm-color-primary-darker: #277148;
   --ifm-color-primary-darkest: #205d3b;
@@ -18,13 +18,15 @@
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme="dark"] {
-  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary: #00a045;
   --ifm-color-primary-dark: #21af90;
   --ifm-color-primary-darker: #1fa588;
   --ifm-color-primary-darkest: #1a8870;
   --ifm-color-primary-light: #29d5b0;
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
+  --ifm-color-info: var(--ifm-color-primary-contrast-background);
+  --ifm-color-secondary: var(--ifm-color-success-contrast-background);
 }
 
 .docusaurus-highlight-code-line {
@@ -104,9 +106,30 @@ section h2 {
   transition: all 0.1s ease-in-out;
 }
 
+.flex a {
+  color: var(--ifm-color-content);
+}
+
 .flex .card:hover {
   box-shadow: 0 5px 40px rgba(0, 0, 0, 0.2);
   transition: all 0.1s ease-in-out;
+}
+
+.flex .pills__item--active,
+.index a,
+.index .button {
+  color: var(--ifm-color-content);
+}
+
+.index .button {
+  padding: 0.85em 1.5em;
+  font-weight: normal;
+}
+
+.index-content > div {
+  vertical-align: middle;
+  place-self: center;
+  align-self: center;
 }
 
 .flex a {
@@ -114,7 +137,7 @@ section h2 {
 }
 
 .flex a:hover {
-  color: var(--ifm-color-primary-lightest);
+  color: var(--ifm-color-primary-light);
 }
 
 .flex li {
@@ -125,7 +148,7 @@ section h2 {
 .card svg {
   height: 70px;
   margin: 2rem 1rem 0 1rem;
-  fill: var(--ifm-color-primary);
+  fill: var(--ifm-color-content);
 }
 
 .widget-examples img {
@@ -148,12 +171,26 @@ section h2 {
 }
 
 .hot-news span {
-  color: var(--ifm-color-primary-lightest);
+  color: var(--ifm-font-color-base-inverse);
+}
+
+.hot-news .badge {
+  background-color: var(--ifm-font-color-base-inverse);
+  border-color: var(--ifm-font-color-base-inverse);
+  color: var(--ifm-color-primary);
 }
 
 .index h1 {
-  margin-top: 0.1em;
-  margin-bottom: 1.5em;
+  margin-top: 0.2em;
+  font-size: 4em;
+  line-height: 1.1em;
+}
+
+.index .tagline {
+  font-size: 1.5em;
+  font-weight: normal;
+  line-height: normal;
+  margin: 2em 0;
 }
 
 .flex .pills {

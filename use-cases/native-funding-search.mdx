@@ -1,7 +1,68 @@
 ---
-title: Native funding search (coming soon)
+title: Native funding search
 tags:
   - API
+description: Design your own native journey to help user find funding from over 100 lenders
 ---
 
-Coming soon
+Design your own native journey to help user find funding from over 100 lenders
+
+### Environemnts
+
+| Environment | Base URL | Description |
+| --- | --- | --- |
+| Demo | https://demo.capitalise.com/api | Get started with test credentials and life-like data |
+| Production | https://capitalise.com/api | Launch your app with unlimited live credentials |
+
+For account setup, please contact our Commercial Director Olly Cummings at [olly@capitalise.com](mailto:olly@capitalise.com).
+
+:::info Important
+
+- Data CANNOT be moved between Production and Demo
+- Credentials (e.g. `Logins`, `API Key`, `API Token`) are NOT sharable between Production and Demo
+- Always double check if you've got the right credentials configured before production release
+
+:::
+
+We provide two suites of RESTful APIs which allows you build native funding journey at your site.
+
+- [`Platofrm API`](/api/platform) - authenticate users, generate API keys (for products such as Marketplace API), and enable sign-in with a Capitalise account
+
+- [`Marketplace API`](/api/marketplace/v1) - integrate with questionnaire flow directly into your product, or use your data to deliver our targeted product matching and business scoring intelligence directly to your customers.
+
+### High-level sequence diagram for submitting funding search via APIs
+
+```mermaid
+sequenceDiagram
+    actor Applicant
+    participant API Partner
+    participant Capitalise Platform APIs
+    participant Capitalise Marketplace APIs
+    Note over API Partner, Capitalise Platform APIs: Step 1: Excange login for API key (one-off)
+    API Partner->>Capitalise Platform APIs: POST /platform/v1/auth/login
+    Capitalise Platform APIs->>API Partner: Access token
+    API Partner->>Capitalise Platform APIs: POST /platform/v1/api-key
+    Capitalise Platform APIs->>API Partner: key
+    Note over API Partner,Capitalise Marketplace APIs: Step 2: Excange API key for Marketplace API tokens
+    API Partner->>Capitalise Marketplace APIs: POST /marketplace/v1/auth/authorize?api_key={{key}}
+    Capitalise Marketplace APIs->>API Partner: Marketplace access token jwt and refresh token refreshToken
+    alt Getting new Marketplace access token using refresh_token when expired
+        API Partner->>Capitalise Marketplace APIs: POST /marketplace/v1/auth/refresh-token
+        Capitalise Marketplace APIs->>API Partner: New marketplace access token jwt and refresh token refreshToken
+    end
+    Note over API Partner,Capitalise Marketplace APIs: Step 3: Create funding search
+    Applicant->>API Partner: Complete the quesitonnaire
+    API Partner->>Capitalise Marketplace APIs: Create the company<br>POST /marketplace/v1/profiles/blank
+    Capitalise Marketplace APIs->>API Partner: Company UUID profileUUID
+    API Partner->>Capitalise Marketplace APIs: Update the company profile<br>PATCH /marketplace/v1/questionnaires/business-all-funding-products/profiles/:profileUUID/answers
+    Capitalise Marketplace APIs->>API Partner: Successful: HTTP 204
+    API Partner->>Capitalise Marketplace APIs: Get lender matches<br>PATCH /marketplace/v1/profiles/:profileUUID/funding/matches/results
+    Capitalise Marketplace APIs->>API Partner: Successful: HTTP 200 - Matches in matches[]
+    API Partner->>Applicant: Show all matches
+    Note over API Partner,Capitalise Marketplace APIs: Step 4: Submit funding search
+    Applicant->>API Partner: Select maximum<br>4 product matches
+    API Partner->>Capitalise Marketplace APIs: Submit the the profile with selected matches<br>POST /marketplace/v1/profiles/:profileUUID/funding/apply
+    Capitalise Marketplace APIs->>API Partner: Successful: HTTP 200
+    API Partner->>Applicant: Funding search submitted
+
+```
