@@ -107,7 +107,7 @@ const config = {
   },
   url: process.env.DEPLOY_PRIME_URL || "http://localhost:5000", // Your website URL
   baseUrl: process.env.DEPLOY_BASE_URL || "/", // Base URL for your project */
-  onBrokenLinks: "throw",
+  onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
   organizationName: "capitalise", // Usually your GitHub org/user name.
