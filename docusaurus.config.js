@@ -139,7 +139,7 @@ const config = {
               to: "/api/marketplace/v1",
             },
             {
-              label: "v2 (beta - coming soon)",
+              label: "v2 (beta)",
               to: "/api/marketplace/v2",
             },
           ],
@@ -149,41 +149,69 @@ const config = {
     footer: {
       // logo: {
       //   alt: "Redocusaurus Logo",
-      //   src: "img/logoDark.png",
+      //   src: "img/logo.svg",
       // },
       style: "dark",
       links: [
         {
-          title: "NPM Modules",
+          title: "Capitalise.com Platform Ltd",
           items: [
             {
-              label: "Redocusaurus",
-              href: "https://www.npmjs.com/package/redocusaurus/",
+              html: `<p>2 Valentine Place, London. SE1 8QH</p>`,
             },
             {
-              label: "Docusaurus Theme Redoc",
-              href: "https://www.npmjs.com/package/docusaurus-theme-redoc/",
-            },
-            {
-              label: "Docusaurus Plugin Redoc",
-              href: "https://www.npmjs.com/package/docusaurus-plugin-redoc/",
+              html: `<p>Capitalise.com Platform Ltd, trading as Capitalise, is authorised and regulated by the Financial Conduct Authority for regulated credit agreements. Capitalise is a credit broker not a lender.</p>`,
             },
           ],
         },
         {
-          title: "More",
+          title: "Useful information",
           items: [
             {
-              label: "Github",
-              href: "https://github.com/rohit-gohri/redocusaurus/",
+              label: "About Us",
+              href: "https://capitalise.com/gb/about",
             },
             {
-              label: "Blog Post",
-              href: "https://rohit.page/blog/projects/openapi-for-docusaurus/",
+              label: "Careers - we are hiring!",
+              href: "https://capitalise.homerun.co",
             },
             {
-              label: "Twitter Discussion",
-              href: "https://twitter.com/rohit_gohri/status/1351589213565644801",
+              label: "FAQs",
+              href: "https://capitalise.com/gb/faq",
+            },
+          ],
+        },
+        {
+          title: "Contacts",
+          items: [
+            {
+              label: "Call us on 020 8038 1151",
+              href: "tel:02080381151",
+            },
+            {
+              label: "support@capitalise.com",
+              href: "mailto:support@capitalise.com",
+            },
+            {
+              label: "LinkedIn",
+              href: "https://www.linkedin.com/company/capitalisers/mycompany/",
+            },
+            {
+              label: "Twitter",
+              href: "https://twitter.com/Capitalisers",
+            },
+          ],
+        },
+        {
+          title: "Legal stuff",
+          items: [
+            {
+              label: "Website Terms of Use",
+              href: "https://capitalise.com/gb/legal/website-terms-of-use",
+            },
+            {
+              label: "Privacy policy",
+              href: "https://capitalise.com/gb/legal/privacy-policy",
             },
           ],
         },

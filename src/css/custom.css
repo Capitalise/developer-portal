@@ -36,41 +36,32 @@
 
 @font-face {
   font-family: "BraceWeb-Light";
-  src: url("https://capitalise.com/public/fonts/brace-web-light.eot?1648710178737");
-  src: url("https://capitalise.com/public/fonts/brace-web-light.eot?#iefix?1648710178737")
+  src: url("/static/fonts/brace-web-light.eot?1648710178737");
+  src: url("/static/fonts/brace-web-light.eot?#iefix?1648710178737")
       format("embedded-opentype"),
-    url("https://capitalise.com/public/fonts/brace-web-light.woff2?1648710178737")
-      format("woff2"),
-    url("https://capitalise.com/public/fonts/brace-web-light.woff?1648710178737")
-      format("woff"),
-    url("https://capitalise.com/public/fonts/brace-web-light.ttf?1648710178737")
-      format("truetype");
+    url("/static/fonts/brace-web-light.woff2?1648710178737") format("woff2"),
+    url("/static/fonts/brace-web-light.woff?1648710178737") format("woff"),
+    url("/static/fonts/brace-web-light.ttf?1648710178737") format("truetype");
 }
 
 @font-face {
   font-family: "BraceWeb-Regular";
-  src: url("https://capitalise.com/public/fonts/brace-web-regular.eot?1648710178737");
-  src: url("https://capitalise.com/public/fonts/brace-web-regular.eot?#iefix?1648710178737")
+  src: url("/static/fonts/brace-web-regular.eot?1648710178737");
+  src: url("/static/fonts/brace-web-regular.eot?#iefix?1648710178737")
       format("embedded-opentype"),
-    url("https://capitalise.com/public/fonts/brace-web-regular.woff2?1648710178737")
-      format("woff2"),
-    url("https://capitalise.com/public/fonts/brace-web-regular.woff?1648710178737")
-      format("woff"),
-    url("https://capitalise.com/public/fonts/brace-web-regular.ttf?1648710178737")
-      format("truetype");
+    url("/static/fonts/brace-web-regular.woff2?1648710178737") format("woff2"),
+    url("/static/fonts/brace-web-regular.woff?1648710178737") format("woff"),
+    url("/static/fonts/brace-web-regular.ttf?1648710178737") format("truetype");
 }
 
 @font-face {
   font-family: "BraceWeb-Thin";
-  src: url("https://capitalise.com/public/fonts/brace-web-thin.eot?1648710178737");
-  src: url("https://capitalise.com/public/fonts/brace-web-thin.eot?#iefix?1648710178737")
+  src: url("/static/fonts/brace-web-thin.eot?1648710178737");
+  src: url("/static/fonts/brace-web-thin.eot?#iefix?1648710178737")
       format("embedded-opentype"),
-    url("https://capitalise.com/public/fonts/brace-web-thin.woff2?1648710178737")
-      format("woff2"),
-    url("https://capitalise.com/public/fonts/brace-web-thin.woff?1648710178737")
-      format("woff"),
-    url("https://capitalise.com/public/fonts/brace-web-thin.ttf?1648710178737")
-      format("truetype");
+    url("/static/fonts/brace-web-thin.woff2?1648710178737") format("woff2"),
+    url("/static/fonts/brace-web-thin.woff?1648710178737") format("woff"),
+    url("/static/fonts/brace-web-thin.ttf?1648710178737") format("truetype");
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -172,9 +163,7 @@ section h2 {
 
 h1,
 h2,
-h3,
-h4,
-h5 {
+h3 {
   font-family: "BraceWeb-Regular", sans-serif;
   font-weight: normal;
 }

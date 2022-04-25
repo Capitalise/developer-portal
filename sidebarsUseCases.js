@@ -22,7 +22,12 @@ const sidebars = {
         type: "doc",
         id: "index",
       },
-      items: ["credit-profile-widget", "embedded-funding-search"],
+      items: [
+        "credit-profile-widget",
+        "embedded-funding-search",
+        "native-funding-search",
+        "direct-referral",
+      ],
     },
   ],
 

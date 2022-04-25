@@ -2,7 +2,15 @@ openapi: 3.0.0
 info:
   title: Marketplace
   version: 1.0.0
-  description: Capitalise Marketplace APIs
+  description: |-
+    # Overview
+    The Capitalise Marketplace API allows developers access to Capitalise matching services and intelligent scoring & insight services.
+
+    With this API you can:
+
+    - Integrate a questionnaire flow directly into your platform
+    - Use your data to deliver targeted product matching
+    - Enhance your application with business scoring intelligence
   contact:
     name: Capitalise
     email: engineering@capitalise.com
