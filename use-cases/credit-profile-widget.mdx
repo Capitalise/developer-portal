@@ -104,6 +104,9 @@ On the server-side, you will be calling two sets of APIs:
 
 Generate a `platform access token` using your environment login to Capitalise.com.
 
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
 ```bash title="Request"
 curl --location --request POST 'https://demo.capitalise.com/api/platform/v1/auth/login' \
 --header 'Content-Type: application/json' \
@@ -114,6 +117,23 @@ curl --location --request POST 'https://demo.capitalise.com/api/platform/v1/auth
   # highlight-end
 }'
 ```
+
+</TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request POST 'https://capitalise.com/api/platform/v1/auth/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  # highlight-start
+  "email": "YOUR_EMAIL",
+  "password": "YOUR_PASSWORD"
+  # highlight-end
+}'
+```
+
+  </TabItem>
+</Tabs>
 
 Upon Successful 200, you will get your `API Key` in the response.
 
@@ -126,6 +146,9 @@ Upon Successful 200, you will get your `API Key` in the response.
 ### Generate Marketplace `master access token`
 
 To generate your `API Key`, you would need to use the platform `access_token` as your bearer token.
+
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
 
 ```bash title="Request"
 curl --location --request POST 'https://demo.capitalise.com/api/platform/v1/api-key' \
@@ -152,6 +175,38 @@ curl --location --request POST 'https://demo.capitalise.com/api/platform/v1/api-
     "expiresAt": "2022-07-26T13:29:11.631Z"
 }'
 ```
+
+  </TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request POST 'https://capitalise.com/api/platform/v1/api-key' \
+# highlight-start
+--header 'Authorization: Bearer eyJhbG...{{PLATFORM_ACCESS_TOKEN}}...puwv4f2KGadrMwq681u_RQ' \
+# highlight-end
+--header 'Content-Type: application/json' \
+--data-raw '{
+    # highlight-start
+    "name": "Widget testing", # This string needs to be unique
+    # highlight-end
+    "scopes": [
+        "profile:multiples",
+        "profile:read",
+        "profile:write",
+        "questionnaire:read",
+        "questionnaire:write",
+        "funding:read",
+        "funding:write",
+        "insights:read",
+        "scoring:read",
+        "offline_access"
+    ],
+    "expiresAt": "2022-07-26T13:29:11.631Z"
+}'
+```
+
+  </TabItem>
+</Tabs>
 
 Now we move onto Marketplace APIs to generate `master access token`. You will need to use your `API Key` to do this.
 
@@ -181,14 +236,32 @@ Upon Successful 201, you will get two Marketplace tokens:
 
 Now we move onto Marketplace APIs to generate `master access token`. You will need to use your `API Key` to do this.
 
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
 ```bash title="Request"
-curl --location --request POST 'https://bravo.dev.capitalise.com/api/marketplace/v2/tenants' \
+curl --location --request POST 'https://demo.capitalise.com/api/marketplace/v2/tenants' \
 --header 'Authorization: Bearer eyJhbGciO...{{MARKETPLACE_MASTER_ACCESS_TOKEN}}...V0GiDrY9sVzbZjQMDc1znR77Q' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "referenceId": "Unique Tenant ID" # Optional but recommended - needs to be unique
 }'
 ```
+
+  </TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request POST 'https://capitalise.com/api/marketplace/v2/tenants' \
+--header 'Authorization: Bearer eyJhbGciO...{{MARKETPLACE_MASTER_ACCESS_TOKEN}}...V0GiDrY9sVzbZjQMDc1znR77Q' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "referenceId": "Unique Tenant ID" # Optional but recommended - needs to be unique
+}'
+```
+
+  </TabItem>
+</Tabs>
 
 Upon Successful 201, you will get the tenant ID.
 
@@ -207,13 +280,30 @@ Upon Successful 201, you will get the tenant ID.
 
 Once a tenant is created, you can generate a `tenant access token` to manage the tenant.
 
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
 ```bash title="Request"
-curl --location --request POST 'https://bravo.dev.capitalise.com/api/marketplace/v2/auth/tenants/authorize' \
+curl --location --request POST 'https://demo.capitalise.com/api/marketplace/v2/auth/tenants/authorize' \
 # highlight-start
 --header 'Capitalise-tenant-id: 5ccaa9ba-e3d4-4c1b-865a-26ac02c2717d' \
 --header 'Authorization: Bearer eyJhbGciO...{{MARKETPLACE_MASTER_ACCESS_TOKEN}}...3Fj_LK_-V0GiDrY9sVzbZjQMDc1znR77Q'
 # highlight-end
 ```
+
+  </TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request POST 'https://capitalise.com/api/marketplace/v2/auth/tenants/authorize' \
+# highlight-start
+--header 'Capitalise-tenant-id: 5ccaa9ba-e3d4-4c1b-865a-26ac02c2717d' \
+--header 'Authorization: Bearer eyJhbGciO...{{MARKETPLACE_MASTER_ACCESS_TOKEN}}...3Fj_LK_-V0GiDrY9sVzbZjQMDc1znR77Q'
+# highlight-end
+```
+
+  </TabItem>
+</Tabs>
 
 Upon Successful 201, you will get the tenant `access_token`.
 
@@ -230,8 +320,11 @@ Upon Successful 201, you will get the tenant `access_token`.
 
 Now you can set up the profile for the tenant. The widget only need a valid Companies House number.
 
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
 ```bash title="Request"
-curl --location --request POST 'https://bravo.dev.capitalise.com/api/marketplace/v2/profile' \
+curl --location --request POST 'https://demo.capitalise.com/api/marketplace/v2/profile' \
       # highlight-start
 --header 'Authorization: Bearer eyJhbGciOi...{{MARKETPLACE_TENANT_ACCESS_TOKEN}}...tRtpiO1aayuWslZ3_ssOQ5rxqGOYZQooBDICrJGVHcF2gg' \
       # highlight-end
@@ -244,6 +337,27 @@ curl --location --request POST 'https://bravo.dev.capitalise.com/api/marketplace
     }
 }'
 ```
+
+  </TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request POST 'https://capitalise.com/api/marketplace/v2/profile' \
+      # highlight-start
+--header 'Authorization: Bearer eyJhbGciOi...{{MARKETPLACE_TENANT_ACCESS_TOKEN}}...tRtpiO1aayuWslZ3_ssOQ5rxqGOYZQooBDICrJGVHcF2gg' \
+      # highlight-end
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "companyInformation": {
+      # highlight-start
+        "registrationNumber": "11391321"
+      # highlight-end
+    }
+}'
+```
+
+  </TabItem>
+</Tabs>
 
 If you get a 201 Successful response, it means you've set up the profile correctly for the tenant.
 
