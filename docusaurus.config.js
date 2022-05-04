@@ -68,6 +68,7 @@ const config = {
           // Please change this to your repo.
           editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
           remarkPlugins: [require("mdx-mermaid")],
+          showLastUpdateTime: true,
         },
         blog: {
           showReadingTime: true,
@@ -95,6 +96,7 @@ const config = {
         sidebarPath: require.resolve("./sidebarsUseCases.js"),
         remarkPlugins: [require("mdx-mermaid")],
         editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
+        showLastUpdateTime: true,
       },
     ],
   ],
