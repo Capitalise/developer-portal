@@ -112,7 +112,9 @@ const config = {
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
   organizationName: "capitalise", // Usually your GitHub org/user name.
-  projectName: "docusaurus", // Usually your repo name.
+  projectName: "developer-portal", // Usually your repo name.
+  deploymentBranch: "production",
+  trailingSlash: false,
   themeConfig: {
     navbar: {
       logo: {
