@@ -1,58 +1,57 @@
 /**
  * @type {import('redocusaurus').PresetEntry}
  */
-const redocusaurus = [
-  "redocusaurus",
-  {
-    debug: Boolean(process.env.DEBUG || process.env.CI),
-    specs: [
-      {
-        id: "platform-v1",
-        spec: "./openapi/platform-v1.yaml",
-        route: "/api/platform/",
-      },
-      {
-        id: "marketplace-v1",
-        spec: "./openapi/marketplace-v1.yaml",
-        route: "/api/marketplace/v1",
-      },
-      {
-        id: "marketplace-v2",
-        spec: "./openapi/marketplace-v2.yaml",
-        route: "/api/marketplace/v2",
-      },
-    ],
-    theme: {
-      /**
-       * Highlight color for docs
-       */
-      primaryColor: "#1890ff",
-      /**
-       * Options to pass to redoc
-       * @see https://github.com/redocly/redoc#redoc-options-object
-       */
-      options: {
-        disableSearch: false,
-        sideNavStyle: "path-only",
-        sortOperationsAlphabetically: true,
-        sortTagsAlphabetically: true,
-        sortEnumValuesAlphabetically: true,
-      },
-      /**
-       * Options to pass to override RedocThemeObject
-       * @see https://github.com/Redocly/redoc#redoc-theme-object
-       */
-      theme: {},
-    },
-  },
-];
+// const redocusaurus = [
+//   "redocusaurus",
+//   {
+//     debug: Boolean(process.env.DEBUG || process.env.CI),
+//     specs: [
+//       {
+//         id: "platform-v1",
+//         spec: "./openapi/platform-v1.yaml",
+//         route: "/api/platform/",
+//       },
+//       {
+//         id: "marketplace-v1",
+//         spec: "./openapi/marketplace-v1.yaml",
+//         route: "/api/marketplace/v1",
+//       },
+//       {
+//         id: "marketplace-v2",
+//         spec: "./openapi/marketplace-v2.yaml",
+//         route: "/api/marketplace/v2",
+//       },
+//     ],
+//     theme: {
+//       /**
+//        * Highlight color for docs
+//        */
+//       primaryColor: "#1890ff",
+//       /**
+//        * Options to pass to redoc
+//        * @see https://github.com/redocly/redoc#redoc-options-object
+//        */
+//       options: {
+//         disableSearch: false,
+//         sideNavStyle: "path-only",
+//         sortOperationsAlphabetically: true,
+//         sortTagsAlphabetically: true,
+//         sortEnumValuesAlphabetically: true,
+//       },
+//       /**
+//        * Options to pass to override RedocThemeObject
+//        * @see https://github.com/Redocly/redoc#redoc-theme-object
+//        */
+//       theme: {},
+//     },
+//   },
+// ];
 
 /**
  * @type {Partial<import('@docusaurus/types').DocusaurusConfig>}
  */
 const config = {
   presets: [
-    redocusaurus,
     /** ************ Rest of your Docusaurus Config *********** */
     [
       "@docusaurus/preset-classic",
@@ -65,6 +64,44 @@ const config = {
           routeBasePath: "use-cases",
           remarkPlugins: [require("mdx-mermaid")],
           showLastUpdateTime: true,
+        },
+      },
+    ],
+    [
+      "redocusaurus",
+      {
+        specs: [
+          { spec: "./openapi/platform-v1.yaml", route: "api/platform" },
+          {
+            spec: "./openapi/marketplace-v1.yaml",
+            route: "api/marketplace/v1",
+          },
+          {
+            spec: "./openapi/marketplace-v2.yaml",
+            route: "api/marketplace/v2",
+          },
+        ],
+        theme: {
+          /**
+           * Highlight color for docs
+           */
+          primaryColor: "#1890ff",
+          /**
+           * Options to pass to redoc
+           * @see https://github.com/redocly/redoc#redoc-options-object
+           */
+          options: {
+            disableSearch: false,
+            sideNavStyle: "path-only",
+            sortOperationsAlphabetically: true,
+            sortTagsAlphabetically: true,
+            sortEnumValuesAlphabetically: true,
+          },
+          /**
+           * Options to pass to override RedocThemeObject
+           * @see https://github.com/Redocly/redoc#redoc-theme-object
+           */
+          theme: {},
         },
       },
     ],

@@ -7395,7 +7395,7 @@ redoc@2.0.0-rc.72:
     swagger2openapi "^7.0.6"
     url-template "^2.0.8"
 
-redocusaurus@^1.1.0:
+redocusaurus@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/redocusaurus/-/redocusaurus-1.2.1.tgz#d1ec459f17e479348107f300a6def1587855340d"
   integrity sha512-Ho03SyMZUkFcmeLPEAayY0JlJkRH7Iwv3X52MNvn0P96wsxQuVJQZBTXEyaeCgCN26G8WqeMFryo2x9nB8f+sw==
