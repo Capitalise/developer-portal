@@ -64,17 +64,19 @@ const config = {
         debug: Boolean(process.env.DEBUG || process.env.CI),
         theme: { customCss: [require.resolve("./src/css/custom.css")] },
         docs: {
-          sidebarPath: require.resolve("./sidebarsDocs.js"),
-          // Please change this to your repo.
-          editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
+          sidebarPath: require.resolve("./sidebarsUseCases.js"),
+          path: "use-cases",
+          routeBasePath: "use-cases",
           remarkPlugins: [require("mdx-mermaid")],
           showLastUpdateTime: true,
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
-        },
+
+        // Removed as currently no blog is created
+        // blog: {
+        //   showReadingTime: true,
+        //   // Please change this to your repo.
+        //   editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
+        // },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
@@ -86,19 +88,6 @@ const config = {
     // Local search
     require.resolve("@cmfcmf/docusaurus-search-local"),
     "@docusaurus/theme-live-codeblock",
-    // Set up use-cases
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "useCases",
-        path: "use-cases",
-        routeBasePath: "use-cases",
-        sidebarPath: require.resolve("./sidebarsUseCases.js"),
-        remarkPlugins: [require("mdx-mermaid")],
-        editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
-        showLastUpdateTime: true,
-      },
-    ],
   ],
   title: "Capitalise.com Developer Portal",
   tagline:
@@ -108,13 +97,13 @@ const config = {
       description: this.tagline,
     },
   },
-  url: process.env.DEPLOY_PRIME_URL || "http://developer.dev.capitalise.com", // Your website URL
-  baseUrl: process.env.DEPLOY_BASE_URL || "/", // Base URL for your project */
+  url: process.env.DEPLOY_PRIME_URL || "http://developer.capitalise.com",
+  baseUrl: process.env.DEPLOY_BASE_URL || "/",
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.png",
-  organizationName: "capitalise", // Usually your GitHub org/user name.
-  projectName: "developer-portal", // Usually your repo name.
+  organizationName: "capitalise",
+  projectName: "developer-portal",
   deploymentBranch: "production",
   trailingSlash: false,
   themeConfig: {
