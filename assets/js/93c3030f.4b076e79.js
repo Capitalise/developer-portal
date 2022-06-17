@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdeveloper_portal_docusaurus=self.webpackChunkdeveloper_portal_docusaurus||[]).push([[4519],{81430:function(e){e.exports=JSON.parse('{"permalink":"/developer-portal/blog/tags/docusaurus","page":1,"postsPerPage":10,"totalPages":1,"totalCount":4,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdeveloper_portal_docusaurus=self.webpackChunkdeveloper_portal_docusaurus||[]).push([[749],{73386:function(e){e.exports=JSON.parse('{"allTagsPath":"/developer-portal/blog/tags","name":"hola","count":1,"permalink":"/developer-portal/blog/tags/hola"}')}}]);
