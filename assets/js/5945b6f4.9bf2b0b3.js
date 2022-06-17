@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkcapialise_developer_portal=self.webpackChunkcapialise_developer_portal||[]).push([[689],{83769:function(e){e.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"default"}')}}]);
