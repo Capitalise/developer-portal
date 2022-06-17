@@ -5,7 +5,6 @@ const redocusaurus = [
   "redocusaurus",
   {
     debug: Boolean(process.env.DEBUG || process.env.CI),
-    editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
     specs: [
       {
         id: "platform-v1",
@@ -66,16 +65,6 @@ const config = {
           routeBasePath: "use-cases",
           remarkPlugins: [require("mdx-mermaid")],
           showLastUpdateTime: true,
-        },
-
-        // Removed as currently no blog is created
-        // blog: {
-        //   showReadingTime: true,
-        //   // Please change this to your repo.
-        //   editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
-        // },
-        theme: {
-          customCss: require.resolve("./src/css/custom.css"),
         },
       },
     ],
