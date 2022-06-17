@@ -108,7 +108,7 @@ const config = {
       description: this.tagline,
     },
   },
-  url: process.env.DEPLOY_PRIME_URL || "http://developer.dev.capitalise.com", // Your website URL
+  url: process.env.DEPLOY_PRIME_URL || "http://developer.capitalise.com", // Your website URL
   baseUrl: process.env.DEPLOY_BASE_URL || "/", // Base URL for your project */
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
