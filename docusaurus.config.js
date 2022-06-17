@@ -101,7 +101,7 @@ const config = {
   favicon: "img/favicon.png",
   organizationName: "capitalise",
   projectName: "developer-portal",
-  deploymentBranch: "production",
+  deploymentBranch: "gh-pages",
   trailingSlash: false,
   themeConfig: {
     navbar: {
