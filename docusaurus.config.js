@@ -112,7 +112,7 @@ const config = {
   baseUrl: process.env.DEPLOY_BASE_URL || "/", // Base URL for your project */
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
-  favicon: "img/favicon.ico",
+  favicon: "img/favicon.png",
   organizationName: "capitalise", // Usually your GitHub org/user name.
   projectName: "docusaurus", // Usually your repo name.
   themeConfig: {

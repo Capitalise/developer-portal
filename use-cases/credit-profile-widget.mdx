@@ -97,8 +97,8 @@ On the server-side, you will be calling two sets of APIs:
 
 | API | Base Path | Description |
 | --- | --- | --- |
-| Platform V1 | /api/platform/v1 | Generating API Key that unique identifies your application |
-| Marketplace V2 | /api/marketplace/v2 | Launch your app with unlimited live credentials |
+| [Platform V1](/api/platform) | /api/platform/v1 | Generating API Key that unique identifies your application |
+| [Marketplace V2](/api/marketplace/v2) | /api/marketplace/v2 | The suite of APIs to create tenants, set up profile and get credit profile |
 
 ### Generate `API key`
 
@@ -135,13 +135,79 @@ curl --location --request POST 'https://capitalise.com/api/platform/v1/auth/logi
   </TabItem>
 </Tabs>
 
+Upon Successful 200, you will get the `access_token` in the response.
+
+```json title="Response"
+{
+    # highlight-start
+    "access_token": "eyJhbGciOiJSUz...",
+    # highlight-end
+    "expires_in": 86400,
+    "scope": "read:current_user update:current_user_metadata delete:current_user_metadata create:current_user_metadata create:current_user_device_credentials delete:current_user_device_credentials update:current_user_identities",
+    "token_type": "Bearer"
+}
+```
+
+You can use this `access_token` to generate an `API key` for your application.
+
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
+```bash title="Request"
+curl --location --request POST 'https://demo.capitalise.com/api/platform/v1/api-key' \
+# highlight-start
+--header 'Authorization: Bearer eyJhbGciOiJSUz...' \
+# highlight-end
+--header 'Content-Type: application/json' \
+--data-raw '{
+    # highlight-start
+    "name": "YOUR_API_KEY_NAME",
+     # highlight-end
+    "scopes": [
+        "profile:multiples",
+        "profile:read",
+        "profile:write",
+        "questionnaire:read",
+        "questionnaire:write",
+        "funding:read",
+        "funding:write",
+        "insights:read",
+        "scoring:read",
+        "offline_access"
+    ],
+}'
+```
+
+</TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request POST 'https://capitalise.com/api/platform/v1/auth/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  # highlight-start
+  "email": "YOUR_EMAIL",
+  "password": "YOUR_PASSWORD"
+  # highlight-end
+}'
+```
+
+  </TabItem>
+</Tabs>
+
 Upon Successful 200, you will get your `API Key` in the response.
 
 ```json title="Response"
 {
-  "key": "e6b6fefbd0c0762ab707c211923781b86f51a47ad323b0faec1d5ed58996026e40"
+  "key": "e6b6fefbd0c0762ab707c211923781985651a47ad323b0faec1d5ed58996026e40"
 }
 ```
+
+:::caution
+
+Please securely store your API key and do not share your with anyone as it's your credential to access Capitalise
+
+:::
 
 ### Generate Marketplace `master access token`
 
