@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdeveloper_portal_docusaurus=self.webpackChunkdeveloper_portal_docusaurus||[]).push([[3129],{29814:function(e){e.exports=JSON.parse('{"allTagsPath":"/developer-portal/blog/tags","name":"facebook","count":1,"permalink":"/developer-portal/blog/tags/facebook"}')}}]);
