@@ -756,6 +756,8 @@ paths:
           application/json:
             schema:
               oneOf:
+                - $ref: >-
+                    #/components/schemas/AnswerKeyIntroducerAllFundingProductsDto
                 - $ref: '#/components/schemas/AnswerKeyBusinessAllFundingProductsDto'
                 - $ref: '#/components/schemas/AnswerKeyBusinessWorkingCapitalDto'
                 - $ref: >-
@@ -789,6 +791,8 @@ paths:
           application/json:
             schema:
               oneOf:
+                - $ref: >-
+                    #/components/schemas/AnswerKeyIntroducerAllFundingProductsDto
                 - $ref: '#/components/schemas/AnswerKeyBusinessAllFundingProductsDto'
                 - $ref: '#/components/schemas/AnswerKeyBusinessWorkingCapitalDto'
                 - $ref: >-
@@ -813,6 +817,8 @@ paths:
             application/json:
               schema:
                 oneOf:
+                  - $ref: >-
+                      #/components/schemas/AnswerKeyIntroducerAllFundingProductsDto
                   - $ref: >-
                       #/components/schemas/AnswerKeyBusinessAllFundingProductsDto
                   - $ref: '#/components/schemas/AnswerKeyBusinessWorkingCapitalDto'
@@ -2976,6 +2982,415 @@ components:
             Do you have any existing government backed loans? Let us know if
             your business has a CBILS, BBLS or similar product.
           default: false
+      required:
+        - clientName
+        - clientEmail
+        - clientNumber
+        - legalRequirements
+        - companyType
+        - companyName
+        - useOfFunds
+        - fundingAmount
+        - fundingPeriod
+        - sector
+        - incorporationDate
+        - revenue
+        - raiseInvoices
+        - cardPayments
+        - fundingAsset
+        - purchaseOrders
+        - governmentBacked
+        - governmentBackedLoansExist
+    AnswerKeyIntroducerAllFundingProductsDto:
+      additionalProperties: false
+      type: object
+      title: introducer-all-funding-products
+      description: 'Questionnaire Request Body: Introducer All Funding Products'
+      x-examples:
+        example-1:
+          clientName: string
+          clientEmail: user@example.com
+          clientNumber: string
+          legalRequirements: true
+          companyType: LIMITED_COMPANY
+          businessPurposes: true
+          companyNumber: string
+          companyName: string
+          fundingUrgency: ASAP
+          useOfFunds: CASH_FLOW
+          fundingAmount:
+            code: GBP
+            value: 25000
+          fundingPeriod: 0
+          personalGuarantee: false
+          homeOwnership: false
+          businessOwnsAssets: false
+          sector: AGRICULTURE
+          tradingAddress: Number, Street, Postcode
+          incorporationDate: '2019-08-24'
+          netProfit:
+            code: GBP
+            value: 0
+          tradeDebtors:
+            code: GBP
+            value: 0
+          revenue:
+            code: GBP
+            value: 0
+          bankInterest:
+            code: GBP
+            value: 0
+          depreciation:
+            code: GBP
+            value: 0
+          amortisation:
+            code: GBP
+            value: 0
+          raiseInvoices: false
+          cardPayments: false
+          averageCardSales: 0
+          fundingAsset: false
+          assetType: TRANSPORTATION
+          assetExistingAgreement: false
+          purchaseOrders: false
+          governmentBacked: false
+          governmentBackedLoansExist: false
+      properties:
+        clientName:
+          type: string
+          description: What is the full name of the applicant?
+        clientEmail:
+          type: string
+          description: What is your e-mail to contact the applicant?
+          format: email
+        clientNumber:
+          type: string
+          description: What is the contact number of the applicant? E.g. +449328291829
+          pattern: ^\+?[0-9\s]{11,30}$
+        inviteClient:
+          type: boolean
+          description: >-
+            Automatically invite the client to the view and track application at
+            Capitalise.com? Highly recommend to set it as `true`. We will send
+            the client an email with a link to the fudning search once it is
+            submitted to us (upon 200 response of request to [`POST
+            /apply`](/api/marketplace/v1#operation/ProfileFundingController.applyMatches)).
+          default: false
+        companyType:
+          type: string
+          enum:
+            - LIMITED_COMPANY
+            - LIMITED_LIABILITY_PARTNERSHIP
+            - SOLE_TRADER
+            - STARTUP
+          description: What is your type of business?
+        companyNumber:
+          type: string
+          minLength: 1
+          description: >-
+            What is the registered company number? _Required when `companyType`
+            = `LIMITED_COMPANY` or `LIMITED_LIABILITY_PARTNERSHIP`._
+        companyName:
+          type: string
+          minLength: 1
+          description: What is the name of the company?
+        businessPurposes:
+          type: boolean
+          default: null
+          description: >-
+            _Required when `companyType` = `SOLE_TRADER`. Our lenders will
+            accept applications for business purposes only._ Is this sole trader
+            loan for business purposes?
+        fundingUrgency:
+          type: string
+          enum:
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+            - JUST_BROWSING
+          description: How soon does the business need the funding?
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+          description: What will the funds be used for?
+          example: CASH_FLOW
+        fundingAmount:
+          type: object
+          description: How much funding the business is searching for?
+          required:
+            - code
+            - value
+          properties:
+            code:
+              type: string
+              enum:
+                - GBP
+                - ZAR
+            value:
+              type: number
+              multipleOf: 1
+              maximum: 1000000
+              minimum: 25000
+        fundingPeriod:
+          type: number
+          description: |-
+            How long (in months) does the business need the funding?
+            - `6` - 6 months or less
+            - `12` - Up to 1 year
+            - `24` - Up to 2 years
+            - `36` - Up to 3 years
+            - `48` - Up to 4 years
+            - `60` - 5 years or more
+          minimum: 0
+          enum:
+            - 6
+            - 12
+            - 24
+            - 36
+            - 48
+            - 60
+        personalGuarantee:
+          type: boolean
+          default: false
+          description: >-
+            Director(s) of the business can offer a limited personal
+            guarantee... Most lenders will require directors to offer this.
+        homeOwnership:
+          type: boolean
+          default: false
+          description: Is any of the directors UK homeowner?
+        businessOwnsAssets:
+          type: boolean
+          default: false
+          description: Does the business own assets or property?
+        sector:
+          type: string
+          minLength: 1
+          enum:
+            - AGRICULTURE
+            - AUTOMOTIVE
+            - BUSINESS_SERVICES
+            - CONSTRUCTION
+            - COURIER
+            - CHARITIES
+            - DISTRIBUTION
+            - EDUCATION
+            - FINANCIAL_SERVICES
+            - HAULAGE
+            - HEALTHCARE_CARE
+            - HOTELS_HOUSE
+            - IMPORT_EXPORT
+            - IT_RELATED
+            - MANUFACTURING
+            - MEDIA_AND_ENTERTAINMENT
+            - PRINT_PUBLISHING
+            - PROFESSIONAL_SERVICES
+            - PROPERTY
+            - RECRUITMENT
+            - RETAIL
+            - SECURITY_SERVICES
+            - TRADE
+            - TRANSPORTATION
+            - WHOLESALE
+            - OTHER
+          description: What sector is the business in?
+        tradingAddress:
+          type: string
+          minLength: 1
+          description: What is the business trading address? Format \:Street, no, postcode
+          example: Number, Street, Postcode
+        incorporationDate:
+          type: string
+          description: When did the business start trading?
+          format: date
+        netProfit:
+          type: object
+          additionalProperties: false
+          description: What is the business last reported annual net profit?
+          properties:
+            code:
+              type: string
+              enum:
+                - GBP
+                - ZAR
+            value:
+              type: number
+          required:
+            - code
+            - value
+        tradeDebtors:
+          type: object
+          additionalProperties: false
+          description: What are the business current trade debtors?
+          properties:
+            code:
+              type: string
+              enum:
+                - GBP
+                - ZAR
+            value:
+              type: number
+          required:
+            - code
+            - value
+        revenue:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: What is the business last reported annual revenue?
+          required:
+            - code
+            - value
+          properties:
+            code:
+              type: string
+              enum:
+                - GBP
+                - ZAR
+            value:
+              type: number
+        bankInterest:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: What is the business last reported annual bank interest?
+          properties:
+            code:
+              type: string
+              enum:
+                - GBP
+                - ZAR
+            value:
+              type: number
+          required:
+            - code
+            - value
+        depreciation:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: What is the business last reported annual depreciation?
+          properties:
+            code:
+              type: string
+              enum:
+                - GBP
+                - ZAR
+            value:
+              type: number
+          required:
+            - code
+            - value
+        amortisation:
+          type: object
+          additionalProperties: false
+          minProperties: 1
+          description: What is the business last reported annual amortisation?
+          properties:
+            code:
+              type: string
+              enum:
+                - GBP
+                - ZAR
+            value:
+              type: number
+          required:
+            - code
+            - value
+        raiseInvoices:
+          type: boolean
+          default: false
+          description: >-
+            Does The business raise invoices to clients? Invoices should have
+            payment terms of 14 days or more.
+        cardPayments:
+          type: boolean
+          default: false
+          description: >-
+            Does the business accept card payments? Credit/Debit card terminal,
+            online payments or any other e-commerce payments.
+        averageCardSales:
+          type: number
+          description: >-
+            What are the average monthly card sales? Include all payments
+            through any terminal or commerce provider. Only required when
+            `cardPayments` is `True`.
+
+            - `2500` - up to £2,500
+
+            - `7500` - up to £7,500
+
+            - `15000` - up to £15,000
+
+            - `35000` - up to £35,000
+
+            - `55000` - up to £55,000
+
+            - `75000` - up to £75,000
+          enum:
+            - 2500
+            - 7500
+            - 15000
+            - 35000
+            - 55000
+            - 75000
+        fundingAsset:
+          type: boolean
+          description: >-
+            Is the funding for an asset? Let us know if funding will be used to
+            purchase or refinance an asset.
+          default: false
+        assetType:
+          type: string
+          enum:
+            - TRANSPORTATION
+            - OFFICE
+            - STOCK
+            - MANUFACTURING
+            - BUSINESS
+          description: >-
+            What kind of asset is it? Let us know the category of asset.
+            Required only when `fundingAsset` is `True`.
+        assetExistingAgreement:
+          type: boolean
+          description: >-
+            Is there an existing agreement for this asset? Optional to fill in
+            when `fundingAsset` is `True`.
+          default: false
+        purchaseOrders:
+          type: boolean
+          description: >-
+            Does the business receive purchase orders? Or if your company
+            imports good from outside the UK.
+          default: false
+        governmentBacked:
+          type: boolean
+          description: Is the business only interested in a Recovery Loan?
+          default: false
+        governmentBackedLoansExist:
+          type: boolean
+          description: >-
+            Does the business have any existing government backed loans? Let us
+            know if the business has a CBILS, BBLS or similar product.
+          default: false
+        legalRequirements:
+          type: boolean
+          description: >-
+            Allow Capitalise to contact the client to collect consent required
+            by lenders and ensure your commission disclosure requirements are
+            met.
+          default: true
       required:
         - clientName
         - clientEmail
