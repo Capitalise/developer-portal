@@ -68,6 +68,7 @@ const config = {
           // Please change this to your repo.
           editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
           remarkPlugins: [require("mdx-mermaid")],
+          showLastUpdateTime: true,
         },
         blog: {
           showReadingTime: true,
@@ -95,6 +96,7 @@ const config = {
         sidebarPath: require.resolve("./sidebarsUseCases.js"),
         remarkPlugins: [require("mdx-mermaid")],
         editUrl: "https://github.com/Capitalise/developer-portal/tree/main/",
+        showLastUpdateTime: true,
       },
     ],
   ],
@@ -110,7 +112,7 @@ const config = {
   baseUrl: process.env.DEPLOY_BASE_URL || "/", // Base URL for your project */
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
-  favicon: "img/favicon.ico",
+  favicon: "img/favicon.png",
   organizationName: "capitalise", // Usually your GitHub org/user name.
   projectName: "developer-portal", // Usually your repo name.
   deploymentBranch: "production",

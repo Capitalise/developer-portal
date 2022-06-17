@@ -19,7 +19,7 @@ interface Props {
 export default function BrowserWindow({
   children,
   minHeight,
-  url = "http://localhost:3000",
+  url,
 }: Props): JSX.Element {
   return (
     <div className={styles.browserWindow} style={{ minHeight }}>
@@ -30,7 +30,7 @@ export default function BrowserWindow({
           <span className={styles.dot} style={{ background: "#58cb42" }} />
         </div>
         <div className={clsx(styles.browserWindowAddressBar, "text--truncate")}>
-          {url}
+          {url || "https://localhost:3000"}
         </div>
         <div className={styles.browserWindowMenuIcon}>
           <div>

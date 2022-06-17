@@ -23,18 +23,6 @@ function HomepageHeader() {
               Get started in 5min ⏱️
             </button>
           </Link>
-          <Link to="/">
-            <button className="button button--secondary button--lg margin-right--md margin-bottom--md button--outline">
-              Download Intergration Whitepaper 📄
-            </button>
-          </Link>
-        </div>
-        <div>
-          <img
-            src={require("/img/super-woman.png").default}
-            alt="Example banner"
-            className="featured-img"
-          />
         </div>
       </div>
     </header>

@@ -7,7 +7,7 @@ description: Design your own native journey to help user find funding from over 
 
 Design your own native journey to help user find funding from over 100 lenders
 
-### Environemnts
+## Environments
 
 | Environment | Base URL | Description |
 | --- | --- | --- |
@@ -24,13 +24,14 @@ For account setup, please contact our Commercial Director Olly Cummings at [olly
 
 :::
 
-We provide two suites of RESTful APIs which allows you build native funding journey at your site.
+You will be using two suites of APIs to implement the native funding search journey at your end:
 
-- [`Platofrm API`](/api/platform) - authenticate users, generate API keys (for products such as Marketplace API), and enable sign-in with a Capitalise account
+| API | Base Path | Description |
+| --- | --- | --- |
+| [Platform V1](/api/platform) | /api/platform/v1 | Generating API Key that unique identifies your application |
+| [Marketplace V1](/api/marketplace/v1) | /api/marketplace/v1 | Create and submit funding searches to Capitalise |
 
-- [`Marketplace API`](/api/marketplace/v1) - integrate with questionnaire flow directly into your product, or use your data to deliver our targeted product matching and business scoring intelligence directly to your customers.
-
-### High-level sequence diagram for submitting funding search via APIs
+## High-level sequence diagram
 
 ```mermaid
 sequenceDiagram
