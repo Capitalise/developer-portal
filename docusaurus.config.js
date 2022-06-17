@@ -1,6 +1,3 @@
-const lightCodeTheme = require("prism-react-renderer/themes/github");
-const darkCodeTheme = require("prism-react-renderer/themes/dracula");
-
 /**
  * @type {import('redocusaurus').PresetEntry}
  */
@@ -97,8 +94,13 @@ const config = {
       description: this.tagline,
     },
   },
+<<<<<<< HEAD
   url: process.env.DEPLOY_PRIME_URL || "http://developer.capitalise.com",
   baseUrl: process.env.DEPLOY_BASE_URL || "/",
+=======
+  url: process.env.DEPLOY_PRIME_URL || "http://developer.capitalise.com", // Your website URL
+  baseUrl: process.env.DEPLOY_BASE_URL || "/", // Base URL for your project */
+>>>>>>> baa2a6901c488b9ec0da9f193acb3c0b671377b7
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.png",
@@ -216,8 +218,8 @@ const config = {
       playgroundPosition: "top",
     },
     prism: {
-      theme: lightCodeTheme,
-      darkTheme: darkCodeTheme,
+      theme: require("prism-react-renderer/themes/github"),
+      darkTheme: require("prism-react-renderer/themes/dracula"),
       additionalLanguages: ["powershell", "bash"],
     },
   },
