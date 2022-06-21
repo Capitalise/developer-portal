@@ -385,6 +385,15 @@ components:
                     | D     | Above average risk | The company is consisdered as above average risk. There is a moderate probability of the company going into default in the next 12 months. Offering credit terms above the recommended credit limit is advised against. Likely to access high value finance but a guarantee may be required                                                                                                                                                                           |
                     | E     | High risk          | There company is considered as high risk and has a high probability of this company going into default in the next 12 months. Offering credit terms above the recommended credit limit is advised against. Challenging to access finance and a personal guaranteed might be required. |
                     | F     | Maximum risk       | There company is considered as maximum risk and has a high probability of this company going into default in the next 12 months. Offering credit terms above the recommended credit limit is advised against. Challenging to access finance and a personal guaranteed might be required.                           |
+                    | G     | Dissolved       | There company is dissolved.                           |
+                  enum:
+                    - A
+                    - B
+                    - C
+                    - D
+                    - E
+                    - F
+                    - G
             creditLimit:
               type: object
               properties:
