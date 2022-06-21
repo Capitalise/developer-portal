@@ -460,6 +460,17 @@ components:
                     terms above the recommended credit limit is advised against.
                     Challenging to access finance and a personal guaranteed
                     might be required.                           |
+
+                    | G     | Dissolved       | There company is
+                    dissolved.                           |
+                  enum:
+                    - A
+                    - B
+                    - C
+                    - D
+                    - E
+                    - F
+                    - G
             creditLimit:
               type: object
               properties:
