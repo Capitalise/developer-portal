@@ -405,7 +405,7 @@ components:
                   type: string
                   minLength: 1
                   description: >-
-                    The crediti score grade of the company
+                    The credit score grade of the company
 
                     | Grade | title              |
                     description                                                                                                                                                                                                                                  
