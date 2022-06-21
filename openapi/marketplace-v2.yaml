@@ -376,7 +376,7 @@ components:
                   type: string
                   minLength: 1
                   description: |-
-                    The crediti score grade of the company
+                    The credit score grade of the company
                     | Grade | title              | description                                                                                                                                                                                                                                   |
                     |-------|--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
                     | A     | Minimum risk       | This companty is considered as minimum risk. There is a low probability of the company going into defaul in the next 12 month. Offering credit terms to the recommended credit limit is advised. Highly likely to access finance at favourable rates                                                                                                                                                                                           |
