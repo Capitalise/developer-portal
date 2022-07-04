@@ -28,6 +28,11 @@ const sidebars = {
         "native-funding-search",
       ],
     },
+    {
+      type: "link",
+      label: "Launch Checklist",
+      href: "/launch-checklist",
+    },
   ],
 
   // But you can create a sidebar manually

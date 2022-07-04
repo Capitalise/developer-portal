@@ -203,3 +203,21 @@ h3 {
   font-family: "BraceWeb-Regular", sans-serif;
   font-weight: normal;
 }
+
+.checkliststyles {
+  margin-top: 0.5em;
+  margin-bottom: 1.5em;
+  display: block;
+}
+
+.checkliststyles input[type="checkbox"] {
+  width: 2em;
+  height: 2em;
+  vertical-align: middle;
+  border: 0.15em solid var(--ifm-color-content);
+  border-radius: 0.5em;
+}
+
+.checkliststyles input[type="checkbox"]:checked + span {
+  text-decoration: line-through;
+}
