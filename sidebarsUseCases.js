@@ -29,9 +29,8 @@ const sidebars = {
       ],
     },
     {
-      type: "link",
-      label: "Launch Checklist",
-      href: "/launch-checklist",
+      type: "doc",
+      id: "launch-checklist",
     },
   ],
 
