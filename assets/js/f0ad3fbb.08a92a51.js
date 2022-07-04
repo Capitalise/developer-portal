@@ -1,1 +1,0 @@
-(self.webpackChunkcapialise_developer_portal=self.webpackChunkcapialise_developer_portal||[]).push([[612],{15101:function(){},42116:function(){},34904:function(){},6918:function(){},23197:function(){},60996:function(){}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkcapialise_developer_portal=self.webpackChunkcapialise_developer_portal||[]).push([[676],{50897:e=>{e.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"useCases"}')}}]);

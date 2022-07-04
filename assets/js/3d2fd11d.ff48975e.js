@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkcapialise_developer_portal=self.webpackChunkcapialise_developer_portal||[]).push([[877],{93531:function(e){e.exports=JSON.parse('{"name":"docusaurus-plugin-redoc","id":"marketplace-v1"}')}}]);
