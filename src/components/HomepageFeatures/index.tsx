@@ -68,12 +68,7 @@ const ApiProducts = [
     title: "Marketplace",
     Svg: require("@site/static/img/index-marketplace.svg").default,
     link: "/api/marketplace/v1",
-    description: (
-      <>
-        Funding matching services and intelligent scoring & insight services all
-        in one place
-      </>
-    ),
+    description: <>Funding matching services with over 100 lenders</>,
   },
   {
     title: "Business",
@@ -81,7 +76,7 @@ const ApiProducts = [
     description: (
       <>
         One-stop shop for small and medium businesses funding matching and
-        intelligent scoring & insight services all in one place
+        intelligent scoring & insight services
       </>
     ),
   },
