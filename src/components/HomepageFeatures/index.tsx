@@ -75,6 +75,16 @@ const ApiProducts = [
       </>
     ),
   },
+  {
+    title: "Business",
+    Svg: require("@site/static/img/index-business.svg").default,
+    description: (
+      <>
+        One-stop shop for small and medium businesses funding matching and
+        intelligent scoring & insight services all in one place
+      </>
+    ),
+  },
 ];
 
 function Feature({ link, title, Svg, description, tags, isNew }: FeatureItem) {
