@@ -14,7 +14,7 @@ This guide will walk you through the steps to migrate from Marketplace V2 to Bus
 
 Marketplace V2 is a marketplace-oriented suite of APIs that manages both tenants and associated business in one place.
 
-Business V1 is a business-oriented suit of APIs that
+Business V1 is a business-oriented suit of APIs that servies individual business.
 
 ## Migration steps
 
@@ -22,7 +22,7 @@ Business V1 is a business-oriented suit of APIs that
 
 | Marketplace V2 | Business V1 | Notes |
 | --- | --- | --- |
-| /marketplace/v2/auth/authorize | /platform/v1/auth/token |  |
-| /marketplace/v2/auth/tenants/authorize | /platform/v1/auth/tenants |
-| /marketplace/v2/auth/refresh-token | /platform/v1/auth/refresh-token |  |
-| /marketplace/v2/tenants | /business/v1/tenants |
+| /marketplace/v2/auth/authorize | [/platform/v1/auth/token](/api/platform#tag/Auth/operation/post-auth-token) | Use only API key to get `platform access token`, previously known as `master access token` |
+| /marketplace/v2/auth/tenants/authorize | [/platform/v1/auth/token](/api/platform#tag/Auth/operation/post-auth-token) | Use API key and provide `Capitlaise-tenant-id` in the header to get `tenant access token`, which is the token used for the JavaScript |
+| /marketplace/v2/auth/refresh-token | [/platform/v1/auth/refresh-token](/api/platform#tag/Auth/operation/post-auth-refresh-token) |  |
+| /marketplace/v2/tenants | [/business/v1/tenants](/api/business#tag/Profile) |
