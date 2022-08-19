@@ -1,0 +1,28 @@
+---
+title: Migration from Marketplace V2 to Business V1
+tags:
+  - API
+---
+
+## Overview
+
+Business API V1 replaces Marketplace V2 as a result of commerical and architectural shift to centre Capitalise' API offering around businesses.
+
+This guide will walk you through the steps to migrate from Marketplace V2 to Business V1.
+
+## Main differences
+
+Marketplace V2 is a marketplace-oriented suite of APIs that manages both tenants and associated business in one place.
+
+Business V1 is a business-oriented suit of APIs that
+
+## Migration steps
+
+### Endpoint changes
+
+| Marketplace V2 | Business V1 | Notes |
+| --- | --- | --- |
+| /marketplace/v2/auth/authorize | /platform/v1/auth/token |  |
+| /marketplace/v2/auth/tenants/authorize | /platform/v1/auth/tenants |
+| /marketplace/v2/auth/refresh-token | /platform/v1/auth/refresh-token |  |
+| /marketplace/v2/tenants | /business/v1/tenants |

@@ -12,12 +12,6 @@ import TabItem from "@theme/TabItem";
 
 Help users improve their finanical health with credit profile information directly from your website.
 
-<img
-  src={require("/img/credit-profile-widget-small.png").default}
-  alt="Example banner"
-  className="featured-img"
-/>
-
 The widget is responsive to adapt to the space you assign.
 
 ## Pre-requisites
@@ -553,11 +547,16 @@ Insert the following code into your website and replace `TENANT_ACCESS_TOKEN` wi
 ```mermaid
 sequenceDiagram
     autonumber
-    participant U as User
+    actor U as User
     participant AF as API Partner (Frontend)
     participant AB as API Partner (Backend)
     participant CA as Capitalise (API)
     participant CW as Capitalise (Widget)
+    Note over AF, CW: Step 0: Generate API Key (one-off)
+    AB->>CA: POST /platform/v1/auth/login
+    CA->>AB: 200 OK with access_token
+    AB->>CA: POST /platform/v1/api-key
+    CA->>AB: 200 OK with key
     Note over AF, CW: Step 1: Generate master access token and master refresh token
     AB->>CA: POST /auth/authorize<br> with API key
     CA->>AB: 201 OK with access_token and refresh_token
@@ -565,6 +564,7 @@ sequenceDiagram
         AB->>CA: POST /auth/refresh<br>with master refresh token
         CA->>AB: 201 OK with access_token
     end
+    Note over U, AB: Reactive widget trigger
     U->>AF: View
     AF->>AB: When user's company<br> has a valid Companies House number
     Note over AF, CW: Step 2: Create a new tenant for the user

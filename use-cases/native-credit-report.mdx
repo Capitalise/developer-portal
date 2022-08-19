@@ -1,0 +1,521 @@
+---
+displayed_sidebar: useCasesSideBar
+title: Native credit report
+tags:
+  - API
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+Help users improve their finanical health with credit report information directly in your website.
+
+## Pre-requisites
+
+To retrieve a credit report, the company must be a limited company and have a valid Companies House number.
+
+Therefore it's recommended only show the widget if you have a valid Companies House number.
+
+## Environments
+
+| Environment | Base URL | Description |
+| --- | --- | --- |
+| Demo | https://demo.capitalise.com/api | Get started with test credentials and life-like data |
+| Production | https://capitalise.com/api | Launch your app with live credentials |
+
+For account setup, please contact our API Partner Manager Sabrin Ghomri at [sabrin.ghomri@capitalise.com](mailto:sabrin.ghomri@capitalise.com).
+
+:::secondary Important
+
+- Data and credentials (e.g. `Logins`, `API Key`, `API Token`) CANNOT be moved between Production and Demo
+- Always double check if you've got the right credentials configured before production release
+
+:::
+
+## Setup your account for Capitalise.com
+
+Once you've signed MOU, your Partner Manager will send the invite so that you can complete the registration. If in doubt, please reach out to your Partner Manager.
+
+## Sever-side
+
+On the server-side, you will be calling two sets of APIs:
+
+| API | Base Path | Description |
+| --- | --- | --- |
+| [Platform V1](/api/platform) | /platform/v1 | Generating API Key that unique identifies your application |
+| [Business V1](/api/business) | /business/v1 | The suite of APIs to create tenants, set up profile and get credit profile |
+
+### Generate `API key` (one-off)
+
+Firstly, login to Capitalise.com with your login credentials.
+
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
+```bash title="Request"
+curl --location --request POST 'https://demo.capitalise.com/api/platform/v1/auth/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  # highlight-start
+  "email": "YOUR_EMAIL",
+  "password": "YOUR_PASSWORD"
+  # highlight-end
+}'
+```
+
+</TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request POST 'https://capitalise.com/api/platform/v1/auth/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  # highlight-start
+  "email": "YOUR_EMAIL",
+  "password": "YOUR_PASSWORD"
+  # highlight-end
+}'
+```
+
+  </TabItem>
+</Tabs>
+
+Upon Successful 200, you will get the `access_token` in the response.
+
+```json title="Response"
+{
+    # highlight-start
+    "access_token": "eyJhbGciOiJSUz...",
+    # highlight-end
+    "expires_in": 86400,
+    "scope": "read:current_user update:current_user_metadata delete:current_user_metadata create:current_user_metadata create:current_user_device_credentials delete:current_user_device_credentials update:current_user_identities",
+    "token_type": "Bearer"
+}
+```
+
+Use the `access_token` to generate an `API key` for your application.
+
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
+```bash title="Request"
+curl --location --request POST 'https://demo.capitalise.com/api/platform/v1/api-key' \
+# highlight-start
+--header 'Authorization: Bearer eyJhbG...{{PLATFORM_ACCESS_TOKEN}}...puwv4f2KGadrMwq681u_RQ' \
+# highlight-end
+--header 'Content-Type: application/json' \
+--data-raw '{
+    # highlight-start
+    "name": "Widget testing", # This string needs to be unique
+    # highlight-end
+    "scopes": [
+        "profile:multiples",
+        "profile:read",
+        "profile:write",
+        "questionnaire:read",
+        "questionnaire:write",
+        "funding:read",
+        "funding:write",
+        "insights:read",
+        "scoring:read",
+        "offline_access"
+    ],
+    "expiresAt": "2022-07-26T13:29:11.631Z"
+}'
+```
+
+  </TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request POST 'https://capitalise.com/api/platform/v1/api-key' \
+# highlight-start
+--header 'Authorization: Bearer eyJhbG...{{PLATFORM_ACCESS_TOKEN}}...puwv4f2KGadrMwq681u_RQ' \
+# highlight-end
+--header 'Content-Type: application/json' \
+--data-raw '{
+    # highlight-start
+    "name": "Widget testing", # This string needs to be unique
+    # highlight-end
+    "scopes": [
+        "profile:multiples",
+        "profile:read",
+        "profile:write",
+        "questionnaire:read",
+        "questionnaire:write",
+        "funding:read",
+        "funding:write",
+        "insights:read",
+        "scoring:read",
+        "offline_access"
+    ],
+    "expiresAt": "2022-07-26T13:29:11.631Z"
+}'
+```
+
+  </TabItem>
+</Tabs>
+
+Upon Successful 200, you will get your `API Key` in the response.
+
+```json title="Response"
+{
+  "key": "e6b6fefbd0c0762ab707c211923781985651a47ad323b0faec1d5ed58996026e40"
+}
+```
+
+:::caution
+
+Please securely store your API key and do not share your with anyone as it's your credential to access Capitalise
+
+:::
+
+:::info
+
+As long as you've got this API, you would be able to call other endpoints. You don't need to repeat above steps unless you want to generate a new API key
+
+:::
+
+### Generate `platform access token`
+
+With an API key, you can generate an access token via `POST /platform/v1/auth/token`, which will give you access to Capitalise APIs.
+
+Make a request to `POST /platform/v1/auth/token` and set the API key as `X-API-Key` in the header.
+
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
+```bash title="Request"
+curl --location --request POST 'https://demo.capitalise.com/api/platform/v1/auth/token' \
+# highlight-start
+--header 'X-API-Key: e6b6fefbd0c0762ab707c211923781b86f51a47ad323b0faec1d5ed58996026e40'
+# highlight-end
+```
+
+</TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request POST 'https://capitalise.com/api/platform/v1/auth/token' \
+# highlight-start
+--header 'X-API-Key: e6b6fefbd0c0762ab707c211923781b86f51a47ad323b0faec1d5ed58996026e40'
+# highlight-end
+```
+
+  </TabItem>
+</Tabs>
+
+Upon Successful 201, you will get two Marketplace tokens:
+
+- `access_token`: This is the token that you will use to access the Marketplace API. It will expire in 10 hours. You can use this token to access `/tenants`; but it will not be able to acccess `/profile`.
+- `refresh_token`: This is the token that allow you refresh your `access_token` without using an `API Key` for extra security. This token will be expired once you've used it to refresh `access_token.
+
+```json title="Response"
+{
+  "access_token": "eyJhbGciO...V0GiDrY9sVzbZjQMDc1znR77Q",
+  "expires_in": 36000,
+  "refresh_token": "eyJhbGciO...zfoV3Ek3RxZZOSIl_IvULkIA",
+  "scope": "profile:multiples profile:read profile:write questionnaire:read questionnaire:write funding:read funding:write insights:read scoring:read offline_access",
+  "token_type": "Bearer"
+}
+```
+
+### Create a tenant
+
+Then create a tenant, which will be used manage one business.
+
+Call `POST /business/v1/tenants` endpoint and provide the `platform access token` from previous step.
+
+You can optionally provide the `referenceId` in the request body which will be used to validate if a referenced tenant already exists.
+
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
+```bash title="Request"
+curl --location --request POST 'https://demo.capitalise.com/api/business/v1/tenants' \
+--header 'Authorization: Bearer eyJhbGciO...V0GiDrY9sVzbZjQMDc1znR77Q' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "referenceId": "Unique Tenant ID" # Optional but recommended - needs to be unique
+}'
+```
+
+  </TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request POST 'https://capitalise.com/api/business/v1/tenants' \
+--header 'Authorization: Bearer eyJhbGciO...V0GiDrY9sVzbZjQMDc1znR77Q' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "referenceId": "Unique Tenant ID" # Optional but recommended - needs to be unique
+}'
+```
+
+  </TabItem>
+</Tabs>
+
+Upon Successful 201, you will get the tenant ID.
+
+```json title="Response"
+{
+  {/* highlight-start */}
+  "id": "5ccaa9ba-e3d4-4c1b-865a-26ac02c2717d",
+  {/* highlight-end */}
+  "referenceId": "Unique Tenant ID",
+  "createdDateTime": "2022-04-25T00:16:28.000Z",
+  "updatedDateTime": "2022-04-25T00:16:28.000Z"
+}
+```
+
+### Genenrate `tenant access token` (optional)
+
+In the case where you want to restrict access to one specifc tenant, you can create an access token with only access to the tenant.
+
+It's the same as generating `platform access token`, but the difference is that you will pass the tenant you want to restrict to as `Capitalise-tenant-id` in the header.
+
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
+```bash title="Request"
+curl --location --request POST 'https://demo.capitalise.com/api/platform/v1/auth/token' \
+--header 'X-API-Key: e6b6fefbd0c0762ab707c211923781b86f51a47ad323b0faec1d5ed58996026e40'
+# highlight-start
+--header 'Capitalise-tenant-id: 5ccaa9ba-e3d4-4c1b-865a-26ac02c2717d' \
+# highlight-end
+```
+
+  </TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request POST 'https://capitalise.com/api/platform/v1/auth/token' \
+--header 'X-API-Key: e6b6fefbd0c0762ab707c211923781b86f51a47ad323b0faec1d5ed58996026e40'
+# highlight-start
+--header 'Capitalise-tenant-id: 5ccaa9ba-e3d4-4c1b-865a-26ac02c2717d' \
+# highlight-end
+```
+
+  </TabItem>
+</Tabs>
+
+Upon Successful 201, you will get the tenant `access_token`.
+
+```json title="Response"
+{
+  "access_token": "eyJhbGciOi...tRtpiO1aayuWslZ3_ssOQ5rxqGOYZQooBDICrJGVHcF2gg",
+  "expires_in": 36000,
+  "scope": "profile:read profile:write sign_up",
+  "token_type": "Bearer"
+}
+```
+
+:::tip When should I use `platform access token` and `tenant access token`?
+
+You should use `platofrm access token` when:
+
+- All integrations with Capitlaise are machine to machine integrations
+- You don't need restricted access at your end
+
+You should use `tenant access token` when:
+
+- Your application architecturally tenant-based therefore access needs to be restricted to specific tenant
+- You are using [credit profile widget](/use-cases/credit-profile-widget)
+
+:::
+
+### Set up profile
+
+Now you can set up the profile for the tenant - you would need a valid Companies House number.
+
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
+```bash title="Request"
+curl --location --request POST 'https://demo.capitalise.com/api/business/v1/profile' \
+      # highlight-start
+--header 'Authorization: Bearer eyJhbGciOi...tRtpiO1aayuWslZ3_ssOQ5rxqGOYZQooBDICrJGVHcF2gg' \
+      # highlight-end
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "companyInformation": {
+      # highlight-start
+        "registrationNumber": "11391321"
+      # highlight-end
+    }
+}'
+```
+
+  </TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request POST 'https://capitalise.com/api/business/v1/profile' \
+      # highlight-start
+--header 'Authorization: Bearer eyJhbGciOi...tRtpiO1aayuWslZ3_ssOQ5rxqGOYZQooBDICrJGVHcF2gg' \
+      # highlight-end
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "companyInformation": {
+      # highlight-start
+        "registrationNumber": "11391321"
+      # highlight-end
+    }
+}'
+```
+
+  </TabItem>
+</Tabs>
+
+If you get a 201 Successful response, it means you've set up the profile correctly for the tenant.
+
+## Retrieve credit report data
+
+:::tip
+
+Currently, credit report data is provided in `/business/v1/profile` endpoint. In the near future, we will move the credit report specific data to `/business/v1/credit-report`. This page will be updated accordingly.
+
+:::
+
+There are two ways you can retrieve the credit report data, depends on the access token you use.
+
+### Using `platform access token`
+
+If you use `platform access token`, you must provide `Capitalise-tenant-id` in the header so we know which tenant ID you want to retrieve the credit report for.
+
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
+```bash title="Request"
+curl --location --request GET 'https://demo.capitalise.com/api/business/v1/profile' \
+# highlight-start
+--header 'Authorization: Bearer eyJhbGciO...V0GiDrY9sVzbZjQMDc1znR77Q' \
+--header 'Capitalise-tenant-id: 5ccaa9ba-e3d4-4c1b-865a-26ac02c2717d' \
+# highlight-end
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "companyInformation": {
+      # highlight-start
+        "registrationNumber": "11391321"
+      # highlight-end
+    }
+}'
+```
+
+  </TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request GET 'https://capitalise.com/api/business/v1/profile' \
+# highlight-start
+--header 'Authorization: Bearer eyJhbGciO...V0GiDrY9sVzbZjQMDc1znR77Q' \
+--header 'Capitalise-tenant-id: 5ccaa9ba-e3d4-4c1b-865a-26ac02c2717d' \
+# highlight-end
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "companyInformation": {
+      # highlight-start
+        "registrationNumber": "11391321"
+      # highlight-end
+    }
+}'
+```
+
+  </TabItem>
+</Tabs>
+
+### Using `tenant access token`
+
+If you use `tenant access token`, it is highly recommmended to provide `Capitalise-tenant-id` in the header. Our endpoint will validate if the `Capitalise-tenant-id` matches the `tenant access token` so you have an extra validation to ensure data are managed correctly.
+
+<Tabs groupId="widget">
+  <TabItem value="demo" label="Demo">
+
+```bash title="Request"
+curl --location --request GET 'https://demo.capitalise.com/api/business/v1/profile' \
+# highlight-start
+--header 'Authorization: Bearer eyJhbGciO...V0GiDrY9sVzbZjQMDc1znR77Q' \
+--header 'Capitalise-tenant-id: 5ccaa9ba-e3d4-4c1b-865a-26ac02c2717d' \
+# highlight-end
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "companyInformation": {
+      # highlight-start
+        "registrationNumber": "11391321"
+      # highlight-end
+    }
+}'
+```
+
+  </TabItem>
+  <TabItem value="production" label="Production">
+
+```bash title="Request"
+curl --location --request GET 'https://capitalise.com/api/business/v1/profile' \
+# highlight-start
+--header 'Authorization: Bearer eyJhbGciO...V0GiDrY9sVzbZjQMDc1znR77Q' \
+--header 'Capitalise-tenant-id: 5ccaa9ba-e3d4-4c1b-865a-26ac02c2717d' \
+# highlight-end
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "companyInformation": {
+      # highlight-start
+        "registrationNumber": "11391321"
+      # highlight-end
+    }
+}'
+```
+
+  </TabItem>
+</Tabs>
+
+### Credit report response
+
+Upon 200 reponse, you will receive the credit report data in the response body. Refer to [documentation](/api/business#tag/Profile/operation/get-profile) for more details.
+
+```json title="Example response"
+{
+  "data": {
+    "companyInformation": {
+      "name": "string",
+      "type": "LIMITED_COMPANY",
+      "sector": "AGRICULTURE",
+      "registrationNumber": "string",
+      "score": {
+        "grade": "A",
+        "changedAt": "2019-08-24T14:15:22Z",
+        "lastAssessedAt": "2019-08-24T14:15:22Z",
+        "industryAverageGrade": "A",
+        "previous": {
+          "grade": "A"
+        }
+      },
+      "creditLimit": {
+        "value": 0,
+        "code": "GBP"
+      },
+      "legalNotices": {
+        "company": {
+          "last12MonthsCount": 0,
+          "last12MonthsValue": {
+            "code": "string",
+            "value": 0
+          }
+        },
+        "directors": {
+          "last12MonthsCount": 0,
+          "last12MonthsValue": {
+            "code": "string",
+            "value": 0
+          }
+        }
+      }
+    },
+    "id": "string",
+    "createdAt": "string",
+    "updatedAt": "string"
+  },
+  "links": "string",
+  "meta": "string"
+}
+```

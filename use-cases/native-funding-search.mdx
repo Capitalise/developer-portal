@@ -11,10 +11,10 @@ Design your own native journey to help user find funding from over 100 lenders
 
 | Environment | Base URL | Description |
 | --- | --- | --- |
-| Demo | https://demo.capitalise.com/api | Get started with test credentials and life-like data |
-| Production | https://capitalise.com/api | Launch your app with unlimited live credentials |
+| Demo | https://demo.capitalise.com/api/business/v1 | Get started with test credentials and life-like data |
+| Production | https://capitalise.com/api/business/v1 | Launch your app with live credentials |
 
-For account setup, please contact our Commercial Director Olly Cummings at [olly@capitalise.com](mailto:olly@capitalise.com).
+For account setup, please contact our API Partner Manager Sabrin Ghomri at [sabrin.ghomri@capitalise.com](mailto:sabrin.ghomri@capitalise.com).
 
 :::info Important
 
@@ -51,7 +51,7 @@ sequenceDiagram
         API Partner->>Capitalise Marketplace APIs: POST /marketplace/v1/auth/refresh-token
         Capitalise Marketplace APIs->>API Partner: New marketplace access token jwt and refresh token refreshToken
     end
-    Note over API Partner,Capitalise Marketplace APIs: Step 3: Create funding search
+    Note over Applicant,Capitalise Marketplace APIs: Step 3: Create funding search
     Applicant->>API Partner: Complete the quesitonnaire
     API Partner->>Capitalise Marketplace APIs: Create the company<br>POST /marketplace/v1/profiles/blank
     Capitalise Marketplace APIs->>API Partner: Company UUID profileUUID
@@ -60,10 +60,9 @@ sequenceDiagram
     API Partner->>Capitalise Marketplace APIs: Get lender matches<br>PATCH /marketplace/v1/profiles/:profileUUID/funding/matches/results
     Capitalise Marketplace APIs->>API Partner: Successful: HTTP 200 - Matches in matches[]
     API Partner->>Applicant: Show all matches
-    Note over API Partner,Capitalise Marketplace APIs: Step 4: Submit funding search
+    Note over Applicant,Capitalise Marketplace APIs: Step 4: Submit funding search
     Applicant->>API Partner: Select maximum<br>4 product matches
     API Partner->>Capitalise Marketplace APIs: Submit the the profile with selected matches<br>POST /marketplace/v1/profiles/:profileUUID/funding/apply
     Capitalise Marketplace APIs->>API Partner: Successful: HTTP 200
     API Partner->>Applicant: Funding search submitted
-
 ```

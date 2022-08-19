@@ -2,9 +2,12 @@
  * @type {import('redocusaurus').PresetEntry}
  * @type {Partial<import('@docusaurus/types').DocusaurusConfig>}
  */
+
 const config = {
   presets: [
-    /** ************ Docusaurus Config *********** */
+    /**
+     * Docusaurus Config *
+     */
     [
       "@docusaurus/preset-classic",
       {
@@ -21,7 +24,9 @@ const config = {
         },
       },
     ],
-    /** ************ Redocusaurus Config *********** */
+    /**
+     * Redocusaurus Config *
+     */
     [
       "redocusaurus",
       {
@@ -30,6 +35,11 @@ const config = {
             id: "platform-v1",
             spec: "./openapi/platform-v1.yaml",
             route: "/api/platform",
+          },
+          {
+            id: "business-v1",
+            spec: "./openapi/business-v1.yaml",
+            route: "/api/business",
           },
           {
             id: "marketplace-v1",
@@ -54,9 +64,16 @@ const config = {
           options: {
             disableSearch: false,
             sideNavStyle: "path-only",
-            sortOperationsAlphabetically: true,
             sortTagsAlphabetically: true,
             sortEnumValuesAlphabetically: true,
+            sortPropsAlphabetically: true,
+            jsonSampleExpandLevel: true,
+            showObjectSchemaExamples: true,
+            expandResponses: "all",
+            showChangeLayoutButton: true,
+            showRightPanelToggle: true,
+            pathInMiddlePanel: true,
+            schemaExpansionLevel: "all",
           },
           /**
            * Options to pass to override RedocThemeObject
@@ -69,9 +86,12 @@ const config = {
   ],
 
   plugins: [
-    // Local search
+    /**
+     * Local search *
+     */
     require.resolve("@cmfcmf/docusaurus-search-local"),
     "@docusaurus/theme-live-codeblock",
+    require.resolve("docusaurus-plugin-image-zoom"),
   ],
   title: "Capitalise.com Developer Portal",
   tagline:
@@ -91,6 +111,16 @@ const config = {
   deploymentBranch: "gh-pages",
   trailingSlash: false,
   themeConfig: {
+    zoom: {
+      selector: ".markdown :not(em) > img",
+      config: {
+        // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
+        background: {
+          light: "rgb(255, 255, 255)",
+          dark: "rgb(50, 50, 50)",
+        },
+      },
+    },
     navbar: {
       logo: {
         alt: "Capitalise.com Developer Portal",
@@ -106,6 +136,10 @@ const config = {
         {
           label: "Platform",
           to: "/api/platform",
+        },
+        {
+          label: "Business",
+          to: "/api/business",
         },
         {
           label: "Marketplace",
@@ -124,11 +158,14 @@ const config = {
         },
       ],
     },
+    announcementBar: {
+      id: "business_api",
+      content:
+        '🎉 <a target="_blank" rel="noopener noreferrer" href="#">Business API</a> is live and now you can <a target="_blank" rel="noopener noreferrer" href="#">natively show business credit profile</a> in your platform',
+      backgroundColor: "#fafbfc",
+      textColor: "#091E42",
+    },
     footer: {
-      // logo: {
-      //   alt: "Redocusaurus Logo",
-      //   src: "img/logo.svg",
-      // },
       style: "dark",
       links: [
         {
@@ -150,7 +187,7 @@ const config = {
               href: "https://capitalise.com/gb/about",
             },
             {
-              label: "Careers - we are hiring!",
+              label: "Careers",
               href: "https://capitalise.homerun.co",
             },
             {
@@ -194,7 +231,7 @@ const config = {
           ],
         },
       ],
-      copyright: `Copyright © 2016-${new Date().getFullYear()} <a href="https://capitalise.com" target="_blank" rel="noopener noreferrer">Capitalise.com</a>`,
+      copyright: `Copyright © 2016-${new Date().getFullYear()} <a href="https://capitalise.com" target="_blank">Capitalise.com</a>`,
     },
     liveCodeBlock: {
       playgroundPosition: "top",

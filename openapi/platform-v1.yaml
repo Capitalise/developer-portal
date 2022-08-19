@@ -1,14 +1,90 @@
 openapi: 3.0.0
 info:
-  title: Capitalise APIs Explorer
+  title: Platform APIs
   version: 1.0.0
-  description: Capitalise Public API
+  description: |-
+    Platofrm APIs serve primarily for two purposes:
+    * Authorisation service which generates access tokens required by Capitalise APIs (e.g. other Platform and Business API resources)
+    * Managing resources exists in the platform (e.g. tenants, and soon to be live user management)
   contact:
     name: Capitalise
     email: engineering@capitalise.com
-    url: https://capitalise.com
+    url: 'https://capitalise.com'
 paths:
-  /v1/api-key:
+  /tenants:
+    post:
+      summary: Create a tenant
+      operationId: post-tenants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantsRequest'
+            examples: {}
+      description: A tenant is property or product within a company.
+      tags:
+        - Tenants
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantsResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      security:
+        - Platform access token: []
+    parameters: []
+    get:
+      summary: Retrieve tenants
+      operationId: get-tenants
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantsResponseGET'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Retrieve all tenants
+      security:
+        - Platform access token: []
+      tags:
+        - Tenants
+      parameters:
+        - schema:
+            type: integer
+            minimum: 0
+          in: query
+          name: offset
+          description: Count of tenants to offset
+        - schema:
+            type: integer
+            maximum: 100
+            minimum: 0
+          in: query
+          name: limit
+          description: Count of tenants to return in the response
+          allowEmptyValue: true
+  /api-key:
     post:
       x-controller-name: APIKeyManager
       x-operation-name: createApiKey
@@ -42,133 +118,27 @@ paths:
               name: My first API key
               partnerApiKey: API_PARTNER_KEY
               scopes:
-                - profile:multiples
-                - profile:read
-                - profile:write
-                - questionnaire:read
-                - questionnaire:write
-                - funding:read
-                - funding:write
-                - insights:read
-                - scoring:read
+                - 'profile:multiples'
+                - 'profile:read'
+                - 'profile:write'
+                - 'questionnaire:read'
+                - 'questionnaire:write'
+                - 'funding:read'
+                - 'funding:write'
+                - 'insights:read'
+                - 'scoring:read'
                 - offline_access
               expiresAt: '2021-11-24T18:03:28.241Z'
             schema:
               $ref: '#/components/schemas/APIKeyRequestDto'
+        description: ''
       operationId: APIKeyManager.createApiKey
-  /v1/auth/authorize/api-key:
-    post:
-      x-controller-name: DeprecatedAuthorizationManager
-      x-operation-name: authorizeApiKey
-      deprecated: true
-      description: Please use "/v1/authorize/callback-url" instead
-      summary: Start authorization for a third party integration
-      tags:
-        - Auth
-      responses:
-        '204':
-          description: No Content
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '422':
-          description: Unprocessable Entity
-        '500':
-          description: Internal Server Error
-      requestBody:
-        content:
-          application/json:
-            example:
-              apiKey: API_KEY
-              callback: http://callback-url
-            schema:
-              $ref: '#/components/schemas/APIKeyAuthorizeRequestDto'
-      operationId: DeprecatedAuthorizationManager.authorizeApiKey
-  /v1/auth/authorize/callback-url:
-    post:
-      x-controller-name: AuthorizationManager
-      x-operation-name: authorizeCallbackUrl
-      summary: Invite user to authorize
-      description: Start authorization for a third party integration
-      tags:
-        - Auth
-      responses:
-        '204':
-          description: No Content
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '422':
-          description: Unprocessable Entity
-        '500':
-          description: Internal Server Error
-      requestBody:
-        content:
-          application/json:
-            example:
-              apiKey: API_KEY
-              callback: http://callback-url
-            schema:
-              $ref: '#/components/schemas/APIKeyAuthorizeRequestDto'
-      operationId: AuthorizationManager.authorizeCallbackUrl
-  /v1/auth/authorize:
-    post:
-      x-controller-name: AuthorizationManager
-      x-operation-name: signIn
-      summary: Sign in user into Capitalise
-      description: Sign in user into Capitalise
-      tags:
-        - Auth
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AuthorizeThirdPartyResponseDto'
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '422':
-          description: Unprocessable Entity
-        '500':
-          description: Internal Server Error
-      parameters:
-        - name: hash
-          in: query
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            example:
-              email: user@email.com
-              password: p4S5w0rd
-            schema:
-              $ref: '#/components/schemas/UserAuthorizeRequestDto'
-      operationId: AuthorizationManager.signIn
-  /v1/auth/login:
+  /auth/login:
     post:
       x-controller-name: AuthorizationManager
       x-operation-name: login
-      summary: Genereate platform tokens
-      description: Generate platform tokens required for Marketplace V1 & V2 access
-      security: []
+      summary: Generate login token
+      description: 'Login token is used to generate API key. Practically, this should be a one-off API call which allow you programmatically generate the access token to subsequently [generate API key](#tag/Auth/operation/APIKeyManager.createApiKey).'
       tags:
         - Auth
       responses:
@@ -196,21 +166,18 @@ paths:
             schema:
               $ref: '#/components/schemas/SignInRequestDto'
       operationId: AuthorizationManager.login
-  /v1/auth/sign-up/{hash}:
+      security: []
+  /auth/token:
     post:
-      x-controller-name: AuthorizationManager
-      x-operation-name: signUp
-      summary: Sign up user into platform using a hash code
-      description: Sign up user into platform using a hash code
-      tags:
-        - Auth
+      summary: Generate platform access token
+      operationId: post-auth-token
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthorizeThirdPartyResponseDto'
+                $ref: '#/components/schemas/PlatformTokenResponse'
         '400':
           description: Bad Request
         '401':
@@ -219,36 +186,37 @@ paths:
           description: Forbidden
         '404':
           description: Not Found
-        '422':
-          description: Unprocessable Entity
         '500':
           description: Internal Server Error
+      description: ''
+      tags:
+        - Auth
+      security:
+        - X-API-Key: []
       parameters:
-        - name: hash
-          in: path
-          schema:
+        - schema:
             type: string
+          in: header
+          name: X-API-Key
+          description: API Key
           required: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SignUpRequestDto'
-      operationId: AuthorizationManager.signUpWithHash
-  /v1/auth/sign-up:
+        - schema:
+            type: string
+          in: header
+          name: Capitalise-tenant-id
+          description: 'Optional field to restrict the access token access to the specified tenant. If not provided, the access token can manage all tenants. _Highly recommended for individual tenant management as it ensures you access the right data._'
+    parameters: []
+  /auth/refresh-token:
     post:
-      x-controller-name: AuthorizationManager
-      x-operation-name: signUp
-      description: Sign up user into platform
-      tags:
-        - Auth
+      summary: Refresh a platform access token
+      operationId: post-auth-refresh-token
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OAuth2AuthorizedTokenDto'
+                $ref: '#/components/schemas/PlatformTokenResponse'
         '400':
           description: Bad Request
         '401':
@@ -257,32 +225,38 @@ paths:
           description: Forbidden
         '404':
           description: Not Found
-        '422':
-          description: Unprocessable Entity
         '500':
           description: Internal Server Error
+      description: ''
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SignUpRequestDto'
-      operationId: AuthorizationManager.signUp
-  /v1/auth/signup:
-    post:
-      x-controller-name: DeprecatedAuthorizationManager
-      x-operation-name: signUp
-      deprecated: true
-      description: Please use "/v1/criteria/sign-up/{hash}" instead
-      summary: Sign up user into platform
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  description: The refresh token
+        description: ''
       tags:
         - Auth
+      security: []
+  '/tenants/{tenantId}':
+    patch:
+      summary: Update a tenant reference
+      operationId: patch-tenant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantsRequest'
+            examples: {}
+      description: A tenant is property or product within a company.
+      tags:
+        - Tenants
       responses:
         '200':
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AuthorizeThirdPartyResponseDto'
         '400':
           description: Bad Request
         '401':
@@ -291,69 +265,56 @@ paths:
           description: Forbidden
         '404':
           description: Not Found
-        '422':
-          description: Unprocessable Entity
         '500':
           description: Internal Server Error
-      parameters:
-        - name: hash
-          in: query
-          schema:
-            type: string
-          required: true
-      requestBody:
-        content:
-          application/json:
-            example:
-              name: Name
-              email: user@email.com
-              password: p4S5w0rd
-              companyName: Company Name
-              userType: introducer
-              phone: 1234 123 123
-              referredBy: Referred by someone
-              terms: true
-              newsletter: true
-              companyNumber: '123123312'
-              introducerType: ACCOUNTANT
-            schema:
-              $ref: '#/components/schemas/OldSignUpRequestDto'
-      operationId: DeprecatedAuthorizationManager.signUp
-  /v1/auth/token/code/{code}:
+      security:
+        - Platform access token: []
+      parameters: []
+    parameters:
+      - schema:
+          type: string
+        name: tenantId
+        in: path
+        required: true
+        description: The tenant ID to be updated
+  /users:
     get:
-      x-controller-name: AuthorizationManager
-      x-operation-name: exchangeAccessTokenForJwt
-      description: Get platform access token from a given authorization code
+      summary: Retrieve the list of users in your company
       tags:
-        - Auth
+        - User Manager (upcoming)
+      responses: {}
+      operationId: get-users
+    post:
+      summary: Create a new user to your company
+      operationId: post-users
       responses:
         '200':
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AccessTokenResponseDto'
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '422':
-          description: Unprocessable Entity
-        '500':
-          description: Internal Server Error
-      parameters:
-        - name: code
-          in: path
-          schema:
-            type: string
-          required: true
-      operationId: AuthorizationManager.exchangeAccessTokenForJwt
+      tags:
+        - User Manager (upcoming)
+  '/users/{userId}':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+    get:
+      summary: Retrieve your company's user by ID
+      tags:
+        - User Manager (upcoming)
+      responses: {}
+      operationId: get-users-userId
+    patch:
+      summary: Update your company's user by ID
+      operationId: patch-users-userId
+      responses:
+        '200':
+          description: OK
+      tags:
+        - User Manager (upcoming)
 servers:
-  - url: /api/platform
+  - url: /api/platform/v1
 components:
   schemas:
     OAuth2AuthorizedTokenDto:
@@ -542,15 +503,15 @@ components:
             type: string
             description: The allowed scopes for the API key
             enum:
-              - profile:multiples
-              - profile:read
-              - profile:write
-              - questionnaire:read
-              - questionnaire:write
-              - funding:read
-              - funding:write
-              - insights:read
-              - scoring:read
+              - 'profile:multiples'
+              - 'profile:read'
+              - 'profile:write'
+              - 'questionnaire:read'
+              - 'questionnaire:write'
+              - 'funding:read'
+              - 'funding:write'
+              - 'insights:read'
+              - 'scoring:read'
               - offline_access
         expiresAt:
           type: string
@@ -560,10 +521,146 @@ components:
         - name
         - scopes
       additionalProperties: false
+    TenantsResponse:
+      description: ''
+      type: object
+      x-examples: {}
+      title: Tenants response
+      properties:
+        id:
+          type: string
+          minLength: 1
+          description: Tenant ID
+          example: 40d0dc8e-20ff-4efc-b905-61c236c68c1e
+        referenceId:
+          type: string
+          minLength: 1
+          description: Unique reference ID provided by you
+          example: CompanyA-9320498
+        createdDateTime:
+          type: string
+          minLength: 1
+          format: date-time
+          description: Tenant created date and time
+          example: '2022-04-25T08:49:17.000Z'
+        updatedDateTime:
+          type: string
+          minLength: 1
+          format: date-time
+          description: Tenant update date and time
+          example: '2022-04-25T08:49:17.000Z'
+      required:
+        - id
+        - createdDateTime
+        - updatedDateTime
+    TenantsRequest:
+      title: Tenants request
+      type: object
+      properties:
+        referenceId:
+          type: string
+          description: A unique referenece. Highly recommend not to use personal identifiable information.
+          example: CompanyA-9320498
+    TenantsResponseGET:
+      description: ''
+      type: object
+      x-examples:
+        The 2nd and 3rd out of total 6 tenants:
+          data:
+            - id: 40d0dc8e-20ff-4efc-b905-61c236c68c1e
+              referenceId: CompanyA-9320498
+              createdDateTime: '2022-04-19T15:05:14.000Z'
+              updatedDateTime: '2022-04-19T15:05:14.000Z'
+            - id: d6c85eae-de3e-4110-b755-4856d1703a6a
+              referenceId: CompanyE-af83hsi2
+              createdDateTime: '2022-04-25T08:49:17.000Z'
+              updatedDateTime: '2022-04-25T08:49:17.000Z'
+          links:
+            self: 'http://demo.capitalise.com/api/business/v1/tenants?offset=2&limit=2'
+            prev: 'http://demo.capitalise.com/api/business/v1/tenants?offset=0&limit=2'
+            next: 'http://demo.capitalise.com/api/business/v1/tenants?offset=4&limit=2'
+          meta:
+            totalEntries: 6
+      title: Tenants response - GET
+      properties:
+        data:
+          type: array
+          uniqueItems: true
+          maxItems: 100
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/TenantsResponse'
+        links:
+          type: object
+          required:
+            - self
+          properties:
+            self:
+              type: string
+              minLength: 1
+              description: The endpoint for this request
+            prev:
+              type: string
+              description: The endpoint for the next batch of tenants
+            next:
+              type: string
+              description: The endpoint for the previous batch of tenants
+        meta:
+          type: object
+          required:
+            - totalEntries
+          properties:
+            totalEntries:
+              type: number
+              description: Total count of the tenants regardless of offset and limit filters
+      required:
+        - data
+        - links
+        - meta
+    PlatformTokenResponse:
+      title: PlatformTokenResponse
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The platform access token
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6InByb2ZpbGU6bXVsdGlwbGVzIG9mZmxpbmVfYWNjZXNzIiwidXNlck1ldGFkYXRhIjp7fSwiYXBwTWV0YWRhdGEiOnsidXNlciI6eyJpZCI6MTkyMiwiZW1haWwiOiJleGFtcGxlQGFjbWVsaW1pdGVkLmNvbSIsIm5hbWUiOiJFeGFtcGxlIFVzZXIifSwiZW50aXR5Ijp7ImlkIjoxMDIwMiwidHlwZSI6IklOVFJPRFVDRVIiLCJjb3VudHJ5Q29kZSI6IkdCIn0sImFwaUtleVRva2VuSWQiOiI2Mjc5NGM3NjZhYmFjOTZlNjNjYTFlZGNmIiwidHlwZSI6ImVudGl0eSJ9LCJpYXQiOjE2NjA2NDEzOTIsImV4cCI6MTY2MDY3NzM5MiwiaXNzIjoiY2FwaXRhbGlzZSIsImp0aSI6IjQ0M2I3ZDc4LTVmMzctNDdkNC1hY2IzLTQ1MTZjNmM4N2FkNiJ9.EhFWMFuA0k0TdXbM7dJxs8Vw-kQZ315RkOasZL7-ycEUgRPkf_OzIge2Y5ThLKm-sC43IEzP1Lb_UcXUU8-1BNQI5js6gSrWT6lPCG-slb1ApZrSv29LcX6xq9VYvXCmB-tj5UPUcWirG-tPGI8a98E8ZVBFKhYF9-kBj9-CJNXFAAPXmDAhmmSb6BLX6pciTr08wZ5dC77Gw09Zl_TI9fS-Vt2sZ-vbI9TaQh4_Q1uqvzQsQHjMVvBby9eT3DDL4ubOpVh7SGczoBAlQYcppLfjVOOX0fGwOSYePqDo37LLKgKBefFocQh9nssp5RFnIhinWn_bmBio3k17k0ewYg
+        expires_in:
+          type: integer
+          description: The expiry of `access_token` in seconds
+          example: '36000'
+        refresh_token:
+          type: string
+          description: The refresh token
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6InByb2ZpbGU6bXVsdGlwbGVzIG9mZmxpbmVfYWNjZXNzIiwidXNlck1ldGFkYXRhIjp7fSwiYXBwTWV0YWRhdGEiOnsidXNlciI6eyJpZCI6MTkyMiwiZW1haWwiOiJleGFtcGxlQGFjbWVsaW1pdGVkLmNvbSIsIm5hbWUiOiJFeGFtcGxlIFVzZXIifSwiZW50aXR5Ijp7ImlkIjoxMDIwMiwidHlwZSI6IklOVFJPRFVDRVIiLCJjb3VudHJ5Q29kZSI6IkdCIn0sImFwaUtleVRva2VuSWQiOiI2Mjc5NGM3NjZhYmFjOTZlNjNjYTFlZGNmIiwidHlwZSI6ImVudGl0eSJ9LCJpYXQiOjE2NjA2NDEzOTIsImV4cCI6MTY2MDY3NzM5MiwiaXNzIjoiY2FwaXRhbGlzZSIsImp0aSI6IjQ0M2I3ZDc4LTVmMzctNDdkNC1hY2IzLTQ1MTZjNmM4N2FkNiJ9.I_ZuJD8knx6XU8O1uJyU8fHfPgxAN8uLIX-7bQ1POJbnZD0sYsdxDTdVp5-aAGFouNRe6cbS0IB0hxj1YocI28lYFI6icPbeb0deMqJon562KCyyFflQJN_bLx_9WHvwa0ZireUhEK6MIX2SmCs6k5zqhoKBvj897byfyyZupXtSZnJDzxv4s8Li3rtuAsLZWX3ZiKmkBsat-9RRm2JXL7Ea2jfjAvGUo2Lifty44ktF2l378zxUxKhaUTORpSV48swZhCpOU6eY2BU_oyfQ4i2H6vZISH3fqmZIE5PytlD8twxMyNoaksG0payQICorJBbjohBTl5QKdIw_MIWxHOQ
+        scope:
+          type: string
+          description: The scopes that the platform access token should have
+          example: 'profile:multiples offline_access'
+        token_type:
+          type: string
+          description: The token type
+          example: Bearer
+      description: ''
   securitySchemes:
-    bearerAuth:
+    Platform Access Token:
       type: http
       scheme: bearer
-      bearerFormat: JWT
+      description: Your bearer token should be a platform access token generated from `/platform/v1/auth/authorize` or `/platform/v1/auth/refresh-token`
+    X-API-Key:
+      name: X-API-Key
+      type: apiKey
+      in: header
+      description: |-
+        An API key is a token that you provide when making API calls. Include the token in a header parameter called X-API-Key. Generated by [Platform V1](/api/platform#operation/APIKeyManager.createApiKey)
+        Example: `X-API-Key: 123`
+    Login Access Token:
+      type: http
+      scheme: bearer
+      description: 'The access token generated by `/platform/v1/auth/login` ([generate login token](#tag/Auth/operation/AuthorizationManager.login)), which is specifically used to programmatially generate API key.'
+tags:
+  - name: Auth
+  - name: Tenants
+  - name: User Manager (upcoming)
 security:
-  - bearerAuth: []
+  - X-API-Key: []

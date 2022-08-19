@@ -23,14 +23,17 @@ const sidebars = {
         id: "index",
       },
       items: [
+        "native-credit-report",
         "credit-profile-widget",
         "embedded-funding-search",
         "native-funding-search",
       ],
     },
     {
-      type: "doc",
-      id: "launch-checklist",
+      type: "category",
+      label: "Guides",
+      collapsed: false,
+      items: ["launch-checklist", "migration-from-marketplace-v1"],
     },
   ],
 
