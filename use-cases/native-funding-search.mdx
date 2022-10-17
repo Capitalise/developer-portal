@@ -52,7 +52,7 @@ sequenceDiagram
         Capitalise Marketplace APIs->>API Partner: New marketplace access token jwt and refresh token refreshToken
     end
     Note over Applicant,Capitalise Marketplace APIs: Step 3: Create funding search
-    Applicant->>API Partner: Complete the quesitonnaire
+    Applicant->>API Partner: Complete the questionnaire
     API Partner->>Capitalise Marketplace APIs: Create the company<br>POST /marketplace/v1/profiles/blank
     Capitalise Marketplace APIs->>API Partner: Company UUID profileUUID
     API Partner->>Capitalise Marketplace APIs: Update the company profile<br>PATCH /marketplace/v1/questionnaires/business-all-funding-products/profiles/:profileUUID/answers

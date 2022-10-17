@@ -3,7 +3,7 @@ info:
   title: Platform APIs
   version: 1.0.0
   description: |-
-    Platofrm APIs serve primarily for two purposes:
+    Platform APIs serve primarily for two purposes:
     * Authorisation service which generates access tokens required by Capitalise APIs (e.g. other Platform and Business API resources)
     * Managing resources exists in the platform (e.g. tenants, and soon to be live user management)
   contact:
@@ -238,6 +238,46 @@ paths:
                   type: string
                   description: The refresh token
         description: ''
+      tags:
+        - Auth
+      security: []
+  '/auth/tenants/authorize':
+    post:
+      summary: Generate platform access token to access a tenant
+      operationId: post-auth-tenants-authorise
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformTokenResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: ''
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: JWT Token
+            description: The token generated from the API key
+          required: true
+        - in: header
+          name: Capitalise-tenant-id
+          schema:
+            type: string
+            format: uuid
+            description: The tenant id
+          required: true
       tags:
         - Auth
       security: []

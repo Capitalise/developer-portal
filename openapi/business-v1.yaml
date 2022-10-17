@@ -26,7 +26,7 @@ info:
 
     Business V1 only accepts platform access token which is generated from `/platform/v1/auth/token` [generate platform access token](/api/platform#tag/Auth/operation/post-auth-token).
 
-    You can restrict the platofrm access token to only access one specific tenant by providing `Capitalise-tenant-id` in the header.
+    You can restrict the platform access token to only access one specific tenant by providing `Capitalise-tenant-id` in the header.
 servers:
   - url: 'https://demo.capitalise.com/api/business/v1'
     description: Demo
@@ -34,45 +34,6 @@ servers:
     description: Production
 paths:
   /profile:
-    get:
-      summary: Retrieve the profile
-      tags:
-        - Profile
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/ProfileResponse'
-                  links:
-                    type: string
-                  meta:
-                    type: string
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-      operationId: get-profile
-      description: Retrieve the business' profile
-      security:
-        - Platform access token: []
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: Capitalise-tenant-id
-          description: 'The tenant ID. If you provided a `Capitalise-tenant-id` when generating the platform access token, this ID must be the same as provided ID for platform access token.'
-          required: true
     post:
       summary: Set up profile details
       operationId: post-profile
@@ -112,33 +73,23 @@ paths:
               required:
                 - companyInformation
         description: ''
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: JWT Token
+            description: The token generated from the API key
+          required: true
+        - in: header
+          name: Capitalise-tenant-id
+          schema:
+            type: string
+            format: uuid
+            description: The tenant id
+          required: true
       tags:
         - Profile
-    patch:
-      summary: Update profile
-      operationId: patch-profile
-      responses:
-        '200':
-          description: OK
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-      description: Update the profile
-      tags:
-        - Profile
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProfileRequest'
-            examples: {}
   /credit-report:
     get:
       summary: Retrieve credit report
@@ -167,16 +118,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  data:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        description: Application ID
-                  links:
-                    type: object
-                  meta:
-                    type: object
+                  id:
+                    type: string
+                    description: Application ID
         '400':
           description: Bad Request
         '401':
@@ -196,46 +140,7 @@ paths:
               $ref: '#/components/schemas/ApplicationsPOST'
       description: ''
     parameters: []
-    get:
-      summary: Retrieve the list of applications
-      operationId: get-applications
-      responses:
-        '200':
-          description: OK
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: offset
-        - schema:
-            type: string
-          in: query
-          name: limit
-      tags:
-        - Applications
-      description: Upcoming feature - please contact support@capitalise.com if you want to learn more
-  '/applications/{applicationId}':
-    parameters:
-      - schema:
-          type: string
-        name: applicationId
-        in: path
-        required: true
-    get:
-      summary: Retrieve the application details by ID
-      tags:
-        - Applications
-      responses: {}
-      operationId: get-applications-funding-applicationId
-    patch:
-      summary: Update application details
-      operationId: patch-applications-applicationId
-      responses:
-        '200':
-          description: OK
-      tags:
-        - Applications
-  '/applications/{applicationId}/continueUrl':
+  '/applications/{applicationId}/continue-url':
     parameters:
       - schema:
           type: string
@@ -243,7 +148,7 @@ paths:
         in: path
         required: true
     post:
-      summary: Generate the URL for user to continue finishing application at Capitalise.com
+      summary: Generate the URL for user to continue application at Capitalise.com
       operationId: post-applications-applicationId-questionnaireUrl
       responses:
         '201':
@@ -255,7 +160,7 @@ paths:
                 properties:
                   continueUrl:
                     type: string
-                    description: The quesitonnaire URL for the user to continue the application in Capitalise
+                    description: The questionnaire URL for the user to continue the application in Capitalise
         '400':
           description: Bad Request
         '401':
@@ -1846,7 +1751,7 @@ x-tagGroups:
   - name: Live
     tags:
       - Profile
+      - Applications
   - name: Upcoming
     tags:
-      - Applications
       - Credit Report
