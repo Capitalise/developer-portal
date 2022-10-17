@@ -12,7 +12,7 @@ function HomepageHeader() {
         <div>
           <Link className="hot-news" to="/use-cases/credit-profile-widget">
             <span className="badge badge--secondary">NEW</span>
-            <span> Credit profile widget is now live!</span>
+            <span> Business API is now live!</span>
           </Link>
           <h1 className="hero__title">
             The integration layer for small business financial services

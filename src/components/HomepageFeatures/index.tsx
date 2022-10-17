@@ -4,32 +4,45 @@ import Link from "@docusaurus/Link";
 type FeatureItem = {
   title: string;
   Svg: React.ComponentType<React.ComponentProps<"svg">>;
-  link: string;
   description: JSX.Element;
-  tags: string[];
-  isNew: boolean;
+  link?: string; // If empty, `Coming soon` tag will show
+  isNew?: boolean; // If true, `New` tag will show
+  tags?: string[]; // Integration patern
 };
 
-const UseCases = [
+const UseCases: FeatureItem[] = [
+  {
+    title: "Native credit profile",
+    Svg: require("@site/static/img/index-native-credit-report.svg").default,
+    link: "/use-cases/native-credit-report",
+    tags: ["API"],
+    isNew: true,
+    description: (
+      <>Offer credit profile of your users' businesses with your own branding</>
+    ),
+  },
   {
     title: "Credit profile widget",
     Svg: require("@site/static/img/index-credit-profile-widget.svg").default,
     link: "/use-cases/credit-profile-widget",
-    tags: ["API", "Iframe", "JavaScript"],
+    tags: ["API", "iFrame", "JavaScript"],
     isNew: true,
     description: (
-      <>Help users track business credit score directly from your platform</>
+      <>
+        Out-of-the-box widget to help users track business credit score directly
+        from your platform
+      </>
     ),
   },
   {
     title: "Embedded funding search",
     Svg: require("@site/static/img/index-embedded-funding-search.svg").default,
     link: "/use-cases/embedded-funding-search",
-    tags: ["Iframe", "JavaScript"],
+    tags: ["iFrame", "JavaScript"],
     description: (
       <>
-        Low-code integration to help your users search funding for from with
-        over 100 lenders in 5 minutes
+        Low-code integration to offer funding search with over 100 lenders in 5
+        minutes
       </>
     ),
   },
@@ -57,7 +70,19 @@ const UseCases = [
   },
 ];
 
-const ApiProducts = [
+const ApiProducts: FeatureItem[] = [
+  {
+    title: "Business",
+    Svg: require("@site/static/img/index-business.svg").default,
+    link: "/api/business",
+    isNew: true,
+    description: (
+      <>
+        One-stop shop for small and medium businesses funding matching and
+        intelligent scoring & insight services
+      </>
+    ),
+  },
   {
     title: "Platform",
     Svg: require("@site/static/img/index-platform.svg").default,
@@ -70,21 +95,11 @@ const ApiProducts = [
     link: "/api/marketplace/v1",
     description: <>Funding matching services with over 100 lenders</>,
   },
-  {
-    title: "Business",
-    Svg: require("@site/static/img/index-business.svg").default,
-    description: (
-      <>
-        One-stop shop for small and medium businesses funding matching and
-        intelligent scoring & insight services
-      </>
-    ),
-  },
 ];
 
 function Feature({ link, title, Svg, description, tags, isNew }: FeatureItem) {
   return (
-    <Link to={link} className=" card padding-horiz--md">
+    <Link to={link} className="card padding-horiz--md">
       <div className="card__image">
         <Svg role="img" />
       </div>
