@@ -51,6 +51,11 @@ const config = {
             spec: "./openapi/marketplace-v2.yaml",
             route: "/api/marketplace/v2",
           },
+          {
+            id: "application",
+            spec: "./openapi/application.yaml",
+            route: "/api/application",
+          },
         ],
         theme: {
           /**
@@ -147,12 +152,16 @@ const config = {
           position: "left",
           items: [
             {
-              label: "v1 (live)",
+              label: "Marketplace API v1 (live)",
               to: "/api/marketplace/v1",
             },
             {
-              label: "v2 (beta)",
+              label: "Marketplace API v2 (beta)",
               to: "/api/marketplace/v2",
+            },
+            {
+              label: "Application API",
+              to: "/api/application",
             },
           ],
         },

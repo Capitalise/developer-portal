@@ -1,0 +1,20 @@
+---
+openapi: 3.0.0
+info:
+  title: Introduction
+  description: |-
+    # Introduction
+    This API provides a way for lenders to receive applications from clients on the Capitalise Platform and to return offers or rejections.
+    The API also supports retrieval of documentation, and a set of web hooks to receive updates for applications when the user accepts or rejects an offer.
+  contact:
+    name: Capitalise
+    email: engineering@capitalise.com
+    url: "https://capitalise.com"
+x-docs:
+  sidebar:
+    applicationApiSidebar:
+      - type: category
+        label: Introduction
+        items:
+          - Introduction
+          - Application Flow
