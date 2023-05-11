@@ -1,33 +1,14 @@
-const sidebars = {
-  applicationApiSideBar: [
+module.exports = {
+  docs: [
     {
       type: "category",
-      label: "Application API",
-      collapsed: false,
-      items: [
-        "application-api/introduction",
-        {
-          type: "collapsible",
-          label: "Application Flow",
-          collapsed: false,
-          items: [
-            {
-              type: "doc",
-              id: "application-api/application-flow",
-            },
-            {
-              type: "doc",
-              id: "application-api/prerequisites-and-requirements",
-            },
-            {
-              type: "doc",
-              id: "application-api/go-live-sign-off",
-            },
-          ],
-        },
-      ],
+      label: "Introduction",
+      items: ["introduction", "application-flow"],
+    },
+    {
+      type: "category",
+      label: "API Reference",
+      items: ["api-reference/platform", "api-reference/business"],
     },
   ],
 };
-
-module.exports = sidebars;

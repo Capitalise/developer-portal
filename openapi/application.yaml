@@ -1,20 +1,52 @@
----
 openapi: 3.0.0
 info:
-  title: Introduction
-  description: |-
-    # Introduction
-    This API provides a way for lenders to receive applications from clients on the Capitalise Platform and to return offers or rejections.
-    The API also supports retrieval of documentation, and a set of web hooks to receive updates for applications when the user accepts or rejects an offer.
+  title: Application API
   contact:
     name: Capitalise
     email: engineering@capitalise.com
-    url: "https://capitalise.com"
-x-docs:
-  sidebar:
-    applicationApiSidebar:
-      - type: category
-        label: Introduction
-        items:
-          - Introduction
-          - Application Flow
+    url: 'https://capitalise.com'
+  description: |-
+    # Introduction
+
+    This API provides a way for lenders to receive applications from clients on the Capitalise Platform and to return offers or rejections.
+    The API also supports retrieval of documentation, and a set of web hooks to receive updates for applications when the user accepts or rejects an offer.
+   
+     ## Application Flow
+
+    A typical integration would follow the following flow, typically:
+
+      1. A client matches to lenders on the Capitalise Platform
+
+      2. Client completes required fields for a lenders API
+
+      3. Capitalise API dispatches application to Webhook
+
+      4. Lender processes application and responds with an offer or rejection
+
+      5. Client accepts or rejects offer
+
+      6. Capitalise redirect user to lender onboarding to finalise
+
+      A more detailed version of this flow is displayed below: 
+
+    ![API Application Flow](/img/API%20Application%20Flow.png)
+
+    ## Prerequisites & Requirements
+
+     ### Required Fields
+
+     Lenders need to provide us the list of required fields (optionally with rules for requirements, e.g. only if field a > 100)
+
+    Some sample required fields rules: 
+
+     - Simply requiring a field to be complete 
+       - Sector
+     - A field is required based on the value of another field
+       - Contact Number required if Company Type = Sole Trader
+     - More complex field requirements based on values and multiple conditions
+       - Personal Guarantees required if Company Type = Sole Trader and Revenue < £100,000 and Sector in (IT Services, Business Services) 
+
+     ### API Setup
+
+      Lender needs to provide Capitalise a webhook for sending applications to. You can optionally provide a separate webhook for sending updates too, or use one for all.
+    
