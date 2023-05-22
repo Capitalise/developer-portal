@@ -9,6 +9,7 @@ info:
     # Introduction
 
     This API provides a way for lenders to receive applications from clients on the Capitalise Platform and to return offers or rejections.
+
     The API also supports retrieval of documentation, and a set of web hooks to receive updates for applications when the user accepts or rejects an offer.
 
      ## Application Flow
@@ -58,18 +59,19 @@ info:
       ### Authentication
 
       Authentication uses oAuth via our Auth0 provider. We will provide you a client secret and credentials.
-      To authenticate, call our oAuth provider as per the sample below:
 
-      https://capitalise.eu.auth0.com/oauth/token
+      To authenticate, call our oAuth provider, `https://capitalise.eu.auth0.com/oauth/token`, as per the sample below:
 
       ```json
-      "audience": "https://capitalise.eu.auth0.com/api/v2/",
-      "client_id": "your_client_id",
-      "client_secret": "your_client_secret",
-      "grant_type": "password",
-      "password": "your_password",
-      "scope": "openid email profile",
-      "username": "your_username"
+      {
+        "audience": "https://capitalise.eu.auth0.com/api/v2/",
+        "client_id": "your_client_id",
+        "client_secret": "your_client_secret",
+        "grant_type": "password",
+        "password": "your_password",
+        "scope": "openid email profile",
+        "username": "your_username"
+      }
       ```
 
       Ensure you also send a header:
@@ -81,20 +83,22 @@ info:
       You will receive a payload back like the following, use the id_token as the bearer token in all authenticated requests. These tokens usually expire within 2 minutes, so we recommend authenticating before each request, rather than storing and refreshing the token.
 
       ```json
-      "access_token": "....",
-      "id_token": "....",
-      "scope": "openid email profile ....",
-      "expires_in": 120,
-      "token_type": "Bearer"
+      {
+        "access_token": "....",
+        "id_token": "....",
+        "scope": "openid email profile ....",
+        "expires_in": 120,
+        "token_type": "Bearer"
+      }
       ```
 
     ----
 
       ### API
 
-    Use your Bearer token to access the API at the below URL
+    Use your Bearer token to access the API at the below URL:
 
-    https://capitalise.com/api/platform/v1/funding
+    `https://capitalise.com/api/platform/v1/funding`
 
     ---
 
@@ -107,6 +111,7 @@ info:
     Ensure that your API is able to deal with only the minimum mandatory fields being entered. Any additional mandatory fields required should be discussed, as lender specific requirements on existing fields can be custom configured.
 
     <strong>Outright rejection</strong>
+
     If for any reason you will fully reject an application, e.g. due to poor credit or similar scenarios, you must demonstrate the response you give to the user is clear.
 
     <strong>Failed validation</strong>
@@ -115,7 +120,7 @@ info:
 
     <strong>Manual Review</strong>
 
-    If you will direct applications for manual review, you show show that acknowledgement made along with a clear message indicating a timeline for update.
+    If you will direct applications for manual review, you should show that acknowledgement made along with a clear message indicating a timeline for update.
 
     <strong>Indicative/Underwritten Offer</strong>
 
@@ -147,197 +152,199 @@ info:
         - attachments: *A list of documents attached to this application*
 
     ```json
-        {
-          "apiProvider": {
-            "url": "https://webhook-url/",
-            "updateUrl": "https://webhook-url/",
-            "authorizationToken": "1234a"
-        },
-          "application": {
-            "id": 10000,
-            "reference": "Q43RT7",
-            "status": "In Review",
-            "responseReason": null,
-            "comment": null,
-          "fundingSearch": {
-            "id": 10001,
-            "status": 2,
-            "amount": "15000.00",
-            "period": 12,
-            "statusLabel": "Reviewing",
+    {
+      "apiProvider": {
+        "url": "https://webhook-url/",
+        "updateUrl": "https://webhook-url/",
+        "authorizationToken": "1234a"
+      },
+      "application": {
+        "id": 10000,
+        "reference": "Q43RT7",
+        "status": "In Review",
+        "responseReason": null,
+        "comment": null,
+        "fundingSearch": {
+          "id": 10001,
+          "status": 2,
+          "amount": "15000.00",
+          "period": 12,
+          "statusLabel": "Reviewing",
           "author": {
             "id": 10002,
-          "entity": {
-            "id": 10003,
-            "entityId": 10004,
-            "companyName": "Acme Introducer"
-        },
-        "userType": "business",
-        "name": "John Smith",
-        "email": "johnsmith@email.com"
-        },
-        "manager": {
-        "id": 10005,
-        "entity": {
-          "id": 10006,
-          "entityId": 10007,
-          "companyName": "Acme Introducer"
-        },
-        "userType": "business",
-        "name": "John Smith",
-        "email": "johnsmith@email.com"
-        },
-        "useOfFunds": "Business expansion",
-        "urgency": "ASAP"
+            "entity": {
+              "id": 10003,
+              "entityId": 10004,
+              "companyName": "Acme Introducer"
+            },
+            "userType": "business",
+            "name": "John Smith",
+            "email": "johnsmith@email.com"
+          },
+          "manager": {
+            "id": 10005,
+            "entity": {
+              "id": 10006,
+              "entityId": 10007,
+              "companyName": "Acme Introducer"
+            },
+            "userType": "business",
+            "name": "John Smith",
+            "email": "johnsmith@email.com"
+          },
+          "useOfFunds": "Business expansion",
+          "urgency": "ASAP"
         },
         "fundingMatch": {
-        "id": 10008,
-        "offerId": null,
-        "products": [1],
-        "productNames": [
-        "Term Loans"
-      ],
-      "statusReason": null,
-      "statusComment": null,
-      "canUseInstantOffer": true,
-      "canUseInstantApplication": true,
-      "lender": {
-        "id": 10009,
-        "entityId": 10010,
-        "companyName": "Lender Name",
-        "logo": "https://logo-url",
-        "icon": "https://icon-url"
-      },
-      "status": 1
-    },
-    "profile": {
-      "accountantDetails": { # only provide for searches though introducers
-        "name": "Acme Accountants",
-        "address": "12 Road Name",
-        "town": "London",
-        "contactName": "John Surname",
-        "telephone": "01234567890",
-        "email": "john@acmeacc.com"
-      },
-      "assetsToFinance": [
-        {
-          "assetCost": null,
-          "assetSerialNumber": null,
-          "depositAvailable": null,
-          "assetType": null,
-          "assetTypeName": null
-        }
-      ],
-      "basicCompanyDetails": {
-        "contactName": "John Companyman",
-        "contactEmail": "john@company.com",
-        "contactPhone": "01234567890",
-        "companyName": "Companman Company",
-        "companyTradingName": "CC Company LTD",
-        "companyNumber": "12345678A",
-        "companyType": "Limited Company",
-        "vatRegistered": 1,
-        "address": "100 Road Name, Town Name",
-        "city": "London",
-        "postalCode": "LO4 0ON",
-        "tradingFrom": 1568718000,
-        "tradingPeriod": "3",
-        "creditScore": "3",
-        "numberOfEmployees": 2,
-        "percentageOfSalesOnline": 10,
-        "companyWebsite": "https://beta.companieshouse.gov.uk/company/123456789A",
-        "sectorName": "Construction"
-      },
-      "companyCredit": {
-        "unpaidItems": 0,
-        "behindOnTaxPayments": 0,
-        "officialsDeclaredBankrupt": true,
-        "officialsFailedBusiness": 0,
-        "exceededAgreedOverdraft": 0,
-        "overdraftWorstMonth": 8,
-        "daysOverdrawn": 13,
-        "debtRepayments": 86000,
-        "expectedTurnover": 1200000, # only for companies trading sub 12 months
-        "expectedNetProfit": 350000 # only for companies trading sub 12 months
-      },
-      "directorOrSecretaryDetails": [
-        {
-          "title": "Mr",
-          "fullName": "John Companyman",
-          "email": "jc@email.com",
-          "phone": "01234567890",
-          "dateOfBirth": -51926400,
-          "position": "Director",
-          "addressResidential": "125 Street, London, LO4 0ON",
-          "ownershipPercentage": 100,
-          "residentialStatus": "homeowner",
-          "personalGuarantee": true,
-          "monthlyRentOrMortgage": 245,
-          "mortgageValue": 39000,
-          "monthlyBusinessIncome": 6500,
-          "monthlyNonBusinessIncome": null,
-          "monthlyOtherHouseholdIncome": null,
-          "personalCreditLimit": 75000,
-          "ccjsValue": null,
-          "personalDefaultsValue": null,
-          "dependants": 3,
-          "oldestCreditAccountAge": null,
-          "missedPaymentsBusiness": null,
-          "missedPaymentsPersonal": null,
-          "personalDefaults": null
-        }
-      ],
-      "eposTerminalInfo": {
-        "transactionsPerMonthAvg": 2500,
-        "monthsUsingCCProcessing": 28,
-        "monthsRemainingOnBusinessLease": 4,
-        "terminalId": null,
-        "terminalProvider": null
-      },
-      "guarantorAssetsForSecurity": {
-        "hasUkHomeownerDirector": true,
-        "estimatedSecurity": 40000,
-        "guarantorAssets": [
-          {
-            "owner": "John Companyman",
-            "estimatedValue": 79000,
-            "totalDebt": 39000,
-            "address": "125 Street, London, LO4 0ON"
-          }
-        ]
-      },
-      "invoiceFinancing": {
-        "debtorsValue": null,
-        "debtorDays": null,
-        "invoicesNumber": null,
-        "creditNotesGrossValue": null,
-        "creditNotesNumber": null,
-        "customersNumber": null
-      },
-      "tradeFinanceProfile": {
-        "currentValueOfDebtors": 11000,
-        "approxNoOfCustomers": 2,
-        "currentValueOfConfirmedOrders": 22750,
-        "approxGrossMargin": 35,
-        "madeADozenWebsiteSales": false
-      },
-      "tradeHistory": [
-        {
-          "year": "2020",
-          "yearEndTimestamp": 1598832000,
-          "revenue": "45000",
-          "profitNet": "4500",
-          "debtorsOutstanding": null,
-          "debtorsInvoicesDue": null,
-          "fixedAssets": null
-        }
-      ],
-      "attachments": []
-    },
-    "acceptedAt": null,
-    "invalidatedAt": null
-     }
-        }
+          "id": 10008,
+          "offerId": null,
+          "products": [
+            1
+          ],
+          "productNames": [
+            "Term Loans"
+          ],
+          "statusReason": null,
+          "statusComment": null,
+          "canUseInstantOffer": true,
+          "canUseInstantApplication": true,
+          "lender": {
+            "id": 10009,
+            "entityId": 10010,
+            "companyName": "Lender Name",
+            "logo": "https://logo-url",
+            "icon": "https://icon-url"
+          },
+          "status": 1
+        },
+        "profile": {
+          "accountantDetails": { # only provide for searches though introducers
+            "name": "Acme Accountants",
+            "address": "12 Road Name",
+            "town": "London",
+            "contactName": "John Surname",
+            "telephone": "01234567890",
+            "email": "john@acmeacc.com"
+          },
+          "assetsToFinance": [
+            {
+              "assetCost": null,
+              "assetSerialNumber": null,
+              "depositAvailable": null,
+              "assetType": null,
+              "assetTypeName": null
+            }
+          ],
+          "basicCompanyDetails": {
+            "contactName": "John Companyman",
+            "contactEmail": "john@company.com",
+            "contactPhone": "01234567890",
+            "companyName": "Companman Company",
+            "companyTradingName": "CC Company LTD",
+            "companyNumber": "12345678A",
+            "companyType": "Limited Company",
+            "vatRegistered": 1,
+            "address": "100 Road Name, Town Name",
+            "city": "London",
+            "postalCode": "LO4 0ON",
+            "tradingFrom": 1568718000,
+            "tradingPeriod": "3",
+            "creditScore": "3",
+            "numberOfEmployees": 2,
+            "percentageOfSalesOnline": 10,
+            "companyWebsite": "https://beta.companieshouse.gov.uk/company/123456789A",
+            "sectorName": "Construction"
+          },
+          "companyCredit": {
+            "unpaidItems": 0,
+            "behindOnTaxPayments": 0,
+            "officialsDeclaredBankrupt": true,
+            "officialsFailedBusiness": 0,
+            "exceededAgreedOverdraft": 0,
+            "overdraftWorstMonth": 8,
+            "daysOverdrawn": 13,
+            "debtRepayments": 86000,
+            "expectedTurnover": 1200000, # only for companies trading sub 12 months
+            "expectedNetProfit": 350000 # only for companies trading sub 12 months
+          },
+          "directorOrSecretaryDetails": [
+            {
+              "title": "Mr",
+              "fullName": "John Companyman",
+              "email": "jc@email.com",
+              "phone": "01234567890",
+              "dateOfBirth": -51926400,
+              "position": "Director",
+              "addressResidential": "125 Street, London, LO4 0ON",
+              "ownershipPercentage": 100,
+              "residentialStatus": "homeowner",
+              "personalGuarantee": true,
+              "monthlyRentOrMortgage": 245,
+              "mortgageValue": 39000,
+              "monthlyBusinessIncome": 6500,
+              "monthlyNonBusinessIncome": null,
+              "monthlyOtherHouseholdIncome": null,
+              "personalCreditLimit": 75000,
+              "ccjsValue": null,
+              "personalDefaultsValue": null,
+              "dependants": 3,
+              "oldestCreditAccountAge": null,
+              "missedPaymentsBusiness": null,
+              "missedPaymentsPersonal": null,
+              "personalDefaults": null
+            }
+          ],
+          "eposTerminalInfo": {
+            "transactionsPerMonthAvg": 2500,
+            "monthsUsingCCProcessing": 28,
+            "monthsRemainingOnBusinessLease": 4,
+            "terminalId": null,
+            "terminalProvider": null
+          },
+          "guarantorAssetsForSecurity": {
+            "hasUkHomeownerDirector": true,
+            "estimatedSecurity": 40000,
+            "guarantorAssets": [
+              {
+                "owner": "John Companyman",
+                "estimatedValue": 79000,
+                "totalDebt": 39000,
+                "address": "125 Street, London, LO4 0ON"
+              }
+            ]
+          },
+          "invoiceFinancing": {
+            "debtorsValue": null,
+            "debtorDays": null,
+            "invoicesNumber": null,
+            "creditNotesGrossValue": null,
+            "creditNotesNumber": null,
+            "customersNumber": null
+          },
+          "tradeFinanceProfile": {
+            "currentValueOfDebtors": 11000,
+            "approxNoOfCustomers": 2,
+            "currentValueOfConfirmedOrders": 22750,
+            "approxGrossMargin": 35,
+            "madeADozenWebsiteSales": false
+          },
+          "tradeHistory": [
+            {
+              "year": "2020",
+              "yearEndTimestamp": 1598832000,
+              "revenue": "45000",
+              "profitNet": "4500",
+              "debtorsOutstanding": null,
+              "debtorsInvoicesDue": null,
+              "fixedAssets": null
+            }
+          ],
+          "attachments": []
+        },
+        "acceptedAt": null,
+        "invalidatedAt": null
+      }
+    }
     ```
      ## Offer 
 
@@ -347,146 +354,157 @@ info:
 
     ### Term Loan
 
-    Request
+    **Request**
 
     ```json
-    "reference": "lender_quote_ref", #required #unqiue [string]
-    "expiryDate": "2012-11-04T14:51:06.157Z", #nullable [iso2701 date+optional time]
-    "status": "FINAL", #required [INDICATIVE or FINAL]
-    "comment": "Other terms include x, y z", #nullable string
-    "termLoan": {
-        "maximumAmount": 1000, #required [currency amount]
-        "minimumAmount": 500, #nullable [currency amount]
-        "term": 18, #required [1 - 240]
-        "interestRate": 3.29, #required [0.00 - 100.00] monthly rate
-        "representativeAPR": 4.00, #nullable [0.00 - 100.00] annual rate
-        "monthlyRepayment": 834.73, #nullable [currency amount]
-        "totalRepayment": 123456.72, #nullable [currency amount]
-        "arrangementFee": 100, #nullable [currency amount]
-        "promotion": "first month free", #nullable [string]
-        "likelihoodOfRate": 0.90, #nullable [0.00 - 1.00]
-        "likelihoodOfAcceptance": 0.94, #nullable [0.00 - 1.00]
+    {
+      "reference": "lender_quote_ref", #required #unqiue [string]
+      "expiryDate": "2012-11-04T14:51:06.157Z", #nullable [iso2701 date+optional time]
+      "status": "FINAL", #required [INDICATIVE or FINAL]
+      "comment": "Other terms include x, y z", #nullable string
+      "termLoan": {
+          "maximumAmount": 1000, #required [currency amount]
+          "minimumAmount": 500, #nullable [currency amount]
+          "term": 18, #required [1 - 240]
+          "interestRate": 3.29, #required [0.00 - 100.00] monthly rate
+          "representativeAPR": 4.00, #nullable [0.00 - 100.00] annual rate
+          "monthlyRepayment": 834.73, #nullable [currency amount]
+          "totalRepayment": 123456.72, #nullable [currency amount]
+          "arrangementFee": 100, #nullable [currency amount]
+          "promotion": "first month free", #nullable [string]
+          "likelihoodOfRate": 0.90, #nullable [0.00 - 1.00]
+          "likelihoodOfAcceptance": 0.94, #nullable [0.00 - 1.00]
+      }
     }
     ```
-    Response
+    **Response**
 
-    `termLoan.totalFees` is returned when fetching an offer, calculated as abs(`termLoan.totalRepayment - termLoan.maximumAmount`) 
+    `termLoan.totalFees` is returned when fetching an offer, calculated as `abs(termLoan.totalRepayment - termLoan.maximumAmount)`
 
     ### Invoice Finance 
 
     ```json
-    "reference": "lender_quote_ref", #required #unqiue [string]
-    "expiryDate": "2012-11-04T14:51:06.157Z", #nullable [iso2701 date+optional time]
-    "status": "FINAL", #required [INDICATIVE or FINAL]
-    "comment": "Other terms include x, y z", #nullable string
-    "invoiceFinance": {
-        "maximumCreditLine": 500000, #required, currency
-        "minimumCreditLine": 50000, #currency
-        "serviceFee": 0.025, #required, decimal % [0.00 - 1.00]
-        "discountFee": 0.025, #required, decimal % [0.00 - 1.00]
-        "advanceRate": 0.80, #required, decimal % [0.00 - 1.00]
-        "additionalFees": "£1500 setup", #string
-        "minimumMonthlyFee": 1500 #currency
-        "concentrationLimit": 0.23 #decimal % [0.00 - 1.00]
-        "contractLength": 6, #required 0 = rolling contract
-        "creditInsurance": 0.55, #decimal % [0.00 - 1.00]
-        "creditInsuranceRequired": true #bool
-        "facility" : "DISCOUNTING", #required, [DISCOUNTING or FACTORING]
-        "selective" : true, #bool
-        "confidential" : true, #bool
-        "promotion": "first month free", #string
-        "likelihoodOfRate": 0.90, #decimal % [0.00 - 1.00]
-        "likelihoodOfAcceptance": 0.94, #decimal [0.00 - 1.00]
+    {
+      "reference": "lender_quote_ref", #required #unqiue [string]
+      "expiryDate": "2012-11-04T14:51:06.157Z", #nullable [iso2701 date+optional time]
+      "status": "FINAL", #required [INDICATIVE or FINAL]
+      "comment": "Other terms include x, y z", #nullable string
+      "invoiceFinance": {
+          "maximumCreditLine": 500000, #required, currency
+          "minimumCreditLine": 50000, #currency
+          "serviceFee": 0.025, #required, decimal % [0.00 - 1.00]
+          "discountFee": 0.025, #required, decimal % [0.00 - 1.00]
+          "advanceRate": 0.80, #required, decimal % [0.00 - 1.00]
+          "additionalFees": "£1500 setup", #string
+          "minimumMonthlyFee": 1500 #currency
+          "concentrationLimit": 0.23 #decimal % [0.00 - 1.00]
+          "contractLength": 6, #required 0 = rolling contract
+          "creditInsurance": 0.55, #decimal % [0.00 - 1.00]
+          "creditInsuranceRequired": true #bool
+          "facility" : "DISCOUNTING", #required, [DISCOUNTING or FACTORING]
+          "selective" : true, #bool
+          "confidential" : true, #bool
+          "promotion": "first month free", #string
+          "likelihoodOfRate": 0.90, #decimal % [0.00 - 1.00]
+          "likelihoodOfAcceptance": 0.94, #decimal [0.00 - 1.00]
+      }
     }
-
     ```
 
     ### Merchant Cash Advance
 
     ```json
-     "reference": "lender_quote_ref", #required #unqiue [string]
-    "expiryDate": "2012-11-04T14:51:06.157Z", #nullable [iso2701 date+optional time]
-    "status": "FINAL", #required [INDICATIVE or FINAL]
-    "comment": "Other terms include x, y z", #nullable string
-    "merchantCashAdvance": {
-        "fundingAmount": 500000, #required, currency
-        "sweep": 0.80, #required, decimal % [0.00 - 1.00]
-        "totalRepayment": 58000 #currency
-        "totalFees": 58000 #currency
-        "ratio": 1.3 #decimal % [1.00 - 100.00]
-        "promotion": "first month free", #string
-        "likelihoodOfRate": 0.90, #decimal % [0.00 - 1.00]
-        "likelihoodOfAcceptance": 0.94, #decimal [0.00 - 1.00]
+    {
+      "reference": "lender_quote_ref", #required #unqiue [string]
+      "expiryDate": "2012-11-04T14:51:06.157Z", #nullable [iso2701 date+optional time]
+      "status": "FINAL", #required [INDICATIVE or FINAL]
+      "comment": "Other terms include x, y z", #nullable string
+      "merchantCashAdvance": {
+          "fundingAmount": 500000, #required, currency
+          "sweep": 0.80, #required, decimal % [0.00 - 1.00]
+          "totalRepayment": 58000 #currency
+          "totalFees": 58000 #currency
+          "ratio": 1.3 #decimal % [1.00 - 100.00]
+          "promotion": "first month free", #string
+          "likelihoodOfRate": 0.90, #decimal % [0.00 - 1.00]
+          "likelihoodOfAcceptance": 0.94, #decimal [0.00 - 1.00]
+      }
     }
     ``` 
 
     ### Asset Finance
 
     ```json
-    "reference": "lender_quote_ref", #required #unqiue [string]
-    "expiryDate": "2012-11-04T14:51:06.157Z", #nullable [iso2701 date+optional time]
-    "status": "FINAL", #required [INDICATIVE or FINAL]
-    "comment": "Other terms include x, y z", #nullable string
-    "assetFinance": {
-        "advanceAmount": 500000, #required, currency
-        "term": 12, #required, number
-        "deposit": 58000 #required, currency
-        "cost": 500 #currency
-        "vat": 15000 #currency
-        "totalPrice": 15000 #currency
-        "representativeAPR": 0.90, #decimal % [0.00 - 1.00]
-        "productOption": "Hire Purchase" #list [Hire Purchase, Finance Lease]
-        "monthlyRepayment": 500 #currency
-        "additionalFees": "£1500 setup", #string
-        "optionToPurchaseFee": 125 #currency
-        "description": "Custom text" #string
-        "promotion": "first month free", #string
-        "likelihoodOfRate": 0.90, #decimal % [0.00 - 1.00]
-        "likelihoodOfAcceptance": 0.94, #decimal [0.00 - 1.00]
+    {
+      "reference": "lender_quote_ref", #required #unqiue [string]
+      "expiryDate": "2012-11-04T14:51:06.157Z", #nullable [iso2701 date+optional time]
+      "status": "FINAL", #required [INDICATIVE or FINAL]
+      "comment": "Other terms include x, y z", #nullable string
+      "assetFinance": {
+          "advanceAmount": 500000, #required, currency
+          "term": 12, #required, number
+          "deposit": 58000 #required, currency
+          "cost": 500 #currency
+          "vat": 15000 #currency
+          "totalPrice": 15000 #currency
+          "representativeAPR": 0.90, #decimal % [0.00 - 1.00]
+          "productOption": "Hire Purchase" #list [Hire Purchase, Finance Lease]
+          "monthlyRepayment": 500 #currency
+          "additionalFees": "£1500 setup", #string
+          "optionToPurchaseFee": 125 #currency
+          "description": "Custom text" #string
+          "promotion": "first month free", #string
+          "likelihoodOfRate": 0.90, #decimal % [0.00 - 1.00]
+          "likelihoodOfAcceptance": 0.94, #decimal [0.00 - 1.00]
+      }
     }
     ```
 
     ### Trade Finance
 
     ```json
-    "reference": "lender_quote_ref", #required #unqiue [string]
-    "expiryDate": "2012-11-04T14:51:06.157Z", #nullable [iso2701 date+optional time]
-    "status": "FINAL", #required [INDICATIVE or FINAL]
-    "comment": "Other terms include x, y z", #nullable string
-    "tradeFinance": {
-        "maximumCreditLine": 500000, #required, currency
-        "minimumCreditLine": 50000, #currency
-        "serviceFee": 0.025, #required, decimal % [0.00 - 1.00]
-        "discountFee": 0.025, #required, decimal % [0.00 - 1.00]
-        "advanceRate": 0.80, #required, decimal % [0.00 - 1.00]
-        "additionalFees": "£1500 setup", #string
-        "minimumMonthlyFee": 1500 #currency
-        "contractLength": 6, #0 = rolling contract
-        "promotion": "first month free", #string
-        "likelihoodOfRate": 0.90, #decimal % [0.00 - 1.00]
-        "likelihoodOfAcceptance": 0.94, #decimal [0.00 - 1.00]
+    {
+      "reference": "lender_quote_ref", #required #unqiue [string]
+      "expiryDate": "2012-11-04T14:51:06.157Z", #nullable [iso2701 date+optional time]
+      "status": "FINAL", #required [INDICATIVE or FINAL]
+      "comment": "Other terms include x, y z", #nullable string
+      "tradeFinance": {
+          "maximumCreditLine": 500000, #required, currency
+          "minimumCreditLine": 50000, #currency
+          "serviceFee": 0.025, #required, decimal % [0.00 - 1.00]
+          "discountFee": 0.025, #required, decimal % [0.00 - 1.00]
+          "advanceRate": 0.80, #required, decimal % [0.00 - 1.00]
+          "additionalFees": "£1500 setup", #string
+          "minimumMonthlyFee": 1500 #currency
+          "contractLength": 6, #0 = rolling contract
+          "promotion": "first month free", #string
+          "likelihoodOfRate": 0.90, #decimal % [0.00 - 1.00]
+          "likelihoodOfAcceptance": 0.94, #decimal [0.00 - 1.00]
+      }
     }
     ```
 
     ### Commercial Property
 
       ```json
-    "reference": "868/3301", #required #unqiue [can default to search ID / match ID for manual]
-    "expiryDate": ..., #nullable [date+time]
-    "status": "Final", #required [INDICATIVE or FINAL]
-    "comment": "Other terms include x, y z", #nullable string
-     {
-        "amount": 1000, #required [currency amount]
-        "ltv": 34.3, #nullable [percentage 0.00 - 100.00]
-        "mortgageTerm": 18, #required [1 - 240]
-        "dealTerm": 18, #required [1 - 240]
-        "interestRate": 3.29, #required [percentage 0.00 - 100.00]
-        "arrangementFee": 955, #nullable [currency amount]
-        "valuationFee": 599, #nullable [currency amount]
-        "exitFee": 599, #nullable [currency amount]
-        "productOption": "BTL" #list [BTL, Interest Only, Repayment]
-        "rateType": "Fixed" #list [Variable, Fixed]
-        "propertyChargeAddress": "12 Street Name" #string
+    {
+      "reference": "868/3301", #required #unqiue [can default to search ID / match ID for manual]
+      "expiryDate": ..., #nullable [date+time]
+      "status": "Final", #required [INDICATIVE or FINAL]
+      "comment": "Other terms include x, y z", #nullable string
+       {
+          "amount": 1000, #required [currency amount]
+          "ltv": 34.3, #nullable [percentage 0.00 - 100.00]
+          "mortgageTerm": 18, #required [1 - 240]
+          "dealTerm": 18, #required [1 - 240]
+          "interestRate": 3.29, #required [percentage 0.00 - 100.00]
+          "arrangementFee": 955, #nullable [currency amount]
+          "valuationFee": 599, #nullable [currency amount]
+          "exitFee": 599, #nullable [currency amount]
+          "productOption": "BTL" #list [BTL, Interest Only, Repayment]
+          "rateType": "Fixed" #list [Variable, Fixed]
+          "propertyChargeAddress": "12 Street Name" #string
+      }
     }
     ```
 
@@ -496,11 +514,13 @@ info:
 
       ## New Application Webhook
 
-    `Webhook` When a user submits an application, a payload with a Funding Application is sent to the lender's provided webhook URL. You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will attempt to resend the application at exponential intervals.
+    When a user submits an application, a payload with a [Funding Application](#funding-application) is sent to the lender's provided webhook URL.
+
+    You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will attempt to resend the application at exponential intervals.
 
       ## Application Updated Webhook
 
-    `Webhook` When a user marks an offer as accepted or rejected, an updated payload with a Funding Application is sent to the lender's provided webhook URL. You should filter updates sent to this webhook and only use what you need (e.g., Status is Client Accepted or Client Declined) to avoid confusion. 
+    When a user marks an offer as accepted or rejected, an updated payload with a Funding Application is sent to the lender's provided webhook URL. You should filter updates sent to this webhook and only use what you need (e.g., Status is Client Accepted or Client Declined) to avoid confusion.
     > We recommend using separate endpoints for New Applications and Application Updated. Our Updated endpoint will provide updates for all status changes. 
 
     You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will attempt to resend the application at exponential intervals.
@@ -517,7 +537,7 @@ paths:
     get:
       summary: List Applications
       description: |
-        Fetches an array of Funding Applications.
+        Fetches an array of [Funding Applications](#funding-application).
         You can pass an optional `?reference` as a filter to find only applications matching your provided reference.
       tags:
         - Endpoints
@@ -525,7 +545,7 @@ paths:
   /applications/{id}:
     get:
       summary: Fetch Application
-      description: Fetch a specific Funding Application by application.id.
+      description: Fetch a specific [Funding Application](#funding-application) by application.id.
       tags:
         - Endpoints
 
@@ -533,7 +553,7 @@ paths:
     get:
       summary: Fetch Document
       description: |
-        Fetch a document from a specific Funding Application by application.id and application.profile.attachment.id.
+        Fetch a document from a specific [Funding Application](#funding-application) by application.id and application.profile.attachment.id.
       tags:
         - Endpoints
 
@@ -541,20 +561,30 @@ paths:
     post:
       summary: Acknowledge Application
       description: |
-        On receipt of a New Application Webhook, this endpoint allows you to provide an optional reference number to be used in later lookups.
+        On receipt of a [New Application Webhook](#new-application-webhook), this endpoint allows you to provide an optional reference number to be used in later lookups.
+
         In addition, this endpoint can receive comments until such time as a quote or rejection is provided.
-        Create a reference for a Funding Application after receipt
+
+        **Create a reference for a Funding Application after receipt**
         ```json
-        "reference": "lenders_unique_reference"
+        {
+          "reference": "lenders_unique_reference"
+        }
         ```
-        Create a reference for a Funding Application after receipt, with comment
+
+        **Create a reference for a Funding Application after receipt, with comment**
          ```json
-        "reference": "lenders_unique_reference",
-        "comment": "This application requires a manual credit review."
+        {
+          "reference": "lenders_unique_reference",
+          "comment": "This application requires a manual credit review."
+        }
         ```
-        Provide an update comment only
+
+        **Provide an update comment only**
         ```json
-        "comment": "This application requires a manual credit review."
+        {
+          "comment": "This application requires a manual credit review."
+        }
         ```
       tags:
         - Endpoints
@@ -563,40 +593,47 @@ paths:
     post:
       summary: Provide Quote/Offer
       description: |
-        Once a Funding Application is received, this endpoint allows a quote or offer to be provided in response.
+        Once a [Funding Application](#funding-application) is received, this endpoint allows a quote or offer to be provided in response.
+
         In addition, this endpoint can receive updated offers at any time, which will replace the previous offer supplied.
-        Send an Initial Quote
+
+        **Send an Initial Quote**
         ```json
-        "reference": "lender_quote_ref",
-        "expiryDate": "2012-11-04T14:51:06.157Z",
-        "status": "INDICATIVE",
-        "comment": "Other terms include x, y z", #nullable string
-        "termLoan": {
-        		"maximumAmount": 15000,
-            "term": 12,
-            "interestRate": 12.29,
-            "representativeAPR": 13.99,
-            "monthlyRepayment": 834.73,
-            "totalRepayment": 17456.72,
-            "arrangementFee": 100,
-            "likelihoodOfRate": 0.90,
-            "likelihoodOfAcceptance": 0.94
+        {
+          "reference": "lender_quote_ref",
+          "expiryDate": "2012-11-04T14:51:06.157Z",
+          "status": "INDICATIVE",
+          "comment": "Other terms include x, y z", #nullable string
+          "termLoan": {
+          		"maximumAmount": 15000,
+              "term": 12,
+              "interestRate": 12.29,
+              "representativeAPR": 13.99,
+              "monthlyRepayment": 834.73,
+              "totalRepayment": 17456.72,
+              "arrangementFee": 100,
+              "likelihoodOfRate": 0.90,
+              "likelihoodOfAcceptance": 0.94
+          }
         }
         ```
-        Send an Underwritten Offer
-          ```json
-        "reference": "lender_quote_ref",
-        "expiryDate": "2012-11-04T14:51:06.157Z",
-        "status": "INDICATIVE",
-        "comment": "Other terms include x, y z", #nullable string
-        "termLoan": {
-        		"maximumAmount": 15000,
-            "term": 12,
-            "interestRate": 12.29,
-            "representativeAPR": 13.99,
-         		"monthlyRepayment": 834.73,
-        		"totalRepayment": 17456.72,
-         		"arrangementFee": 100
+
+        **Send an Underwritten Offer**
+        ```json
+        {
+          "reference": "lender_quote_ref",
+          "expiryDate": "2012-11-04T14:51:06.157Z",
+          "status": "INDICATIVE",
+          "comment": "Other terms include x, y z", #nullable string
+          "termLoan": {
+          		"maximumAmount": 15000,
+              "term": 12,
+              "interestRate": 12.29,
+              "representativeAPR": 13.99,
+           		"monthlyRepayment": 834.73,
+          		"totalRepayment": 17456.72,
+           		"arrangementFee": 100
+          }
         }
         ```
       tags:
@@ -655,21 +692,30 @@ paths:
     post:
       summary: Fail or Reject Application
       description: |
-        Once a Funding Application is received this endpoint allows a failure or rejection to be provided in response.
+        Once a [Funding Application](#funding-application) is received this endpoint allows a failure or rejection to be provided in response.
+
         Failing an application allows the client to resubmit and should be used to report formatting, processing or data errors.
+
         Rejecting an application is terminal. A client cannot resubmit.
+
         The comment and reference are optional, but a reason must be provided.
-        Fail an application
+
+        **Fail an application**
         ```json
-        "reason": "Failed",
-        "comment": "Unable to verify directors address. Please check and resubmit.",
-        "reference": "y76fga78s"
+        {
+          "reason": "Failed",
+          "comment": "Unable to verify directors address. Please check and resubmit.",
+          "reference": "y76fga78s"
+        }
         ```
-        Reject an application
+
+        **Reject an application**
         ```json
-        "reason": "Ineligible",
-        "comment": "A directors credit checks did not pass our requirements",
-        "reference": "y76fga78s"
+        {
+          "reason": "Ineligible",
+          "comment": "A directors credit checks did not pass our requirements",
+          "reference": "y76fga78s"
+        }
         ```
       tags:
         - Endpoints
