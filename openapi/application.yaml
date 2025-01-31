@@ -128,11 +128,11 @@ info:
 
     ---
 
-     # Schema
+    # Schema
 
-     ## Funding Application
+    ## Funding Application
 
-     It contains:
+    It contains:
 
     - apiProvider: *Lender can use this to verify the request is genuine*
     - application: *The packaged Capitalise Application*

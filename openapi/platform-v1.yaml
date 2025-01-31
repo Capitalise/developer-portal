@@ -9,7 +9,7 @@ info:
   contact:
     name: Capitalise
     email: engineering@capitalise.com
-    url: 'https://capitalise.com'
+    url: "https://capitalise.com"
 paths:
   /tenants:
     post:
@@ -19,27 +19,27 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TenantsRequest'
+              $ref: "#/components/schemas/TenantsRequest"
             examples: {}
       description: A tenant is property or product within a company.
       tags:
         - Tenants
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TenantsResponse'
-        '400':
+                $ref: "#/components/schemas/TenantsResponse"
+        "400":
           description: Bad Request
-        '401':
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
-        '500':
+        "500":
           description: Internal Server Error
       security:
         - Platform access token: []
@@ -48,21 +48,21 @@ paths:
       summary: Retrieve tenants
       operationId: get-tenants
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TenantsResponseGET'
-        '400':
+                $ref: "#/components/schemas/TenantsResponseGET"
+        "400":
           description: Bad Request
-        '401':
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
-        '500':
+        "500":
           description: Internal Server Error
       description: Retrieve all tenants
       security:
@@ -93,23 +93,23 @@ paths:
       tags:
         - Auth
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/APIKeyResponseDto'
-        '400':
+                $ref: "#/components/schemas/APIKeyResponseDto"
+        "400":
           description: Bad Request
-        '401':
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
-        '422':
+        "422":
           description: Unprocessable Entity
-        '500':
+        "500":
           description: Internal Server Error
       requestBody:
         content:
@@ -118,53 +118,53 @@ paths:
               name: My first API key
               partnerApiKey: API_PARTNER_KEY
               scopes:
-                - 'profile:multiples'
-                - 'profile:read'
-                - 'profile:write'
-                - 'questionnaire:read'
-                - 'questionnaire:write'
-                - 'funding:read'
-                - 'funding:write'
-                - 'insights:read'
-                - 'scoring:read'
+                - "profile:multiples"
+                - "profile:read"
+                - "profile:write"
+                - "questionnaire:read"
+                - "questionnaire:write"
+                - "funding:read"
+                - "funding:write"
+                - "insights:read"
+                - "scoring:read"
                 - offline_access
-              expiresAt: '2021-11-24T18:03:28.241Z'
+              expiresAt: "2021-11-24T18:03:28.241Z"
             schema:
-              $ref: '#/components/schemas/APIKeyRequestDto'
-        description: ''
+              $ref: "#/components/schemas/APIKeyRequestDto"
+        description: ""
       operationId: APIKeyManager.createApiKey
   /auth/login:
     post:
       x-controller-name: AuthorizationManager
       x-operation-name: login
       summary: Generate login token
-      description: 'Login token is used to generate API key. Practically, this should be a one-off API call which allow you programmatically generate the access token to subsequently [generate API key](#tag/Auth/operation/APIKeyManager.createApiKey).'
+      description: "Login token is used to generate API key. Practically, this should be a one-off API call which allow you programmatically generate the access token to subsequently [generate API key](#tag/Auth/operation/APIKeyManager.createApiKey)."
       tags:
         - Auth
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OAuth2AuthorizedTokenDto'
-        '400':
+                $ref: "#/components/schemas/OAuth2AuthorizedTokenDto"
+        "400":
           description: Bad Request
-        '401':
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
-        '422':
+        "422":
           description: Unprocessable Entity
-        '500':
+        "500":
           description: Internal Server Error
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SignInRequestDto'
+              $ref: "#/components/schemas/SignInRequestDto"
       operationId: AuthorizationManager.login
       security: []
   /auth/token:
@@ -172,23 +172,23 @@ paths:
       summary: Generate platform access token
       operationId: post-auth-token
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PlatformTokenResponse'
-        '400':
+                $ref: "#/components/schemas/PlatformTokenResponse"
+        "400":
           description: Bad Request
-        '401':
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
-        '500':
+        "500":
           description: Internal Server Error
-      description: ''
+      description: ""
       tags:
         - Auth
       security:
@@ -204,30 +204,30 @@ paths:
             type: string
           in: header
           name: Capitalise-tenant-id
-          description: 'Optional field to restrict the access token access to the specified tenant. If not provided, the access token can manage all tenants. _Highly recommended for individual tenant management as it ensures you access the right data._'
+          description: "Optional field to restrict the access token access to the specified tenant. If not provided, the access token can manage all tenants. _Highly recommended for individual tenant management as it ensures you access the right data._"
     parameters: []
   /auth/refresh-token:
     post:
       summary: Refresh a platform access token
       operationId: post-auth-refresh-token
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PlatformTokenResponse'
-        '400':
+                $ref: "#/components/schemas/PlatformTokenResponse"
+        "400":
           description: Bad Request
-        '401':
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
-        '500':
+        "500":
           description: Internal Server Error
-      description: ''
+      description: ""
       requestBody:
         content:
           application/json:
@@ -237,32 +237,32 @@ paths:
                 refresh_token:
                   type: string
                   description: The refresh token
-        description: ''
+        description: ""
       tags:
         - Auth
       security: []
-  '/auth/tenants/authorize':
+  "/auth/tenants/authorize":
     post:
       summary: Generate platform access token to access a tenant
       operationId: post-auth-tenants-authorise
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PlatformTokenResponse'
-        '400':
+                $ref: "#/components/schemas/PlatformTokenResponse"
+        "400":
           description: Bad Request
-        '401':
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
-        '500':
+        "500":
           description: Internal Server Error
-      description: ''
+      description: ""
       parameters:
         - in: header
           name: Authorization
@@ -281,7 +281,7 @@ paths:
       tags:
         - Auth
       security: []
-  '/tenants/{tenantId}':
+  "/tenants/{tenantId}":
     patch:
       summary: Update a tenant reference
       operationId: patch-tenant
@@ -289,23 +289,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TenantsRequest'
+              $ref: "#/components/schemas/TenantsRequest"
             examples: {}
       description: A tenant is property or product within a company.
       tags:
         - Tenants
       responses:
-        '200':
+        "200":
           description: OK
-        '400':
+        "400":
           description: Bad Request
-        '401':
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
-        '500':
+        "500":
           description: Internal Server Error
       security:
         - Platform access token: []
@@ -328,11 +328,11 @@ paths:
       summary: Create a new user to your company
       operationId: post-users
       responses:
-        '200':
+        "200":
           description: OK
       tags:
         - User Manager
-  '/users/{userId}':
+  "/users/{userId}":
     parameters:
       - schema:
           type: string
@@ -349,7 +349,7 @@ paths:
       summary: Update your company's user by ID
       operationId: patch-users-userId
       responses:
-        '200':
+        "200":
           description: OK
       tags:
         - User Manager
@@ -360,7 +360,7 @@ components:
     OAuth2AuthorizedTokenDto:
       title: OAuth2AuthorizedTokenDto
       type: object
-      description: '(tsType: OAuth2AuthorizedTokenDto, schemaOptions: { exclude: undefined })'
+      description: "(tsType: OAuth2AuthorizedTokenDto, schemaOptions: { exclude: undefined })"
       properties:
         access_token:
           type: string
@@ -448,7 +448,7 @@ components:
     AuthorizeThirdPartyResponseDto:
       title: AuthorizeThirdPartyResponseDto
       type: object
-      description: '(tsType: AuthorizeThirdPartyResponseDto, schemaOptions: { exclude: undefined })'
+      description: "(tsType: AuthorizeThirdPartyResponseDto, schemaOptions: { exclude: undefined })"
       properties:
         url:
           type: string
@@ -471,7 +471,7 @@ components:
     AccessTokenResponseDto:
       title: AccessTokenResponseDto
       type: object
-      description: '(tsType: AccessTokenResponseDto, schemaOptions: { exclude: undefined })'
+      description: "(tsType: AccessTokenResponseDto, schemaOptions: { exclude: undefined })"
       properties:
         jwt:
           type: string
@@ -517,7 +517,7 @@ components:
     APIKeyResponseDto:
       title: APIKeyResponseDto
       type: object
-      description: '(tsType: APIKeyResponseDto, schemaOptions: { exclude: undefined })'
+      description: "(tsType: APIKeyResponseDto, schemaOptions: { exclude: undefined })"
       properties:
         key:
           type: string
@@ -543,15 +543,15 @@ components:
             type: string
             description: The allowed scopes for the API key
             enum:
-              - 'profile:multiples'
-              - 'profile:read'
-              - 'profile:write'
-              - 'questionnaire:read'
-              - 'questionnaire:write'
-              - 'funding:read'
-              - 'funding:write'
-              - 'insights:read'
-              - 'scoring:read'
+              - "profile:multiples"
+              - "profile:read"
+              - "profile:write"
+              - "questionnaire:read"
+              - "questionnaire:write"
+              - "funding:read"
+              - "funding:write"
+              - "insights:read"
+              - "scoring:read"
               - offline_access
         expiresAt:
           type: string
@@ -562,7 +562,7 @@ components:
         - scopes
       additionalProperties: false
     TenantsResponse:
-      description: ''
+      description: ""
       type: object
       x-examples: {}
       title: Tenants response
@@ -582,13 +582,13 @@ components:
           minLength: 1
           format: date-time
           description: Tenant created date and time
-          example: '2022-04-25T08:49:17.000Z'
+          example: "2022-04-25T08:49:17.000Z"
         updatedDateTime:
           type: string
           minLength: 1
           format: date-time
           description: Tenant update date and time
-          example: '2022-04-25T08:49:17.000Z'
+          example: "2022-04-25T08:49:17.000Z"
       required:
         - id
         - createdDateTime
@@ -602,23 +602,23 @@ components:
           description: A unique referenece. Highly recommend not to use personal identifiable information.
           example: CompanyA-9320498
     TenantsResponseGET:
-      description: ''
+      description: ""
       type: object
       x-examples:
         The 2nd and 3rd out of total 6 tenants:
           data:
             - id: 40d0dc8e-20ff-4efc-b905-61c236c68c1e
               referenceId: CompanyA-9320498
-              createdDateTime: '2022-04-19T15:05:14.000Z'
-              updatedDateTime: '2022-04-19T15:05:14.000Z'
+              createdDateTime: "2022-04-19T15:05:14.000Z"
+              updatedDateTime: "2022-04-19T15:05:14.000Z"
             - id: d6c85eae-de3e-4110-b755-4856d1703a6a
               referenceId: CompanyE-af83hsi2
-              createdDateTime: '2022-04-25T08:49:17.000Z'
-              updatedDateTime: '2022-04-25T08:49:17.000Z'
+              createdDateTime: "2022-04-25T08:49:17.000Z"
+              updatedDateTime: "2022-04-25T08:49:17.000Z"
           links:
-            self: 'http://demo.capitalise.com/api/business/v1/tenants?offset=2&limit=2'
-            prev: 'http://demo.capitalise.com/api/business/v1/tenants?offset=0&limit=2'
-            next: 'http://demo.capitalise.com/api/business/v1/tenants?offset=4&limit=2'
+            self: "http://demo.capitalise.com/api/business/v1/tenants?offset=2&limit=2"
+            prev: "http://demo.capitalise.com/api/business/v1/tenants?offset=0&limit=2"
+            next: "http://demo.capitalise.com/api/business/v1/tenants?offset=4&limit=2"
           meta:
             totalEntries: 6
       title: Tenants response - GET
@@ -629,7 +629,7 @@ components:
           maxItems: 100
           minItems: 0
           items:
-            $ref: '#/components/schemas/TenantsResponse'
+            $ref: "#/components/schemas/TenantsResponse"
         links:
           type: object
           required:
@@ -668,7 +668,7 @@ components:
         expires_in:
           type: integer
           description: The expiry of `access_token` in seconds
-          example: '36000'
+          example: "36000"
         refresh_token:
           type: string
           description: The refresh token
@@ -676,12 +676,12 @@ components:
         scope:
           type: string
           description: The scopes that the platform access token should have
-          example: 'profile:multiples offline_access'
+          example: "profile:multiples offline_access"
         token_type:
           type: string
           description: The token type
           example: Bearer
-      description: ''
+      description: ""
   securitySchemes:
     Platform Access Token:
       type: http
@@ -697,7 +697,7 @@ components:
     Login Access Token:
       type: http
       scheme: bearer
-      description: 'The access token generated by `/platform/v1/auth/login` ([generate login token](#tag/Auth/operation/AuthorizationManager.login)), which is specifically used to programmatially generate API key.'
+      description: "The access token generated by `/platform/v1/auth/login` ([generate login token](#tag/Auth/operation/AuthorizationManager.login)), which is specifically used to programmatially generate API key."
 tags:
   - name: Auth
     description: Authorisation services for Capitalise APIs
