@@ -163,11 +163,15 @@ info:
 
     ---
 
-     # Schema
 
-     ## Funding Application
+    # Schema
 
-     It contains:
+
+    ## Funding Application
+
+
+    It contains:
+
 
     - apiProvider: *Lender can use this to verify the request is genuine*
 

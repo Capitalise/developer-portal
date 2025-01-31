@@ -128,73 +128,131 @@ paths:
       description: >-
         Upcoming feature - please contact support@capitalise.com if you want to
         learn more
+  /applications/:applicationId/pre-selected:
+    get:
+      summary: Retrieve the pre selected offers
+      tags:
+        - Pre Selected Offers
+      responses: {}
+      operationId: get-pre-selected
+      description: >-
+        Upcoming feature - please contact support@capitalise.com if you want to
+        learn more
   /applications:
     post:
-      summary: Submit an application for the business
-      operationId: post-application-funding
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: Application ID
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-      tags:
-        - Applications
+      operationId: ApplicationController_create
+      parameters: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ApplicationsPOST'
-      description: ''
-    parameters: []
-  /applications/{applicationId}/continue-url:
-    parameters:
-      - schema:
-          type: string
-        name: applicationId
-        in: path
-        required: true
-    post:
-      summary: Generate the URL for user to continue application at Capitalise.com
-      operationId: post-applications-applicationId-questionnaireUrl
+              title: PatchApplicationRequestOneOfDto
+              minProperties: 1
+              oneOf:
+                - $ref: >-
+                    #/components/schemas/PatchApplicationRequestBusinessAllFundingProductsDto
+                - $ref: >-
+                    #/components/schemas/PatchApplicationRequestBusinessWorkingCapitalDto
+                - $ref: >-
+                    #/components/schemas/PatchApplicationRequestBusinessAnonymousWorkingCapitalDto
+                - $ref: >-
+                    #/components/schemas/PatchApplicationRequestIntroducerAllFundingProductsDto
+                - $ref: >-
+                    #/components/schemas/PatchApplicationRequestIntroducerCommercialPropertyDto
+                - $ref: >-
+                    #/components/schemas/PatchApplicationRequestIntroducerCreditImprovementDto
+                - $ref: >-
+                    #/components/schemas/PatchApplicationRequestIntroducerDebtRecoveryDto
+                - $ref: >-
+                    #/components/schemas/PatchApplicationRequestIntroducerGrantsDto
+                - $ref: >-
+                    #/components/schemas/PatchApplicationRequestIntroducerRdTaxClaimDto
+                - $ref: >-
+                    #/components/schemas/PatchApplicationRequestIntroducerRecoveryLoanSchemeDto
+                - $ref: >-
+                    #/components/schemas/PatchApplicationRequestIntroducerWorkingCapitalDto
       responses:
         '201':
-          description: Created
+          description: ''
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  continueUrl:
-                    type: string
-                    description: >-
-                      The questionnaire URL for the user to continue the
-                      application in Capitalise
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
+                title: ApplicationResponseOneOfDto
+                minProperties: 1
+                oneOf:
+                  - $ref: >-
+                      #/components/schemas/ApplicationResponseIntroducerAllFundingProductsDto
+                  - $ref: >-
+                      #/components/schemas/ApplicationResponseBusinessAllFundingProductsDto
+                  - $ref: >-
+                      #/components/schemas/ApplicationResponseBusinessWorkingCapitalDto
+                  - $ref: >-
+                      #/components/schemas/ApplicationResponseBusinessAnonymousWorkingCapitalDto
+                  - $ref: >-
+                      #/components/schemas/ApplicationResponseIntroducerCommercialPropertyDto
+                  - $ref: >-
+                      #/components/schemas/ApplicationResponseIntroducerCreditImprovementDto
+                  - $ref: >-
+                      #/components/schemas/ApplicationResponseIntroducerDebtRecoveryDto
+                  - $ref: >-
+                      #/components/schemas/ApplicationResponseIntroducerGrantsDto
+                  - $ref: >-
+                      #/components/schemas/ApplicationResponseIntroducerRdTaxClaimDto
+                  - $ref: >-
+                      #/components/schemas/ApplicationResponseIntroducerRecoveryLoanSchemeDto
+                  - $ref: >-
+                      #/components/schemas/ApplicationResponseIntroducerWorkingCapitalDto
+      tags:
+        - Applications
+  /applications/{applicationId}/continue-url:
+    post:
+      operationId: ApplicationSignUpController_generateContinueUrl
+      parameters:
+        - name: applicationId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationContinueUrlResponseDto'
+      tags:
+        - Applications
+  /applications/validate-continue-url:
+    get:
+      operationId: ApplicationSignUpController_validateContinueUrl
+      parameters:
+        - name: continueUrl
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Applications
+  /applications/{applicationId}/matches:
+    get:
+      operationId: ApplicationSignUpController_getMatches
+      parameters:
+        - name: applicationId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationMatchesSummaryResponseDto'
       tags:
         - Applications
 components:
@@ -1846,6 +1904,1453 @@ components:
           type: string
           enum:
             - creditImprovement
+    ApplicationMatchesSummaryResponseDto:
+      type: object
+      properties:
+        numberOfMatches:
+          type: number
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationFundingMatchResultsDto'
+      required:
+        - numberOfMatches
+        - matches
+    ApplicationFundingMatchResultsDto:
+      type: object
+      properties:
+        lender:
+          $ref: '#/components/schemas/LenderDto'
+        product:
+          type: string
+          enum:
+            - TERM_LOAN
+            - FIXED_LOAN_TERMS
+            - ASSET_BACKED_FINANCE
+            - MERCHANT_CASH_ADVANCE
+            - INVOICE_FINANCE
+        instantOffer:
+          type: boolean
+      required:
+        - lender
+        - product
+        - instantOffer
+    LenderDto:
+      type: object
+      properties:
+        id:
+          type: number
+        logo:
+          type: string
+      required:
+        - id
+    PatchApplicationRequestBusinessAllFundingProductsDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: business-all-funding-products
+          enum:
+            - business-all-funding-products
+        fundingUrgency:
+          type: string
+          enum:
+            - JUST_BROWSING
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+        assetType:
+          type: string
+          enum:
+            - PROPERTY
+            - TRANSPORTATION
+            - OFFICE
+            - STOCK
+            - MANUFACTURING
+            - BUSINESS
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        businessPurposes:
+          type: boolean
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingPeriod:
+          type: number
+        clientType:
+          type: number
+        averageCardSales:
+          type: number
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        netAssetCost:
+          $ref: '#/components/schemas/CurrencyDto'
+        cardPayments:
+          type: boolean
+        governmentBackedLoansExist:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        personalGuarantee:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        purchaseOrders:
+          type: boolean
+        assetExistingAgreement:
+          type: boolean
+        fundingAsset:
+          type: boolean
+        raiseInvoices:
+          type: boolean
+    CurrencyDto:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+            - GBP
+            - EUR
+            - ZAR
+        value:
+          type: number
+      required:
+        - code
+        - value
+    PatchApplicationRequestBusinessWorkingCapitalDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: business-working-capital
+          enum:
+            - business-working-capital
+        fundingUrgency:
+          type: string
+          enum:
+            - JUST_BROWSING
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+        businessPurposes:
+          type: boolean
+        personalGuarantee:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingPeriod:
+          type: number
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactNumber:
+          type: string
+        tradingAddress:
+          type: string
+    PatchApplicationRequestBusinessAnonymousWorkingCapitalDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: business-anonymous-working-capital
+          enum:
+            - business-anonymous-working-capital
+        fundingUrgency:
+          type: string
+          enum:
+            - JUST_BROWSING
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+        businessPurposes:
+          type: boolean
+        personalGuarantee:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingPeriod:
+          type: number
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactNumber:
+          type: string
+        tradingAddress:
+          type: string
+    PatchApplicationRequestIntroducerAllFundingProductsDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-all-funding-products
+          enum:
+            - introducer-all-funding-products
+        fundingUrgency:
+          type: string
+          enum:
+            - JUST_BROWSING
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+        assetType:
+          type: string
+          enum:
+            - PROPERTY
+            - TRANSPORTATION
+            - OFFICE
+            - STOCK
+            - MANUFACTURING
+            - BUSINESS
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        businessPurposes:
+          type: boolean
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingPeriod:
+          type: number
+        clientType:
+          type: number
+        averageCardSales:
+          type: number
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        netAssetCost:
+          $ref: '#/components/schemas/CurrencyDto'
+        cardPayments:
+          type: boolean
+        raiseInvoices:
+          type: boolean
+        fundingAsset:
+          type: boolean
+        assetExistingAgreement:
+          type: boolean
+        purchaseOrders:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        personalGuarantee:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        tradingAddress:
+          type: string
+    PatchApplicationRequestIntroducerCommercialPropertyDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-commercial-property
+          enum:
+            - introducer-commercial-property
+        repaymentMethod:
+          type: string
+          enum:
+            - INTEREST_ONLY
+            - CAPITAL_AND_INTEREST
+            - DONT_MIND
+        propertyClassification:
+          type: string
+          enum:
+            - COMMERCIAL
+            - RESIDENTIAL
+            - MIXED_USE
+        mortgageProduct:
+          type: string
+          enum:
+            - PERSONAL_MORTGAGE
+            - BUY_TO_LET
+            - COMMERCIAL_MORTGAGE
+            - COMMERCIAL_INVESTMENT
+            - DEVELOPMENT_FINANCE
+            - BRIDGING_LOAN
+            - REFURBISHMENT_LOAN
+            - OTHER
+        portfolioSize:
+          type: string
+          enum:
+            - ONE
+            - TWO_TO_FOUR
+            - FIVE_OR_MORE
+        primaryUse:
+          type: string
+          enum:
+            - HOTEL
+            - OFFICES
+            - LEISURE_FACILITY
+            - RETAIL
+            - FLATS
+            - HMO
+            - OTHER
+            - RESIDENTIAL_HOUSING
+            - STUDENT_HOUSING
+            - HOLIDAY_LETS
+        propertySetting:
+          type: string
+          enum:
+            - RURAL
+            - INDUSTRIAL
+            - TOWN
+            - CITY
+        propertyLocation:
+          type: string
+          enum:
+            - UK_MAINLAND
+            - UK_ISLES
+            - SCOTTISH_MAINLAND
+            - SCOTTISH_ISLES
+            - NORTHERN_IRELAND
+            - EUROPE
+            - OTHER
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        businessPurposes:
+          type: boolean
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        depositOrEquity:
+          $ref: '#/components/schemas/CurrencyDto'
+        propertyValue:
+          $ref: '#/components/schemas/CurrencyDto'
+        outstandingDebt:
+          $ref: '#/components/schemas/CurrencyDto'
+        annualIncome:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingPeriod:
+          type: number
+        personalGuarantee:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        refinancing:
+          type: boolean
+        tradingAddress:
+          type: string
+    PatchApplicationRequestIntroducerCreditImprovementDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-credit-improvement
+          enum:
+            - introducer-credit-improvement
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+    PatchApplicationRequestIntroducerDebtRecoveryDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-debt-recovery
+          enum:
+            - introducer-debt-recovery
+        defendantSector:
+          type: string
+          enum:
+            - AGRICULTURE
+            - AUTOMOTIVE
+            - BUSINESS_SERVICES
+            - CONSTRUCTION
+            - COURIER
+            - DISTRIBUTION
+            - FINANCIAL_SERVICES
+            - HAULAGE
+            - HEALTHCARE_CARE
+            - HOTELS_HOUSE
+            - IMPORT_EXPORT
+            - IT_RELATED
+            - MANUFACTURING
+            - PRINT_PUBLISHING
+            - PROFESSIONAL_SERVICES
+            - PROPERTY
+            - RECRUITMENT
+            - RETAIL
+            - SECURITY_SERVICES
+            - TRADE
+            - TRANSPORTATION
+            - WHOLESALE
+            - OTHER
+            - EDUCATION
+            - CHARITIES
+            - MEDIA_AND_ENTERTAINMENT
+        defendantCompanyType:
+          type: string
+          enum:
+            - SOLE_TRADER
+            - LIMITED_LIABILITY_PARTNERSHIP
+            - LIMITED_COMPANY
+            - STARTUP
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        claimAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        defendantClientName:
+          type: string
+        defendantClientEmail:
+          type: string
+        defendantClientNumber:
+          type: string
+        defendantTradingAddress:
+          type: string
+        defendantIncorporationDate:
+          type: string
+        defendantCompanyName:
+          type: string
+        defendantCompanyNumber:
+          type: string
+    PatchApplicationRequestIntroducerGrantsDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-grants
+          enum:
+            - introducer-grants
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        tradeDebtors:
+          $ref: '#/components/schemas/CurrencyDto'
+        bankInterest:
+          $ref: '#/components/schemas/CurrencyDto'
+        depreciation:
+          $ref: '#/components/schemas/CurrencyDto'
+        amortisation:
+          $ref: '#/components/schemas/CurrencyDto'
+        companyWebsite:
+          type: string
+        employeesNumber:
+          type: number
+        uniqueIp:
+          type: boolean
+        previousGrantApplication:
+          type: boolean
+        tradingDifficulty:
+          type: boolean
+        tradingAddress:
+          type: string
+    PatchApplicationRequestIntroducerRdTaxClaimDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-rd-tax-claim
+          enum:
+            - introducer-rd-tax-claim
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        companyWebsite:
+          type: string
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        innovativeProductsOrServices:
+          type: boolean
+        taxRelief:
+          type: boolean
+        tradingDifficulty:
+          type: boolean
+        tradingAddress:
+          type: string
+    PatchApplicationRequestIntroducerRecoveryLoanSchemeDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-recovery-loan-scheme
+          enum:
+            - introducer-recovery-loan-scheme
+        fundingUrgency:
+          type: string
+          enum:
+            - JUST_BROWSING
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+        assetType:
+          type: string
+          enum:
+            - PROPERTY
+            - TRANSPORTATION
+            - OFFICE
+            - STOCK
+            - MANUFACTURING
+            - BUSINESS
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        businessPurposes:
+          type: boolean
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        netAssetCost:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingPeriod:
+          type: number
+        clientType:
+          type: number
+        averageCardSales:
+          type: number
+        cardPayments:
+          type: boolean
+        raiseInvoices:
+          type: boolean
+        fundingAsset:
+          type: boolean
+        assetExistingAgreement:
+          type: boolean
+        purchaseOrders:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        tradingAddress:
+          type: string
+    PatchApplicationRequestIntroducerWorkingCapitalDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-working-capital
+          enum:
+            - introducer-working-capital
+        fundingUrgency:
+          type: string
+          enum:
+            - JUST_BROWSING
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        fundingPeriod:
+          type: number
+        businessPurposes:
+          type: boolean
+        personalGuarantee:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        tradingAddress:
+          type: string
+    ApplicationContinueUrlResponseDto:
+      type: object
+      properties:
+        continueUrl:
+          type: string
+      required:
+        - continueUrl
+    ApplicationResponseIntroducerRdTaxClaimDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-rd-tax-claim
+          enum:
+            - introducer-rd-tax-claim
+        id:
+          type: string
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        companyWebsite:
+          type: string
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        innovativeProductsOrServices:
+          type: boolean
+        taxRelief:
+          type: boolean
+        tradingDifficulty:
+          type: boolean
+        tradingAddress:
+          type: string
+      required:
+        - type
+        - id
+    ApplicationResponseIntroducerRecoveryLoanSchemeDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-recovery-loan-scheme
+          enum:
+            - introducer-recovery-loan-scheme
+        fundingUrgency:
+          type: string
+          enum:
+            - JUST_BROWSING
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+        assetType:
+          type: string
+          enum:
+            - PROPERTY
+            - TRANSPORTATION
+            - OFFICE
+            - STOCK
+            - MANUFACTURING
+            - BUSINESS
+        id:
+          type: string
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        businessPurposes:
+          type: boolean
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        netAssetCost:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingPeriod:
+          type: number
+        clientType:
+          type: number
+        averageCardSales:
+          type: number
+        cardPayments:
+          type: boolean
+        raiseInvoices:
+          type: boolean
+        fundingAsset:
+          type: boolean
+        assetExistingAgreement:
+          type: boolean
+        purchaseOrders:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        tradingAddress:
+          type: string
+      required:
+        - type
+        - id
+    ApplicationResponseIntroducerWorkingCapitalDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-working-capital
+          enum:
+            - introducer-working-capital
+        fundingUrgency:
+          type: string
+          enum:
+            - JUST_BROWSING
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+        id:
+          type: string
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        fundingPeriod:
+          type: number
+        businessPurposes:
+          type: boolean
+        personalGuarantee:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        tradingAddress:
+          type: string
+      required:
+        - type
+        - id
+    ApplicationResponseIntroducerGrantsDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-grants
+          enum:
+            - introducer-grants
+        id:
+          type: string
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        tradeDebtors:
+          $ref: '#/components/schemas/CurrencyDto'
+        bankInterest:
+          $ref: '#/components/schemas/CurrencyDto'
+        depreciation:
+          $ref: '#/components/schemas/CurrencyDto'
+        amortisation:
+          $ref: '#/components/schemas/CurrencyDto'
+        companyWebsite:
+          type: string
+        employeesNumber:
+          type: number
+        uniqueIp:
+          type: boolean
+        previousGrantApplication:
+          type: boolean
+        tradingDifficulty:
+          type: boolean
+        tradingAddress:
+          type: string
+      required:
+        - type
+        - id
+    ApplicationResponseIntroducerAllFundingProductsDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-all-funding-products
+          enum:
+            - introducer-all-funding-products
+        fundingUrgency:
+          type: string
+          enum:
+            - JUST_BROWSING
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+        assetType:
+          type: string
+          enum:
+            - PROPERTY
+            - TRANSPORTATION
+            - OFFICE
+            - STOCK
+            - MANUFACTURING
+            - BUSINESS
+        id:
+          type: string
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        businessPurposes:
+          type: boolean
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingPeriod:
+          type: number
+        clientType:
+          type: number
+        averageCardSales:
+          type: number
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        netAssetCost:
+          $ref: '#/components/schemas/CurrencyDto'
+        cardPayments:
+          type: boolean
+        raiseInvoices:
+          type: boolean
+        fundingAsset:
+          type: boolean
+        assetExistingAgreement:
+          type: boolean
+        purchaseOrders:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        personalGuarantee:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        tradingAddress:
+          type: string
+      required:
+        - type
+        - id
+    ApplicationResponseBusinessAllFundingProductsDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: business-all-funding-products
+          enum:
+            - business-all-funding-products
+        fundingUrgency:
+          type: string
+          enum:
+            - JUST_BROWSING
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+        assetType:
+          type: string
+          enum:
+            - PROPERTY
+            - TRANSPORTATION
+            - OFFICE
+            - STOCK
+            - MANUFACTURING
+            - BUSINESS
+        id:
+          type: string
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        businessPurposes:
+          type: boolean
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingPeriod:
+          type: number
+        clientType:
+          type: number
+        averageCardSales:
+          type: number
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        netAssetCost:
+          $ref: '#/components/schemas/CurrencyDto'
+        cardPayments:
+          type: boolean
+        governmentBackedLoansExist:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        personalGuarantee:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        purchaseOrders:
+          type: boolean
+        assetExistingAgreement:
+          type: boolean
+        fundingAsset:
+          type: boolean
+        raiseInvoices:
+          type: boolean
+      required:
+        - type
+        - id
+    ApplicationResponseBusinessWorkingCapitalDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: business-working-capital
+          enum:
+            - business-working-capital
+        fundingUrgency:
+          type: string
+          enum:
+            - JUST_BROWSING
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+        id:
+          type: string
+        businessPurposes:
+          type: boolean
+        personalGuarantee:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingPeriod:
+          type: number
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactNumber:
+          type: string
+        tradingAddress:
+          type: string
+      required:
+        - type
+        - id
+        - contactName
+        - contactEmail
+        - contactNumber
+    ApplicationResponseBusinessAnonymousWorkingCapitalDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: business-anonymous-working-capital
+          enum:
+            - business-anonymous-working-capital
+        fundingUrgency:
+          type: string
+          enum:
+            - JUST_BROWSING
+            - ASAP
+            - ONE_WEEK
+            - ONE_MONTH
+            - REFINANCING
+        useOfFunds:
+          type: string
+          enum:
+            - CASH_FLOW
+            - BUSINESS_EXPANSION
+            - EQUIPMENT_ASSET_FINANCE
+            - REFINANCING_DEBT
+            - IMPORT_EXPORT
+            - TAX_BILL_DUE
+            - ACQUIRING_BUSINESS
+            - STARTING_BUSINESS
+            - PURCHASING_PROPERTY
+            - PURCHASING_STOCK
+        id:
+          type: string
+        businessPurposes:
+          type: boolean
+        personalGuarantee:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingPeriod:
+          type: number
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactNumber:
+          type: string
+        tradingAddress:
+          type: string
+      required:
+        - type
+        - fundingUrgency
+        - useOfFunds
+        - id
+        - fundingAmount
+        - fundingPeriod
+        - revenue
+        - contactName
+        - contactEmail
+        - contactNumber
+    ApplicationResponseIntroducerCommercialPropertyDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-commercial-property
+          enum:
+            - introducer-commercial-property
+        repaymentMethod:
+          type: string
+          enum:
+            - INTEREST_ONLY
+            - CAPITAL_AND_INTEREST
+            - DONT_MIND
+        propertyClassification:
+          type: string
+          enum:
+            - COMMERCIAL
+            - RESIDENTIAL
+            - MIXED_USE
+        mortgageProduct:
+          type: string
+          enum:
+            - PERSONAL_MORTGAGE
+            - BUY_TO_LET
+            - COMMERCIAL_MORTGAGE
+            - COMMERCIAL_INVESTMENT
+            - DEVELOPMENT_FINANCE
+            - BRIDGING_LOAN
+            - REFURBISHMENT_LOAN
+            - OTHER
+        portfolioSize:
+          type: string
+          enum:
+            - ONE
+            - TWO_TO_FOUR
+            - FIVE_OR_MORE
+        primaryUse:
+          type: string
+          enum:
+            - HOTEL
+            - OFFICES
+            - LEISURE_FACILITY
+            - RETAIL
+            - FLATS
+            - HMO
+            - OTHER
+            - RESIDENTIAL_HOUSING
+            - STUDENT_HOUSING
+            - HOLIDAY_LETS
+        propertySetting:
+          type: string
+          enum:
+            - RURAL
+            - INDUSTRIAL
+            - TOWN
+            - CITY
+        propertyLocation:
+          type: string
+          enum:
+            - UK_MAINLAND
+            - UK_ISLES
+            - SCOTTISH_MAINLAND
+            - SCOTTISH_ISLES
+            - NORTHERN_IRELAND
+            - EUROPE
+            - OTHER
+        id:
+          type: string
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        businessPurposes:
+          type: boolean
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        depositOrEquity:
+          $ref: '#/components/schemas/CurrencyDto'
+        propertyValue:
+          $ref: '#/components/schemas/CurrencyDto'
+        outstandingDebt:
+          $ref: '#/components/schemas/CurrencyDto'
+        annualIncome:
+          $ref: '#/components/schemas/CurrencyDto'
+        fundingPeriod:
+          type: number
+        personalGuarantee:
+          type: boolean
+        homeOwnership:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+        refinancing:
+          type: boolean
+        tradingAddress:
+          type: string
+      required:
+        - type
+        - id
+    ApplicationResponseIntroducerCreditImprovementDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-credit-improvement
+          enum:
+            - introducer-credit-improvement
+        id:
+          type: string
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+      required:
+        - type
+        - id
+    ApplicationResponseIntroducerDebtRecoveryDto:
+      type: object
+      properties:
+        type:
+          type: string
+          default: introducer-debt-recovery
+          enum:
+            - introducer-debt-recovery
+        defendantSector:
+          type: string
+          enum:
+            - AGRICULTURE
+            - AUTOMOTIVE
+            - BUSINESS_SERVICES
+            - CONSTRUCTION
+            - COURIER
+            - DISTRIBUTION
+            - FINANCIAL_SERVICES
+            - HAULAGE
+            - HEALTHCARE_CARE
+            - HOTELS_HOUSE
+            - IMPORT_EXPORT
+            - IT_RELATED
+            - MANUFACTURING
+            - PRINT_PUBLISHING
+            - PROFESSIONAL_SERVICES
+            - PROPERTY
+            - RECRUITMENT
+            - RETAIL
+            - SECURITY_SERVICES
+            - TRADE
+            - TRANSPORTATION
+            - WHOLESALE
+            - OTHER
+            - EDUCATION
+            - CHARITIES
+            - MEDIA_AND_ENTERTAINMENT
+        defendantCompanyType:
+          type: string
+          enum:
+            - SOLE_TRADER
+            - LIMITED_LIABILITY_PARTNERSHIP
+            - LIMITED_COMPANY
+            - STARTUP
+        id:
+          type: string
+        clientName:
+          type: string
+        clientEmail:
+          type: string
+        clientNumber:
+          type: string
+        legalRequirements:
+          type: boolean
+        claimAmount:
+          $ref: '#/components/schemas/CurrencyDto'
+        defendantClientName:
+          type: string
+        defendantClientEmail:
+          type: string
+        defendantClientNumber:
+          type: string
+        defendantTradingAddress:
+          type: string
+        defendantIncorporationDate:
+          type: string
+        defendantCompanyName:
+          type: string
+        defendantCompanyNumber:
+          type: string
+      required:
+        - type
+        - id
   securitySchemes:
     Platform access token:
       type: http
@@ -1926,3 +3431,4 @@ x-tagGroups:
   - name: Upcoming
     tags:
       - Credit Report
+      - Pre Selected Offers
