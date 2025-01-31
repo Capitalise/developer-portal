@@ -106,6 +106,14 @@ paths:
       responses: {}
       operationId: get-credit-report-pdf
       description: Upcoming feature - please contact support@capitalise.com if you want to learn more
+  /applications/:applicationId/pre-selected:
+    get:
+      summary: Retrieve the pre selected offers
+      tags:
+        - Pre Selected Offers
+      responses: {}
+      operationId: get-pre-selected
+      description: Upcoming feature - please contact support@capitalise.com if you want to learn more
   /applications:
     post:
       operationId: ApplicationController_create
@@ -3230,3 +3238,4 @@ x-tagGroups:
   - name: Upcoming
     tags:
       - Credit Report
+      - Pre Selected Offers
