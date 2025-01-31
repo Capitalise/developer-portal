@@ -10,20 +10,20 @@ This API provides a way for lenders to receive applications from clients on the 
 
 The API also supports retrieval of documentation, and a set of web hooks to receive updates for applications when the user accepts or rejects an offer.
 
- ## Application Flow
+## Application Flow
 
 ---
 
 A typical integration would follow the following flow, typically:
 
-  1. A client matches to lenders on the Capitalise Platform
-  2. Client completes required fields for a lender&#x27;s API
-  3. Capitalise API dispatches application to Webhook
-  4. Lender processes application and responds with an offer or rejection
-  5. Client accepts or rejects offer
-  6. Capitalise redirects user to lender onboarding to finalize
+1. A client matches to lenders on the Capitalise Platform
+2. Client completes required fields for a lender&#x27;s API
+3. Capitalise API dispatches application to Webhook
+4. Lender processes application and responds with an offer or rejection
+5. Client accepts or rejects offer
+6. Capitalise redirects user to lender onboarding to finalize
 
-  A more detailed version of this flow is displayed below: 
+A more detailed version of this flow is displayed below:
 
 ![API Application Flow](/img/API%20Application%20Flow.png)
 
@@ -31,68 +31,68 @@ A typical integration would follow the following flow, typically:
 
 ---
 
- ### Required Fields
+### Required Fields
 
- Lenders need to provide us the list of required fields (optionally with rules for requirements, e.g. only if field a &gt; 100)
+Lenders need to provide us the list of required fields (optionally with rules for requirements, e.g. only if field a &gt; 100)
 
-Some sample required field rules: 
+Some sample required field rules:
 
- - Simply requiring a field to be complete 
-   - `Sector`
- - A field is required based on the value of another field
-   - `Contact Number` required if `Company Type = Sole Trader`
- - More complex field requirements based on values and multiple conditions
-   - `Personal Guarantees` required if `Company Type = Sole Trader` and `Revenue &lt; £100,000` and `Sector in (IT Services, Business Services)` 
+- Simply requiring a field to be complete
+  - `Sector`
+- A field is required based on the value of another field
+  - `Contact Number` required if `Company Type = Sole Trader`
+- More complex field requirements based on values and multiple conditions
+  - `Personal Guarantees` required if `Company Type = Sole Trader` and `Revenue &lt; £100,000` and `Sector in (IT Services, Business Services)`
 
 ---
 
-  ### API Setup
+### API Setup
 
-  Lender needs to provide Capitalise a webhook for sending applications to. You can optionally provide a separate webhook for sending updates too, or use one for all.
+Lender needs to provide Capitalise a webhook for sending applications to. You can optionally provide a separate webhook for sending updates too, or use one for all.
 
 &gt; Capitalise has an iPaaS platform which allows us to connect internal software without an API, or existing lender APIs with our API without the need for the lender to provide a webhook, if they provide endpoints to send an application to. This path is suitable for lenders we have an existing high-volume relationship with. Please speak to our product team about this integration path.
 
---- 
+---
 
-  ### Authentication
+### Authentication
 
-  Authentication uses oAuth via our Auth0 provider. We will provide you a client secret and credentials.
+Authentication uses oAuth via our Auth0 provider. We will provide you a client secret and credentials.
 
-  To authenticate, call our oAuth provider, `https://capitalise.eu.auth0.com/oauth/token`, as per the sample below:
+To authenticate, call our oAuth provider, `https://capitalise.eu.auth0.com/oauth/token`, as per the sample below:
 
-  ```json
-  {
-    &quot;audience&quot;: &quot;https://capitalise.eu.auth0.com/api/v2/&quot;,
-    &quot;client_id&quot;: &quot;your_client_id&quot;,
-    &quot;client_secret&quot;: &quot;your_client_secret&quot;,
-    &quot;grant_type&quot;: &quot;password&quot;,
-    &quot;password&quot;: &quot;your_password&quot;,
-    &quot;scope&quot;: &quot;openid email profile&quot;,
-    &quot;username&quot;: &quot;your_username&quot;
-  }
-  ```
+```json
+{
+  &quot;audience&quot;: &quot;https://capitalise.eu.auth0.com/api/v2/&quot;,
+  &quot;client_id&quot;: &quot;your_client_id&quot;,
+  &quot;client_secret&quot;: &quot;your_client_secret&quot;,
+  &quot;grant_type&quot;: &quot;password&quot;,
+  &quot;password&quot;: &quot;your_password&quot;,
+  &quot;scope&quot;: &quot;openid email profile&quot;,
+  &quot;username&quot;: &quot;your_username&quot;
+}
+```
 
-  Ensure you also send a header:
+Ensure you also send a header:
 
-  ```json
-  &quot;content-type&quot;: &quot;application/json&quot;
-  ```
+```json
+&quot;content-type&quot;: &quot;application/json&quot;
+```
 
-  You will receive a payload back like the following, use the id_token as the bearer token in all authenticated requests. These tokens usually expire within 2 minutes, so we recommend authenticating before each request, rather than storing and refreshing the token.
+You will receive a payload back like the following, use the id_token as the bearer token in all authenticated requests. These tokens usually expire within 2 minutes, so we recommend authenticating before each request, rather than storing and refreshing the token.
 
-  ```json
-  {
-    &quot;access_token&quot;: &quot;....&quot;,
-    &quot;id_token&quot;: &quot;....&quot;,
-    &quot;scope&quot;: &quot;openid email profile ....&quot;,
-    &quot;expires_in&quot;: 120,
-    &quot;token_type&quot;: &quot;Bearer&quot;
-  }
-  ```
+```json
+{
+  &quot;access_token&quot;: &quot;....&quot;,
+  &quot;id_token&quot;: &quot;....&quot;,
+  &quot;scope&quot;: &quot;openid email profile ....&quot;,
+  &quot;expires_in&quot;: 120,
+  &quot;token_type&quot;: &quot;Bearer&quot;
+}
+```
 
 ----
 
-  ### API
+### API
 
 Use your Bearer token to access the API at the below URL:
 
@@ -100,9 +100,9 @@ Use your Bearer token to access the API at the below URL:
 
 ---
 
- ## Go-live sign-off
+## Go-live sign-off
 
-    In order to obtain production keys and configuration, you will need to demonstrate several standard scenarios:
+In order to obtain production keys and configuration, you will need to demonstrate several standard scenarios:
 
 &lt;strong&gt;Minimum application&lt;/strong&gt;
 
@@ -344,9 +344,9 @@ It contains:
   }
 }
 ```
- ## Offer 
+## Offer
 
- An offer is our accepted format to receive a lenders format in. Not all fields are required.
+An offer is our accepted format to receive a lenders format in. Not all fields are required.
 
 ---
 
@@ -379,7 +379,7 @@ It contains:
 
 `termLoan.totalFees` is returned when fetching an offer, calculated as `abs(termLoan.totalRepayment - termLoan.maximumAmount)`
 
-### Invoice Finance 
+### Invoice Finance
 
 ```json
 {
@@ -428,7 +428,7 @@ It contains:
       &quot;likelihoodOfAcceptance&quot;: 0.94, #decimal [0.00 - 1.00]
   }
 }
-``` 
+```
 
 ### Asset Finance
 
@@ -507,19 +507,19 @@ It contains:
 ```
 
 ---
- 
- # Webhooks
 
-  ## New Application Webhook
+# Webhooks
+
+## New Application Webhook
 
 When a user submits an application, a payload with a [Funding Application](#funding-application) is sent to the lender&#x27;s provided webhook URL.
 
 You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will attempt to resend the application at exponential intervals.
 
-  ## Application Updated Webhook
+## Application Updated Webhook
 
 When a user marks an offer as accepted or rejected, an updated payload with a Funding Application is sent to the lender&#x27;s provided webhook URL. You should filter updates sent to this webhook and only use what you need (e.g., Status is Client Accepted or Client Declined) to avoid confusion.
-&gt; We recommend using separate endpoints for New Applications and Application Updated. Our Updated endpoint will provide updates for all status changes. 
+&gt; We recommend using separate endpoints for New Applications and Application Updated. Our Updated endpoint will provide updates for all status changes.
 
 You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will attempt to resend the application at exponential intervals.
 
@@ -529,20 +529,20 @@ This API provides a way for lenders to receive applications from clients on the 
 
 The API also supports retrieval of documentation, and a set of web hooks to receive updates for applications when the user accepts or rejects an offer.
 
- ## Application Flow
+## Application Flow
 
 ---
 
 A typical integration would follow the following flow, typically:
 
-  1. A client matches to lenders on the Capitalise Platform
-  2. Client completes required fields for a lender&#x27;s API
-  3. Capitalise API dispatches application to Webhook
-  4. Lender processes application and responds with an offer or rejection
-  5. Client accepts or rejects offer
-  6. Capitalise redirects user to lender onboarding to finalize
+1. A client matches to lenders on the Capitalise Platform
+2. Client completes required fields for a lender&#x27;s API
+3. Capitalise API dispatches application to Webhook
+4. Lender processes application and responds with an offer or rejection
+5. Client accepts or rejects offer
+6. Capitalise redirects user to lender onboarding to finalize
 
-  A more detailed version of this flow is displayed below: 
+A more detailed version of this flow is displayed below:
 
 ![API Application Flow](/img/API%20Application%20Flow.png)
 
@@ -550,68 +550,68 @@ A typical integration would follow the following flow, typically:
 
 ---
 
- ### Required Fields
+### Required Fields
 
- Lenders need to provide us the list of required fields (optionally with rules for requirements, e.g. only if field a &gt; 100)
+Lenders need to provide us the list of required fields (optionally with rules for requirements, e.g. only if field a &gt; 100)
 
-Some sample required field rules: 
+Some sample required field rules:
 
- - Simply requiring a field to be complete 
-   - `Sector`
- - A field is required based on the value of another field
-   - `Contact Number` required if `Company Type = Sole Trader`
- - More complex field requirements based on values and multiple conditions
-   - `Personal Guarantees` required if `Company Type = Sole Trader` and `Revenue &lt; £100,000` and `Sector in (IT Services, Business Services)` 
+- Simply requiring a field to be complete
+  - `Sector`
+- A field is required based on the value of another field
+  - `Contact Number` required if `Company Type = Sole Trader`
+- More complex field requirements based on values and multiple conditions
+  - `Personal Guarantees` required if `Company Type = Sole Trader` and `Revenue &lt; £100,000` and `Sector in (IT Services, Business Services)`
 
 ---
 
-  ### API Setup
+### API Setup
 
-  Lender needs to provide Capitalise a webhook for sending applications to. You can optionally provide a separate webhook for sending updates too, or use one for all.
+Lender needs to provide Capitalise a webhook for sending applications to. You can optionally provide a separate webhook for sending updates too, or use one for all.
 
 &gt; Capitalise has an iPaaS platform which allows us to connect internal software without an API, or existing lender APIs with our API without the need for the lender to provide a webhook, if they provide endpoints to send an application to. This path is suitable for lenders we have an existing high-volume relationship with. Please speak to our product team about this integration path.
 
---- 
+---
 
-  ### Authentication
+### Authentication
 
-  Authentication uses oAuth via our Auth0 provider. We will provide you a client secret and credentials.
+Authentication uses oAuth via our Auth0 provider. We will provide you a client secret and credentials.
 
-  To authenticate, call our oAuth provider, `https://capitalise.eu.auth0.com/oauth/token`, as per the sample below:
+To authenticate, call our oAuth provider, `https://capitalise.eu.auth0.com/oauth/token`, as per the sample below:
 
-  ```json
-  {
-    &quot;audience&quot;: &quot;https://capitalise.eu.auth0.com/api/v2/&quot;,
-    &quot;client_id&quot;: &quot;your_client_id&quot;,
-    &quot;client_secret&quot;: &quot;your_client_secret&quot;,
-    &quot;grant_type&quot;: &quot;password&quot;,
-    &quot;password&quot;: &quot;your_password&quot;,
-    &quot;scope&quot;: &quot;openid email profile&quot;,
-    &quot;username&quot;: &quot;your_username&quot;
-  }
-  ```
+```json
+{
+  &quot;audience&quot;: &quot;https://capitalise.eu.auth0.com/api/v2/&quot;,
+  &quot;client_id&quot;: &quot;your_client_id&quot;,
+  &quot;client_secret&quot;: &quot;your_client_secret&quot;,
+  &quot;grant_type&quot;: &quot;password&quot;,
+  &quot;password&quot;: &quot;your_password&quot;,
+  &quot;scope&quot;: &quot;openid email profile&quot;,
+  &quot;username&quot;: &quot;your_username&quot;
+}
+```
 
-  Ensure you also send a header:
+Ensure you also send a header:
 
-  ```json
-  &quot;content-type&quot;: &quot;application/json&quot;
-  ```
+```json
+&quot;content-type&quot;: &quot;application/json&quot;
+```
 
-  You will receive a payload back like the following, use the id_token as the bearer token in all authenticated requests. These tokens usually expire within 2 minutes, so we recommend authenticating before each request, rather than storing and refreshing the token.
+You will receive a payload back like the following, use the id_token as the bearer token in all authenticated requests. These tokens usually expire within 2 minutes, so we recommend authenticating before each request, rather than storing and refreshing the token.
 
-  ```json
-  {
-    &quot;access_token&quot;: &quot;....&quot;,
-    &quot;id_token&quot;: &quot;....&quot;,
-    &quot;scope&quot;: &quot;openid email profile ....&quot;,
-    &quot;expires_in&quot;: 120,
-    &quot;token_type&quot;: &quot;Bearer&quot;
-  }
-  ```
+```json
+{
+  &quot;access_token&quot;: &quot;....&quot;,
+  &quot;id_token&quot;: &quot;....&quot;,
+  &quot;scope&quot;: &quot;openid email profile ....&quot;,
+  &quot;expires_in&quot;: 120,
+  &quot;token_type&quot;: &quot;Bearer&quot;
+}
+```
 
 ----
 
-  ### API
+### API
 
 Use your Bearer token to access the API at the below URL:
 
@@ -619,9 +619,9 @@ Use your Bearer token to access the API at the below URL:
 
 ---
 
- ## Go-live sign-off
+## Go-live sign-off
 
-    In order to obtain production keys and configuration, you will need to demonstrate several standard scenarios:
+In order to obtain production keys and configuration, you will need to demonstrate several standard scenarios:
 
 &lt;strong&gt;Minimum application&lt;/strong&gt;
 
@@ -863,9 +863,9 @@ It contains:
   }
 }
 ```
- ## Offer 
+## Offer
 
- An offer is our accepted format to receive a lenders format in. Not all fields are required.
+An offer is our accepted format to receive a lenders format in. Not all fields are required.
 
 ---
 
@@ -898,7 +898,7 @@ It contains:
 
 `termLoan.totalFees` is returned when fetching an offer, calculated as `abs(termLoan.totalRepayment - termLoan.maximumAmount)`
 
-### Invoice Finance 
+### Invoice Finance
 
 ```json
 {
@@ -947,7 +947,7 @@ It contains:
       &quot;likelihoodOfAcceptance&quot;: 0.94, #decimal [0.00 - 1.00]
   }
 }
-``` 
+```
 
 ### Asset Finance
 
@@ -1026,25 +1026,25 @@ It contains:
 ```
 
 ---
- 
- # Webhooks
 
-  ## New Application Webhook
+# Webhooks
+
+## New Application Webhook
 
 When a user submits an application, a payload with a [Funding Application](#funding-application) is sent to the lender&#x27;s provided webhook URL.
 
 You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will attempt to resend the application at exponential intervals.
 
-  ## Application Updated Webhook
+## Application Updated Webhook
 
 When a user marks an offer as accepted or rejected, an updated payload with a Funding Application is sent to the lender&#x27;s provided webhook URL. You should filter updates sent to this webhook and only use what you need (e.g., Status is Client Accepted or Client Declined) to avoid confusion.
-&gt; We recommend using separate endpoints for New Applications and Application Updated. Our Updated endpoint will provide updates for all status changes. 
+&gt; We recommend using separate endpoints for New Applications and Application Updated. Our Updated endpoint will provide updates for all status changes.
 
 You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will attempt to resend the application at exponential intervals.
 
 ---"><link data-rh="true" rel="icon" href="/img/favicon.png"><link data-rh="true" rel="canonical" href="https://developer.capitalise.com/api/application"><link data-rh="true" rel="alternate" href="https://developer.capitalise.com/api/application" hreflang="en"><link data-rh="true" rel="alternate" href="https://developer.capitalise.com/api/application" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.9fe2019a.css">
-<link rel="preload" href="/assets/js/runtime~main.4fec9ee3.js" as="script">
-<link rel="preload" href="/assets/js/main.b7077b52.js" as="script">
+<link rel="preload" href="/assets/js/runtime~main.2ef6902f.js" as="script">
+<link rel="preload" href="/assets/js/main.86335771.js" as="script">
 </head>
 <body class="navigation-with-keyboard" data-theme="light">
 <script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){var t=null;try{t=localStorage.getItem("theme")}catch(t){}return t}();t(null!==e?e:"light")}(),document.documentElement.setAttribute("data-announcement-bar-initially-dismissed",function(){try{return"true"===localStorage.getItem("docusaurus.announcement.dismiss")}catch(t){}return!1}())</script><div id="__docusaurus">
@@ -1078,14 +1078,14 @@ You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will at
 <li>Client accepts or rejects offer</li>
 <li>Capitalise redirects user to lender onboarding to finalize</li>
 </ol>
-<p>  A more detailed version of this flow is displayed below: </p>
+<p>A more detailed version of this flow is displayed below:</p>
 <p><img src="/img/API%20Application%20Flow.png" alt="API Application Flow"></p>
 </div></div></div><div id="section/Introduction/Prerequisites-and-Requirements" data-section-id="section/Introduction/Prerequisites-and-Requirements" class="sc-eCYdqJ dMKOYR"><div class="sc-iBkjds knzwrM"><div class="sc-hKMtZM dntXuc"><h2 class="sc-papXJ hKFfQR"><a class="sc-crXcEl bNKhZP" href="#section/Introduction/Prerequisites-and-Requirements" aria-label="section/Introduction/Prerequisites-and-Requirements"></a>Prerequisites &amp; Requirements</h2></div></div><div class="sc-hKMtZM letaeM"><div class="sc-iIPllB sc-ciZhAO kVWksa eGjRsZ redoc-markdown"><hr>
 <h3 id="required-fields">Required Fields</h3>
-<p> Lenders need to provide us the list of required fields (optionally with rules for requirements, e.g. only if field a &gt; 100)</p>
-<p>Some sample required field rules: </p>
+<p>Lenders need to provide us the list of required fields (optionally with rules for requirements, e.g. only if field a &gt; 100)</p>
+<p>Some sample required field rules:</p>
 <ul>
-<li>Simply requiring a field to be complete <ul>
+<li>Simply requiring a field to be complete<ul>
 <li><code>Sector</code></li>
 </ul>
 </li>
@@ -1100,14 +1100,14 @@ You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will at
 </ul>
 <hr>
 <h3 id="api-setup">API Setup</h3>
-<p>  Lender needs to provide Capitalise a webhook for sending applications to. You can optionally provide a separate webhook for sending updates too, or use one for all.</p>
+<p>Lender needs to provide Capitalise a webhook for sending applications to. You can optionally provide a separate webhook for sending updates too, or use one for all.</p>
 <blockquote>
 <p>Capitalise has an iPaaS platform which allows us to connect internal software without an API, or existing lender APIs with our API without the need for the lender to provide a webhook, if they provide endpoints to send an application to. This path is suitable for lenders we have an existing high-volume relationship with. Please speak to our product team about this integration path.</p>
 </blockquote>
 <hr>
 <h3 id="authentication">Authentication</h3>
-<p>  Authentication uses oAuth via our Auth0 provider. We will provide you a client secret and credentials.</p>
-<p>  To authenticate, call our oAuth provider, <code>https://capitalise.eu.auth0.com/oauth/token</code>, as per the sample below:</p>
+<p>Authentication uses oAuth via our Auth0 provider. We will provide you a client secret and credentials.</p>
+<p>To authenticate, call our oAuth provider, <code>https://capitalise.eu.auth0.com/oauth/token</code>, as per the sample below:</p>
 <pre><code class="language-json"><span class="token punctuation">{</span>
   <span class="token string-property property">"audience"</span><span class="token operator">:</span> <span class="token string">"https://capitalise.eu.auth0.com/api/v2/"</span><span class="token punctuation">,</span>
   <span class="token string-property property">"client_id"</span><span class="token operator">:</span> <span class="token string">"your_client_id"</span><span class="token punctuation">,</span>
@@ -1118,10 +1118,10 @@ You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will at
   <span class="token string-property property">"username"</span><span class="token operator">:</span> <span class="token string">"your_username"</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>  Ensure you also send a header:</p>
+<p>Ensure you also send a header:</p>
 <pre><code class="language-json"><span class="token string-property property">"content-type"</span><span class="token operator">:</span> <span class="token string">"application/json"</span>
 </code></pre>
-<p>  You will receive a payload back like the following, use the id_token as the bearer token in all authenticated requests. These tokens usually expire within 2 minutes, so we recommend authenticating before each request, rather than storing and refreshing the token.</p>
+<p>You will receive a payload back like the following, use the id_token as the bearer token in all authenticated requests. These tokens usually expire within 2 minutes, so we recommend authenticating before each request, rather than storing and refreshing the token.</p>
 <pre><code class="language-json"><span class="token punctuation">{</span>
   <span class="token string-property property">"access_token"</span><span class="token operator">:</span> <span class="token string">"...."</span><span class="token punctuation">,</span>
   <span class="token string-property property">"id_token"</span><span class="token operator">:</span> <span class="token string">"...."</span><span class="token punctuation">,</span>
@@ -1147,8 +1147,7 @@ You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will at
 <p><strong>Indicative/Underwritten Offer</strong></p>
 <p>You should demonstrate that a full and complete offer is returned to the end user if implementing offer responses.</p>
 <hr>
-</div></div></div><div id="section/Schema" data-section-id="section/Schema" class="sc-eCYdqJ dMKOYR"><div class="sc-iBkjds knzwrM"><div class="sc-hKMtZM dntXuc"><h1 class="sc-ftvSup ciKUdM"><a class="sc-crXcEl bNKhZP" href="#section/Schema" aria-label="section/Schema"></a>Schema</h1></div></div></div><div id="section/Schema/Funding-Application" data-section-id="section/Schema/Funding-Application" class="sc-eCYdqJ dMKOYR"><div class="sc-iBkjds knzwrM"><div class="sc-hKMtZM dntXuc"><h2 class="sc-papXJ hKFfQR"><a class="sc-crXcEl bNKhZP" href="#section/Schema/Funding-Application" aria-label="section/Schema/Funding-Application"></a>Funding Application</h2></div></div></div><div id="section/Schema/Offer" data-section-id="section/Schema/Offer" class="sc-eCYdqJ dMKOYR"><div class="sc-iBkjds knzwrM"><div class="sc-hKMtZM dntXuc"><h2 class="sc-papXJ hKFfQR"><a class="sc-crXcEl bNKhZP" href="#section/Schema/Offer" aria-label="section/Schema/Offer"></a>Offer</h2></div></div><div class="sc-hKMtZM letaeM"><div class="sc-iIPllB sc-ciZhAO kVWksa eGjRsZ redoc-markdown"><h2 id="funding-application">Funding Application</h2>
-<p>It contains:</p>
+</div></div></div><div id="section/Schema" data-section-id="section/Schema" class="sc-eCYdqJ dMKOYR"><div class="sc-iBkjds knzwrM"><div class="sc-hKMtZM dntXuc"><h1 class="sc-ftvSup ciKUdM"><a class="sc-crXcEl bNKhZP" href="#section/Schema" aria-label="section/Schema"></a>Schema</h1></div></div></div><div id="section/Schema/Funding-Application" data-section-id="section/Schema/Funding-Application" class="sc-eCYdqJ dMKOYR"><div class="sc-iBkjds knzwrM"><div class="sc-hKMtZM dntXuc"><h2 class="sc-papXJ hKFfQR"><a class="sc-crXcEl bNKhZP" href="#section/Schema/Funding-Application" aria-label="section/Schema/Funding-Application"></a>Funding Application</h2></div></div><div class="sc-hKMtZM letaeM"><div class="sc-iIPllB sc-ciZhAO kVWksa eGjRsZ redoc-markdown"><p>It contains:</p>
 <ul>
 <li>apiProvider: <em>Lender can use this to verify the request is genuine</em></li>
 <li>application: <em>The packaged Capitalise Application</em><ul>
@@ -1365,8 +1364,7 @@ You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will at
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h2 id="offer">Offer</h2>
-<p> An offer is our accepted format to receive a lenders format in. Not all fields are required.</p>
+</div></div></div><div id="section/Schema/Offer" data-section-id="section/Schema/Offer" class="sc-eCYdqJ dMKOYR"><div class="sc-iBkjds knzwrM"><div class="sc-hKMtZM dntXuc"><h2 class="sc-papXJ hKFfQR"><a class="sc-crXcEl bNKhZP" href="#section/Schema/Offer" aria-label="section/Schema/Offer"></a>Offer</h2></div></div><div class="sc-hKMtZM letaeM"><div class="sc-iIPllB sc-ciZhAO kVWksa eGjRsZ redoc-markdown"><p>An offer is our accepted format to receive a lenders format in. Not all fields are required.</p>
 <hr>
 <h3 id="term-loan">Term Loan</h3>
 <p><strong>Request</strong></p>
@@ -1509,7 +1507,7 @@ You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will at
 <p>You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will attempt to resend the application at exponential intervals.</p>
 </div></div></div><div id="section/Webhooks/Application-Updated-Webhook" data-section-id="section/Webhooks/Application-Updated-Webhook" class="sc-eCYdqJ dMKOYR"><div class="sc-iBkjds knzwrM"><div class="sc-hKMtZM dntXuc"><h2 class="sc-papXJ hKFfQR"><a class="sc-crXcEl bNKhZP" href="#section/Webhooks/Application-Updated-Webhook" aria-label="section/Webhooks/Application-Updated-Webhook"></a>Application Updated Webhook</h2></div></div><div class="sc-hKMtZM letaeM"><div class="sc-iIPllB sc-ciZhAO kVWksa eGjRsZ redoc-markdown"><p>When a user marks an offer as accepted or rejected, an updated payload with a Funding Application is sent to the lender&#39;s provided webhook URL. You should filter updates sent to this webhook and only use what you need (e.g., Status is Client Accepted or Client Declined) to avoid confusion.</p>
 <blockquote>
-<p>We recommend using separate endpoints for New Applications and Application Updated. Our Updated endpoint will provide updates for all status changes. </p>
+<p>We recommend using separate endpoints for New Applications and Application Updated. Our Updated endpoint will provide updates for all status changes.</p>
 </blockquote>
 <p>You must return an HTTP 204 to this dispatcher, otherwise the dispatcher will attempt to resend the application at exponential intervals.</p>
 <hr>
@@ -1620,7 +1618,7 @@ You can pass an optional <code>?reference</code> as a filter to find only applic
 </div></div></div></td></tr><tr><td class="sc-hAZoDl sc-fEOsli hXTTeA hZGnro" kind="field" title="reason"><span class="sc-idiyUo klvgdF"></span><span class="property-name">reason</span></td><td class="sc-bjUoiL ekMelP"><div><div><span class="sc-lbxAil sc-iNWwEs lfhyVw jQVdcm"></span><span class="sc-lbxAil sc-jfmDQi lfhyVw jvMGVM">string</span></div> <div><div class="sc-iIPllB sc-ciZhAO kVWksa jXzosn"><p>Failed</p>
 </div></div></div></td></tr><tr class="last"><td class="sc-hAZoDl sc-fEOsli hXTTeA hZGnro" kind="field" title="reference"><span class="sc-idiyUo klvgdF"></span><span class="property-name">reference</span></td><td class="sc-bjUoiL ekMelP"><div><div><span class="sc-lbxAil sc-iNWwEs lfhyVw jQVdcm"></span><span class="sc-lbxAil sc-jfmDQi lfhyVw jvMGVM">string</span></div> <div><div class="sc-iIPllB sc-ciZhAO kVWksa jXzosn"><p>y76fga78s</p>
 </div></div></div></td></tr></tbody></table></div><div class="sc-jSMfEi sc-gKXOVf kGJqig jSfEKO"><div><h3 class="sc-kDDrLX bphuUp"> <!-- -->Request samples<!-- --> </h3><div class="sc-cxabCf kBGHPE" data-rttabs="true"><ul class="react-tabs__tab-list" role="tablist"><li class="react-tabs__tab react-tabs__tab--selected" role="tab" id="react-tabs-10" aria-selected="true" aria-disabled="false" aria-controls="react-tabs-11" tabindex="0" data-rttab="true">Payload</li></ul><div class="react-tabs__tab-panel react-tabs__tab-panel--selected" role="tabpanel" id="react-tabs-11" aria-labelledby="react-tabs-10"><div><div class="sc-BeQoi goaScV"><span class="sc-cOFTSb ffeMEW">Content type</span><div class="sc-bBXxYQ lgEJMw">application/json</div></div><div class="sc-jgbSNz gMMBTc"><div class="sc-jOrMOR gDNHHZ"><div class="sc-gicCDI iCAxWZ"><button><div class="sc-bZnhIo AlGJd">Copy</div></button></div><div class="sc-iIPllB kVWksa sc-dPyBCJ efMzV"><div class="redoc-json"><code><button class="collapser" aria-label="collapse"></button><span class="token punctuation">{</span><span class="ellipsis"></span><ul class="obj collapsible"><li><div class="hoverable collapsed"><span class="property token string">"reason"</span>: <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span></div></li><li><div class="hoverable collapsed"><span class="property token string">"comment"</span>: <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span></div></li><li><div class="hoverable collapsed"><span class="property token string">"reference"</span>: <span class="token string">&quot;string&quot;</span></div></li></ul><span class="token punctuation">}</span></code></div></div></div></div></div></div></div></div></div></div></div></div><div class="sc-elYLMi dKMsjd"></div></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Capitalise.com Platform Ltd</div><ul class="footer__items clean-list"><li class="footer__item"><p>2 Valentine Place, London. SE1 8QH</p></li><li class="footer__item"><p>Capitalise.com Platform Ltd, trading as Capitalise, is authorised and regulated by the Financial Conduct Authority for regulated credit agreements. Capitalise is a credit broker not a lender.</p></li></ul></div><div class="col footer__col"><div class="footer__title">Useful information</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://capitalise.com/gb/about" target="_blank" rel="noopener noreferrer" class="footer__link-item">About Us<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://capitalise.homerun.co" target="_blank" rel="noopener noreferrer" class="footer__link-item">Careers<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://capitalise.com/gb/faq" target="_blank" rel="noopener noreferrer" class="footer__link-item">FAQs<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">Contacts</div><ul class="footer__items clean-list"><li class="footer__item"><a href="tel:02080381151" target="_blank" rel="noopener noreferrer" class="footer__link-item">Call us on 020 8038 1151<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="mailto:support@capitalise.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">support@capitalise.com<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://www.linkedin.com/company/capitalisers/mycompany/" target="_blank" rel="noopener noreferrer" class="footer__link-item">LinkedIn<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://twitter.com/Capitalisers" target="_blank" rel="noopener noreferrer" class="footer__link-item">Twitter<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">Legal stuff</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://capitalise.com/gb/legal/website-terms-of-use" target="_blank" rel="noopener noreferrer" class="footer__link-item">Website Terms of Use<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://capitalise.com/gb/legal/privacy-policy" target="_blank" rel="noopener noreferrer" class="footer__link-item">Privacy policy<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2016-2025 <a href="https://capitalise.com" target="_blank">Capitalise.com</a></div></div></div></footer></div>
-<script src="/assets/js/runtime~main.4fec9ee3.js"></script>
-<script src="/assets/js/main.b7077b52.js"></script>
+<script src="/assets/js/runtime~main.2ef6902f.js"></script>
+<script src="/assets/js/main.86335771.js"></script>
 </body>
 </html>

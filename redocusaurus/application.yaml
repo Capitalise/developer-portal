@@ -16,21 +16,31 @@ info:
     The API also supports retrieval of documentation, and a set of web hooks to
     receive updates for applications when the user accepts or rejects an offer.
 
-     ## Application Flow
+
+    ## Application Flow
+
 
     ---
 
 
     A typical integration would follow the following flow, typically:
 
-      1. A client matches to lenders on the Capitalise Platform
-      2. Client completes required fields for a lender's API
-      3. Capitalise API dispatches application to Webhook
-      4. Lender processes application and responds with an offer or rejection
-      5. Client accepts or rejects offer
-      6. Capitalise redirects user to lender onboarding to finalize
 
-      A more detailed version of this flow is displayed below: 
+    1. A client matches to lenders on the Capitalise Platform
+
+    2. Client completes required fields for a lender's API
+
+    3. Capitalise API dispatches application to Webhook
+
+    4. Lender processes application and responds with an offer or rejection
+
+    5. Client accepts or rejects offer
+
+    6. Capitalise redirects user to lender onboarding to finalize
+
+
+    A more detailed version of this flow is displayed below:
+
 
     ![API Application Flow](/img/API%20Application%20Flow.png)
 
@@ -40,24 +50,34 @@ info:
 
     ---
 
-     ### Required Fields
 
-     Lenders need to provide us the list of required fields (optionally with rules for requirements, e.g. only if field a > 100)
+    ### Required Fields
 
-    Some sample required field rules: 
 
-     - Simply requiring a field to be complete 
-       - `Sector`
-     - A field is required based on the value of another field
-       - `Contact Number` required if `Company Type = Sole Trader`
-     - More complex field requirements based on values and multiple conditions
-       - `Personal Guarantees` required if `Company Type = Sole Trader` and `Revenue < £100,000` and `Sector in (IT Services, Business Services)` 
+    Lenders need to provide us the list of required fields (optionally with
+    rules for requirements, e.g. only if field a > 100)
+
+
+    Some sample required field rules:
+
+
+    - Simply requiring a field to be complete
+      - `Sector`
+    - A field is required based on the value of another field
+      - `Contact Number` required if `Company Type = Sole Trader`
+    - More complex field requirements based on values and multiple conditions
+      - `Personal Guarantees` required if `Company Type = Sole Trader` and `Revenue < £100,000` and `Sector in (IT Services, Business Services)`
 
     ---
 
-      ### API Setup
 
-      Lender needs to provide Capitalise a webhook for sending applications to. You can optionally provide a separate webhook for sending updates too, or use one for all.
+    ### API Setup
+
+
+    Lender needs to provide Capitalise a webhook for sending applications to.
+    You can optionally provide a separate webhook for sending updates too, or
+    use one for all.
+
 
     > Capitalise has an iPaaS platform which allows us to connect internal
     software without an API, or existing lender APIs with our API without the
@@ -67,47 +87,69 @@ info:
     integration path.
 
 
-    --- 
+    ---
 
-      ### Authentication
 
-      Authentication uses oAuth via our Auth0 provider. We will provide you a client secret and credentials.
+    ### Authentication
 
-      To authenticate, call our oAuth provider, `https://capitalise.eu.auth0.com/oauth/token`, as per the sample below:
 
-      ```json
-      {
-        "audience": "https://capitalise.eu.auth0.com/api/v2/",
-        "client_id": "your_client_id",
-        "client_secret": "your_client_secret",
-        "grant_type": "password",
-        "password": "your_password",
-        "scope": "openid email profile",
-        "username": "your_username"
-      }
-      ```
+    Authentication uses oAuth via our Auth0 provider. We will provide you a
+    client secret and credentials.
 
-      Ensure you also send a header:
 
-      ```json
-      "content-type": "application/json"
-      ```
+    To authenticate, call our oAuth provider,
+    `https://capitalise.eu.auth0.com/oauth/token`, as per the sample below:
 
-      You will receive a payload back like the following, use the id_token as the bearer token in all authenticated requests. These tokens usually expire within 2 minutes, so we recommend authenticating before each request, rather than storing and refreshing the token.
 
-      ```json
-      {
-        "access_token": "....",
-        "id_token": "....",
-        "scope": "openid email profile ....",
-        "expires_in": 120,
-        "token_type": "Bearer"
-      }
-      ```
+    ```json
+
+    {
+      "audience": "https://capitalise.eu.auth0.com/api/v2/",
+      "client_id": "your_client_id",
+      "client_secret": "your_client_secret",
+      "grant_type": "password",
+      "password": "your_password",
+      "scope": "openid email profile",
+      "username": "your_username"
+    }
+
+    ```
+
+
+    Ensure you also send a header:
+
+
+    ```json
+
+    "content-type": "application/json"
+
+    ```
+
+
+    You will receive a payload back like the following, use the id_token as the
+    bearer token in all authenticated requests. These tokens usually expire
+    within 2 minutes, so we recommend authenticating before each request, rather
+    than storing and refreshing the token.
+
+
+    ```json
+
+    {
+      "access_token": "....",
+      "id_token": "....",
+      "scope": "openid email profile ....",
+      "expires_in": 120,
+      "token_type": "Bearer"
+    }
+
+    ```
+
 
     ----
 
-      ### API
+
+    ### API
+
 
     Use your Bearer token to access the API at the below URL:
 
@@ -117,9 +159,13 @@ info:
 
     ---
 
-     ## Go-live sign-off
 
-        In order to obtain production keys and configuration, you will need to demonstrate several standard scenarios:
+    ## Go-live sign-off
+
+
+    In order to obtain production keys and configuration, you will need to
+    demonstrate several standard scenarios:
+
 
     <strong>Minimum application</strong>
 
@@ -388,9 +434,13 @@ info:
     }
 
     ```
-     ## Offer 
 
-     An offer is our accepted format to receive a lenders format in. Not all fields are required.
+    ## Offer
+
+
+    An offer is our accepted format to receive a lenders format in. Not all
+    fields are required.
+
 
     ---
 
@@ -432,7 +482,7 @@ info:
     `abs(termLoan.totalRepayment - termLoan.maximumAmount)`
 
 
-    ### Invoice Finance 
+    ### Invoice Finance
 
 
     ```json
@@ -488,7 +538,7 @@ info:
       }
     }
 
-    ``` 
+    ```
 
 
     ### Asset Finance
@@ -578,10 +628,13 @@ info:
 
 
     ---
-     
-     # Webhooks
 
-      ## New Application Webhook
+
+    # Webhooks
+
+
+    ## New Application Webhook
+
 
     When a user submits an application, a payload with a [Funding
     Application](#funding-application) is sent to the lender's provided webhook
@@ -591,7 +644,9 @@ info:
     You must return an HTTP 204 to this dispatcher, otherwise the dispatcher
     will attempt to resend the application at exponential intervals.
 
-      ## Application Updated Webhook
+
+    ## Application Updated Webhook
+
 
     When a user marks an offer as accepted or rejected, an updated payload with
     a Funding Application is sent to the lender's provided webhook URL. You
@@ -599,7 +654,7 @@ info:
     Status is Client Accepted or Client Declined) to avoid confusion.
 
     > We recommend using separate endpoints for New Applications and Application
-    Updated. Our Updated endpoint will provide updates for all status changes. 
+    Updated. Our Updated endpoint will provide updates for all status changes.
 
 
     You must return an HTTP 204 to this dispatcher, otherwise the dispatcher
