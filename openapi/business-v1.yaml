@@ -43,7 +43,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProfileResponse"
+                $ref: '#/components/schemas/ProfileResponseDto'
         "400":
           description: Bad Request
         "401":
@@ -54,25 +54,12 @@ paths:
           description: Not Found
         "500":
           description: Internal Server Error
-      description: ""
-      security: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                companyInformation:
-                  type: object
-                  required:
-                    - registrationNumber
-                  properties:
-                    registrationNumber:
-                      type: string
-                      description: The Companies House number
-              required:
-                - companyInformation
-        description: ""
+              $ref: '#/components/schemas/ProfileRequestDto'
       parameters:
         - in: header
           name: Authorization
@@ -88,6 +75,123 @@ paths:
             format: uuid
             description: The tenant id
           required: true
+      tags:
+        - Profile
+    get:
+      summary: Get profile details
+      operationId: get-profile
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: JWT Token
+            description: The token generated from the API key
+          required: true
+        - in: header
+          name: Capitalise-tenant-id
+          schema:
+            type: string
+            format: uuid
+            description: The tenant id
+          required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponseDto'
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      tags:
+        - Profile
+    patch:
+      summary: Update profile details
+      operationId: patch-profile
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: JWT Token
+            description: The token generated from the API key
+          required: true
+        - in: header
+          name: Capitalise-tenant-id
+          schema:
+            type: string
+            format: uuid
+            description: The tenant id
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfilePatchRequestDto'
+      responses:
+        "201":
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponseDto'
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      tags:
+        - Profile
+    put:
+      summary: Update profile details
+      operationId: put-profile
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: JWT Token
+            description: The token generated from the API key
+          required: true
+        - in: header
+          name: Capitalise-tenant-id
+          schema:
+            type: string
+            format: uuid
+            description: The tenant id
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileRequestDto'
+      responses:
+        '201':
+          description: Updated successfully
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
       tags:
         - Profile
   /credit-report:
@@ -223,6 +327,531 @@ paths:
         - Applications
 components:
   schemas:
+    ProfileRequestDto:
+      type: object
+      properties:
+        companyInformation:
+          $ref: '#/components/schemas/CompanyInformationDto'
+        financials:
+          $ref: '#/components/schemas/FinancialsDto'
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyDataDto'
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetDataDto'
+        assetsForSecurity:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetSecurityDataDto'
+        merchantCashAdvance:
+          type: array
+          items:
+            $ref: '#/components/schemas/MerchantCashAdvanceDataDto'
+        tradeReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradeReferenceDto'
+      required:
+        - companyInformation
+    ProfileResponseDto:
+      type: object
+      properties:
+        companyInformation:
+          $ref: '#/components/schemas/CompanyInformationDto'
+        financials:
+          $ref: '#/components/schemas/FinancialsDto'
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyDataDto'
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetDataDto'
+        assetsForSecurity:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetSecurityDataDto'
+        merchantCashAdvance:
+          type: array
+          items:
+            $ref: '#/components/schemas/MerchantCashAdvanceDataDto'
+        tradeReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradeReferenceDto'
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - createdAt
+        - updatedAt
+    CompanyInformationDto:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - SOLE_TRADER
+            - LIMITED_LIABILITY_PARTNERSHIP
+            - LIMITED_COMPANY
+            - STARTUP
+        sector:
+          type: string
+          enum:
+            - AGRICULTURE
+            - AUTOMOTIVE
+            - BUSINESS_SERVICES
+            - CONSTRUCTION
+            - COURIER
+            - DISTRIBUTION
+            - FINANCIAL_SERVICES
+            - HAULAGE
+            - HEALTHCARE_CARE
+            - HOTELS_HOUSE
+            - IMPORT_EXPORT
+            - IT_RELATED
+            - MANUFACTURING
+            - PRINT_PUBLISHING
+            - PROFESSIONAL_SERVICES
+            - PROPERTY
+            - RECRUITMENT
+            - RETAIL
+            - SECURITY_SERVICES
+            - TRADE
+            - TRANSPORTATION
+            - WHOLESALE
+            - OTHER
+            - EDUCATION
+            - CHARITIES
+            - MEDIA_AND_ENTERTAINMENT
+        vatStatus:
+          type: string
+          enum:
+            - REGISTERED
+            - NOT_REGISTERED
+            - UNKNOWN
+        name:
+          type: string
+        registrationNumber:
+          type: string
+        score:
+          $ref: '#/components/schemas/CompanyScoreDto'
+        creditLimit:
+          $ref: '#/components/schemas/CurrencyDto'
+        unencumberedAssets:
+          $ref: '#/components/schemas/UnencumberedAssetsDto'
+        isGovernmentBacked:
+          type: boolean
+        hasGovernmentBackedLoans:
+          type: boolean
+        employeesNumber:
+          type: number
+        percentageSalesOnline:
+          type: number
+        website:
+          type: string
+        legalNotices:
+          $ref: '#/components/schemas/LegalNoticesDto'
+        primaryContactInformation:
+          $ref: '#/components/schemas/PrimaryContactInformationDto'
+        tradingAddress:
+          $ref: '#/components/schemas/ProfileAddressDto'
+      required:
+        - registrationNumber
+    FinancialsDto:
+      type: object
+      properties:
+        netProfit:
+          $ref: '#/components/schemas/CurrencyDto'
+        revenue:
+          $ref: '#/components/schemas/CurrencyDto'
+        bankInterest:
+          $ref: '#/components/schemas/CurrencyDto'
+        depreciation:
+          $ref: '#/components/schemas/CurrencyDto'
+        amortisation:
+          $ref: '#/components/schemas/CurrencyDto'
+        tradingHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradingHistoryDto'
+        debtors:
+          type: array
+          items:
+            $ref: '#/components/schemas/DebtorDto'
+        primaryBank:
+          type: number
+        tradeDebtors:
+          $ref: '#/components/schemas/CurrencyDto'
+        paymentTerms:
+          type: number
+        invoicesOutstanding:
+          type: number
+        numberOfCustomers:
+          type: number
+        currentValueConfirmedOrders:
+          $ref: '#/components/schemas/CurrencyDto'
+        grossProfitMargin:
+          type: number
+    PropertyDataDto:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - HOTEL
+            - OFFICES
+            - LEISURE_FACILITY
+            - RETAIL
+            - FLATS
+            - HMO
+            - OTHER
+            - RESIDENTIAL_HOUSING
+            - STUDENT_HOUSING
+            - HOLIDAY_LETS
+        location:
+          type: string
+          enum:
+            - UK_MAINLAND
+            - UK_ISLES
+            - SCOTTISH_MAINLAND
+            - SCOTTISH_ISLES
+            - NORTHERN_IRELAND
+            - EUROPE
+            - OTHER
+        setting:
+          type: string
+          enum:
+            - RURAL
+            - INDUSTRIAL
+            - TOWN
+            - CITY
+        classification:
+          type: string
+          enum:
+            - COMMERCIAL
+            - RESIDENTIAL
+            - MIXED_USE
+        address:
+          $ref: '#/components/schemas/ProfileAddressDto'
+        value:
+          $ref: '#/components/schemas/CurrencyDto'
+        outstandingDebt:
+          $ref: '#/components/schemas/CurrencyDto'
+        depositAvailable:
+          $ref: '#/components/schemas/CurrencyDto'
+        additionalDetails:
+          type: string
+      required:
+        - address
+        - value
+        - outstandingDebt
+        - depositAvailable
+    AssetDataDto:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - PROPERTY
+            - TRANSPORTATION
+            - OFFICE
+            - STOCK
+            - MANUFACTURING
+            - BUSINESS
+        name:
+          type: string
+        offeredAsGuarantee:
+          type: boolean
+        netCost:
+          $ref: '#/components/schemas/CurrencyDto'
+        depositAvailable:
+          $ref: '#/components/schemas/CurrencyDto'
+        existingAgreement:
+          type: boolean
+      required:
+        - type
+        - netCost
+    AssetSecurityDataDto:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - MAIN_PROPERTY
+            - OTHER_PROPERTY
+            - OTHER_FIXED_ASSETS
+        owner:
+          type: string
+        address:
+          $ref: '#/components/schemas/ProfileAddressDto'
+        value:
+          $ref: '#/components/schemas/CurrencyDto'
+        totalDebt:
+          $ref: '#/components/schemas/CurrencyDto'
+      required:
+        - type
+        - owner
+        - address
+    MerchantCashAdvanceDataDto:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - Ingenico
+            - Izettle
+            - Paylevel
+            - Paypal here
+            - PB payment solutions
+            - Shopify
+            - SmartTrade
+            - Sumsup
+            - Transax
+            - Verifone
+            - Worldpay
+            - Amazon
+            - Etsy
+            - Ebay
+            - Deliveroo
+            - Uber
+            - Other
+        averageMonthlyTransactions:
+          type: number
+        terminalId:
+          type: string
+        monthsOnBusinessLease:
+          type: number
+    TradeReferenceDto:
+      type: object
+      properties:
+        companyName:
+          type: string
+        contactName:
+          type: string
+        contactNumber:
+          type: string
+        contactEmail:
+          type: string
+      required:
+        - companyName
+        - contactName
+        - contactNumber
+    CompanyScoreDto:
+      type: object
+      properties:
+        grade:
+          type: string
+          enum:
+            - A
+            - B
+            - C
+            - D
+            - E
+            - F
+            - G
+            - H
+        industryAverageGrade:
+          type: string
+          enum:
+            - A
+            - B
+            - C
+            - D
+            - E
+            - F
+            - G
+            - H
+        value:
+          type: number
+        changedAt:
+          type: string
+        lastAssessedAt:
+          type: string
+        previous:
+          $ref: '#/components/schemas/PreviousCompanyScoreDto'
+    UnencumberedAssetsDto:
+      type: object
+      properties:
+        guarantees:
+          type: string
+          enum:
+            - BUSINESS
+            - PERSONAL
+        isHomeOwnership:
+          type: boolean
+        personalGuarantee:
+          type: boolean
+        businessOwnsAssets:
+          type: boolean
+    LegalNoticesDto:
+      type: object
+      properties:
+        company:
+          $ref: '#/components/schemas/CompanyLegalNoticesDto'
+        directors:
+          $ref: '#/components/schemas/DirectorsLegalNoticesDto'
+    PrimaryContactInformationDto:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        number:
+          type: string
+        inviteClient:
+          type: boolean
+        legalRequirements:
+          type: boolean
+        address:
+          $ref: '#/components/schemas/ProfileAddressDto'
+      required:
+        - email
+        - name
+        - number
+    ProfileAddressDto:
+      type: object
+      properties:
+        simpleValue:
+          type: string
+        street:
+          type: string
+        houseNumber:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        postalCode:
+          type: string
+    TradingHistoryDto:
+      type: object
+      properties:
+        debtorsInvoicesDue:
+          type: number
+        debtorsOutstanding:
+          type: number
+        fixedAssets:
+          type: number
+        netAssets:
+          type: number
+        profitNet:
+          type: number
+        dividends:
+          type: number
+        revenue:
+          type: number
+        year:
+          type: number
+        yearEnd:
+          type: number
+      required:
+        - profitNet
+        - revenue
+        - yearEnd
+    DebtorDto:
+      type: object
+      properties:
+        id:
+          type: string
+        contactId:
+          type: string
+        name:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        companyName:
+          type: string
+        emailAddress:
+          type: string
+        outstandingAmount:
+          type: number
+        outstandingAmountMonthlyAverage:
+          type: number
+        outstandingInvoicesCount:
+          type: number
+        contactNumber:
+          type: string
+        debtorDays:
+          type: number
+        revenue:
+          type: number
+        averageMonthlyIncome:
+          $ref: '#/components/schemas/CurrencyDto'
+        address:
+          $ref: '#/components/schemas/ProfileAddressDto'
+      required:
+        - id
+        - contactId
+        - name
+        - firstName
+        - emailAddress
+        - outstandingAmount
+        - outstandingAmountMonthlyAverage
+        - outstandingInvoicesCount
+    PreviousCompanyScoreDto:
+      type: object
+      properties:
+        grade:
+          type: string
+          enum:
+            - A
+            - B
+            - C
+            - D
+            - E
+            - F
+            - G
+            - H
+    CompanyLegalNoticesDto:
+      type: object
+      properties:
+        last12MonthsCount:
+          type: number
+        last12MonthsValue:
+          $ref: '#/components/schemas/CurrencyDto'
+    DirectorsLegalNoticesDto:
+      type: object
+      properties:
+        last12MonthsCount:
+          type: number
+        last12MonthsValue:
+          $ref: '#/components/schemas/CurrencyDto'
+    ProfilePatchRequestDto:
+      type: object
+      properties:
+        companyInformation:
+          $ref: '#/components/schemas/CompanyInformationDto'
+        financials:
+          $ref: '#/components/schemas/FinancialsDto'
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyDataDto'
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetDataDto'
+        assetsForSecurity:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetSecurityDataDto'
+        merchantCashAdvance:
+          type: array
+          items:
+            $ref: '#/components/schemas/MerchantCashAdvanceDataDto'
+        tradeReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradeReferenceDto'
     ApplicationOfferDto:
       type: object
       properties:
