@@ -106,14 +106,6 @@ paths:
       responses: {}
       operationId: get-credit-report-pdf
       description: Upcoming feature - please contact support@capitalise.com if you want to learn more
-  /applications/:applicationId/pre-selected:
-    get:
-      summary: Retrieve the pre selected offers
-      tags:
-        - Pre Selected Offers
-      responses: {}
-      operationId: get-pre-selected
-      description: Upcoming feature - please contact support@capitalise.com if you want to learn more
   /applications:
     post:
       operationId: ApplicationController_create
@@ -209,8 +201,319 @@ paths:
                 $ref: "#/components/schemas/ApplicationMatchesSummaryResponseDto"
       tags:
         - Applications
+  /applications/{applicationId}/pre-selected:
+    get:
+      operationId: ApplicationController_getPreselectedOffers
+      parameters:
+        - name: applicationId
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApplicationOfferDto'
+      tags:
+        - Applications
 components:
   schemas:
+    ApplicationOfferDto:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - INSTANT_OFFER
+            - MANUAL_OFFER
+        isPreselected:
+          type: boolean
+        status:
+          type: string
+          enum:
+            - INDICATIVE
+            - FINAL
+            - PRE_SELECTED
+        productType:
+          type: string
+          enum:
+            - TERM_LOAN
+            - TRADE_FINANCE
+            - FIXED_LOAN_TERMS
+            - ASSET_BACKED_FINANCE
+            - MERCHANT_CASH_ADVANCE
+            - INVOICE_FINANCE
+            - COMMERCIAL_PROPERTY
+        applicationUrl:
+          type: string
+        profileUuid:
+          type: string
+        reference:
+          type: string
+        publicComment:
+          type: string
+        securityRequired:
+          type: array
+          items:
+            type: string
+            enum:
+              - DEBENTURE
+              - PROPERTY
+              - PERSONAL_GUARANTEE
+              - UNSECURED
+        assetFinance:
+          $ref: '#/components/schemas/ApplicationOfferAssetFinanceDto'
+        invoiceFinance:
+          $ref: '#/components/schemas/ApplicationOfferInvoiceFinanceDto'
+        merchantCashAdvance:
+          $ref: '#/components/schemas/ApplicationOfferMerchantCashAdvanceDto'
+        termLoan:
+          $ref: '#/components/schemas/ApplicationOfferTermLoanDto'
+        tradeFinance:
+          $ref: '#/components/schemas/ApplicationOfferTradeFinanceDto'
+        commercialProperty:
+          $ref: '#/components/schemas/ApplicationOfferCommercialPropertyDto'
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        expiryDate:
+          format: date-time
+          type: string
+      required:
+        - id
+        - type
+        - status
+        - createdAt
+    ApplicationOfferAssetFinanceDto:
+      type: object
+      properties:
+        advanceAmount:
+          type: number
+        arrangementFee:
+          type: number
+        commissionAmount:
+          type: number
+        interestCharge:
+          type: string
+          enum:
+            - ANNUAL_RATE
+            - MONTHLY_RATE
+            - DAILY_RATE
+            - FACTOR_RATE
+            - FLAT_RATE
+        rate:
+          type: number
+        term:
+          type: number
+        deposit:
+          type: number
+        productOption:
+          type: string
+          enum:
+            - HIRE_PURCHASE
+            - FINANCE_LEASE
+        vat:
+          type: number
+        cost:
+          type: number
+        totalPrice:
+          type: number
+        description:
+          type: string
+        promotion:
+          type: string
+        monthlyRepayment:
+          type: number
+        additionalFees:
+          type: string
+        optionToPurchaseFee:
+          type: number
+        likelihoodOfRate:
+          type: number
+        likelihoodOfAcceptance:
+          type: number
+        representativeAPR:
+          type: number
+    ApplicationOfferInvoiceFinanceDto:
+      type: object
+      properties:
+        commissionAmount:
+          type: number
+        maximumCreditLine:
+          type: number
+        minimumCreditLine:
+          type: number
+        serviceFee:
+          type: number
+        discountFee:
+          type: number
+        advanceRate:
+          type: number
+        facility:
+          type: string
+          enum:
+            - DISCOUNTING
+            - FACTORING
+        contractLength:
+          type: number
+        additionalFees:
+          type: string
+        minimumMonthlyFee:
+          type: number
+        concentrationLimit:
+          type: number
+        creditInsurance:
+          type: number
+        creditInsuranceRequired:
+          type: boolean
+        selective:
+          type: boolean
+        confidential:
+          type: boolean
+        promotion:
+          type: string
+        likelihoodOfRate:
+          type: number
+        likelihoodOfAcceptance:
+          type: number
+    ApplicationOfferMerchantCashAdvanceDto:
+      type: object
+      properties:
+        commissionAmount:
+          type: number
+        fundingAmount:
+          type: number
+        sweep:
+          type: number
+        totalRepayment:
+          type: number
+        ratio:
+          type: number
+        promotion:
+          type: string
+        likelihoodOfRate:
+          type: number
+        likelihoodOfAcceptance:
+          type: number
+        totalFees:
+          type: number
+    ApplicationOfferTermLoanDto:
+      type: object
+      properties:
+        maximumAmount:
+          type: number
+        arrangementFee:
+          type: number
+        commissionAmount:
+          type: number
+        interestCharge:
+          type: string
+          enum:
+            - ANNUAL_RATE
+            - MONTHLY_RATE
+            - DAILY_RATE
+            - FACTOR_RATE
+            - FLAT_RATE
+        rate:
+          type: number
+        minimumAmount:
+          type: number
+        interestRate:
+          type: number
+        representativeAPR:
+          type: number
+        term:
+          type: number
+        monthlyRepayment:
+          type: number
+        totalRepayment:
+          type: number
+        promotion:
+          type: string
+        likelihoodOfRate:
+          type: number
+        likelihoodOfAcceptance:
+          type: number
+        totalFees:
+          type: number
+    ApplicationOfferTradeFinanceDto:
+      type: object
+      properties:
+        commissionAmount:
+          type: number
+        maximumCreditLine:
+          type: number
+        minimumCreditLine:
+          type: number
+        serviceFee:
+          type: number
+        discountFee:
+          type: number
+        additionalFees:
+          type: string
+        advanceRate:
+          type: number
+        contractLength:
+          type: number
+        promotion:
+          type: string
+        likelihoodOfRate:
+          type: number
+        likelihoodOfAcceptance:
+          type: number
+    ApplicationOfferCommercialPropertyDto:
+      type: object
+      properties:
+        fundingAmount:
+          type: number
+        arrangementFee:
+          type: number
+        commissionAmount:
+          type: number
+        interestCharge:
+          type: string
+          enum:
+            - ANNUAL_RATE
+            - MONTHLY_RATE
+            - DAILY_RATE
+            - FACTOR_RATE
+            - FLAT_RATE
+        interestRate:
+          type: number
+        productType:
+          type: string
+          enum:
+            - BTL
+            - INTEREST_ONLY
+            - REPAYMENT
+            - PARTIALLY_AMORTISING
+        mortgageTerm:
+          type: number
+        dealTerm:
+          type: number
+        rateType:
+          type: string
+          enum:
+            - FIXED
+            - VARIABLE
+        ltv:
+          type: number
+        valuationFee:
+          type: number
+        exitFee:
+          type: number
+        propertyChargeAddress:
+          type: string
     AnswerKeyBusinessAnonymousWorkingCapitalDto:
       additionalProperties: false
       type: object
@@ -3235,7 +3538,7 @@ x-tagGroups:
     tags:
       - Profile
       - Applications
+      - Pre Selected Offers
   - name: Upcoming
     tags:
       - Credit Report
-      - Pre Selected Offers
