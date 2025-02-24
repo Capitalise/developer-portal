@@ -293,7 +293,7 @@ paths:
         - Applications
   "/applications/{applicationId}/matches":
     get:
-      operationId: ApplicationSignUpController_getMatches
+      operationId: ApplicationController_getMatches
       parameters:
         - in: header
           name: Authorization
@@ -4257,4 +4257,3 @@ x-tagGroups:
     tags:
       - Profile
       - Applications
-      - Pre Selected Offers
