@@ -194,26 +194,17 @@ paths:
           description: Internal Server Error
       tags:
         - Profile
-  /credit-report:
-    get:
-      summary: Retrieve credit report
-      tags:
-        - Credit Report
-      responses: {}
-      operationId: get-credit-report
-      description: Upcoming feature - please contact support@capitalise.com if you want to learn more
-  /credit-report/pdf:
-    get:
-      summary: Retrieve the credit report in PDF format
-      tags:
-        - Credit Report
-      responses: {}
-      operationId: get-credit-report-pdf
-      description: Upcoming feature - please contact support@capitalise.com if you want to learn more
   /applications:
     post:
       operationId: ApplicationController_create
-      parameters: []
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: JWT Token
+            description: The token generated from the API key
+          required: true
       requestBody:
         required: true
         content:
@@ -259,11 +250,24 @@ paths:
     post:
       operationId: ApplicationSignUpController_generateContinueUrl
       parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: JWT Token
+            description: The token generated from the API key
+          required: true
         - name: applicationId
           required: true
           in: path
           schema:
             type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationSignUpInviteRequestDto'
       responses:
         "201":
           description: ""
@@ -291,24 +295,38 @@ paths:
     get:
       operationId: ApplicationSignUpController_getMatches
       parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: JWT Token
+            description: The token generated from the API key
+          required: true
         - name: applicationId
           required: true
           in: path
           schema:
             type: string
       responses:
-        "200":
-          description: ""
+        '200':
+          description: ''
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApplicationMatchesSummaryResponseDto"
+                $ref: '#/components/schemas/ApplicationFundingMatchesResponseDto'
       tags:
         - Applications
   /applications/{applicationId}/pre-selected:
     get:
       operationId: ApplicationController_getPreselectedOffers
       parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: JWT Token
+            description: The token generated from the API key
+          required: true
         - name: applicationId
           required: true
           in: path
@@ -327,6 +345,49 @@ paths:
         - Applications
 components:
   schemas:
+    ApplicationSignUpInviteRequestDto:
+      type: object
+      properties:
+        clickId:
+          type: string
+          title: ClickId
+    ApplicationFundingMatchesResponseDto:
+      type: object
+      properties:
+        numberOfMatches:
+          type: number
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationFundingMatchDto'
+      required:
+        - numberOfMatches
+        - matches
+    ApplicationFundingMatchDto:
+      type: object
+      properties:
+        lender:
+          $ref: '#/components/schemas/FundingMatchLenderDto'
+        product:
+          type: string
+          enum:
+            - TERM_LOAN
+            - TRADE_FINANCE
+            - FIXED_LOAN_TERMS
+            - ASSET_BACKED_FINANCE
+            - MERCHANT_CASH_ADVANCE
+            - INVOICE_FINANCE
+            - COMMERCIAL_PROPERTY
+        fees:
+          $ref: '#/components/schemas/FundingMatchFeesDto'
+        likelihood:
+          $ref: '#/components/schemas/FundingMatchLikelihoodDto'
+        instantOffer:
+          type: boolean
+      required:
+        - lender
+        - product
+        - instantOffer
     ProfileRequestDto:
       type: object
       properties:
@@ -463,6 +524,49 @@ components:
           $ref: '#/components/schemas/ProfileAddressDto'
       required:
         - registrationNumber
+    FundingMatchLenderDto:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        logo:
+          type: string
+        description:
+          type: string
+        average:
+          type: string
+          enum:
+            - LOW
+            - AVERAGE
+            - EXPENSIVE
+            - MOST_EXPENSIVE
+        responseTime:
+          type: number
+        documents:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - name
+    FundingMatchFeesDto:
+      type: object
+      properties:
+        arrangementFees:
+          type: number
+        earlyRepaymentFees:
+          type: number
+        exitFees:
+          type: number
+    FundingMatchLikelihoodDto:
+      type: object
+      properties:
+        value:
+          type: number
+      required:
+        - value
     FinancialsDto:
       type: object
       properties:
@@ -2689,18 +2793,6 @@ components:
           type: string
           enum:
             - creditImprovement
-    ApplicationMatchesSummaryResponseDto:
-      type: object
-      properties:
-        numberOfMatches:
-          type: number
-        matches:
-          type: array
-          items:
-            $ref: "#/components/schemas/ApplicationFundingMatchResultsDto"
-      required:
-        - numberOfMatches
-        - matches
     ApplicationFundingMatchResultsDto:
       type: object
       properties:
@@ -4160,14 +4252,9 @@ tags:
 
   - name: Applications
     description: Submit and track applications of the business
-  - name: Credit Report
-    description: Track credit report of the business
 x-tagGroups:
   - name: Live
     tags:
       - Profile
       - Applications
       - Pre Selected Offers
-  - name: Upcoming
-    tags:
-      - Credit Report
